@@ -1,0 +1,46 @@
+<svg width="900" height="560" viewBox="0 0 900 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="900" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6FBF4"/>
+      <stop offset="1" stop-color="#E3EFE3"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="560" rx="24" fill="url(#bg2)"/>
+
+  <rect x="364" y="220" width="172" height="92" rx="16" fill="#1E7B4F"/>
+  <text x="401" y="258" font-family="Segoe UI, Arial" font-size="20" font-weight="700" fill="#ECFFF3">PROJET</text>
+  <text x="381" y="286" font-family="Segoe UI, Arial" font-size="14" fill="#D9F2E1">qis-dist-cms</text>
+
+  <rect x="72" y="72" width="220" height="92" rx="14" fill="#FFFFFF" stroke="#BFD4C1"/>
+  <text x="92" y="106" font-family="Segoe UI, Arial" font-size="17" font-weight="700" fill="#19372A">Architecture</text>
+  <text x="92" y="132" font-family="Segoe UI, Arial" font-size="14" fill="#486455">Contrat + dependances</text>
+
+  <rect x="608" y="72" width="220" height="92" rx="14" fill="#FFFFFF" stroke="#BFD4C1"/>
+  <text x="628" y="106" font-family="Segoe UI, Arial" font-size="17" font-weight="700" fill="#19372A">Documentation</text>
+  <text x="628" y="132" font-family="Segoe UI, Arial" font-size="14" fill="#486455">Vivante et versionnee</text>
+
+  <rect x="72" y="396" width="220" height="92" rx="14" fill="#FFFFFF" stroke="#BFD4C1"/>
+  <text x="92" y="430" font-family="Segoe UI, Arial" font-size="17" font-weight="700" fill="#19372A">Context Pack IA</text>
+  <text x="92" y="456" font-family="Segoe UI, Arial" font-size="14" fill="#486455">Repo map + instructions</text>
+
+  <rect x="608" y="396" width="220" height="92" rx="14" fill="#FFFFFF" stroke="#BFD4C1"/>
+  <text x="628" y="430" font-family="Segoe UI, Arial" font-size="17" font-weight="700" fill="#19372A">Tokens et ROI</text>
+  <text x="628" y="456" font-family="Segoe UI, Arial" font-size="14" fill="#486455">Cout, derive, actions</text>
+
+  <rect x="340" y="62" width="220" height="82" rx="14" fill="#FFFFFF" stroke="#BFD4C1"/>
+  <text x="360" y="94" font-family="Segoe UI, Arial" font-size="17" font-weight="700" fill="#19372A">Onboarding dev</text>
+  <text x="360" y="118" font-family="Segoe UI, Arial" font-size="14" fill="#486455">Time-to-productivity</text>
+
+  <rect x="340" y="416" width="220" height="82" rx="14" fill="#FFFFFF" stroke="#BFD4C1"/>
+  <text x="360" y="448" font-family="Segoe UI, Arial" font-size="17" font-weight="700" fill="#19372A">Actions pilotees</text>
+  <text x="360" y="472" font-family="Segoe UI, Arial" font-size="14" fill="#486455">Prioriser, agir, mesurer</text>
+
+  <path d="M364 245L292 154" stroke="#1E7B4F" stroke-width="3"/>
+  <path d="M536 245L608 154" stroke="#1E7B4F" stroke-width="3"/>
+  <path d="M364 287L292 426" stroke="#1E7B4F" stroke-width="3"/>
+  <path d="M536 287L608 426" stroke="#1E7B4F" stroke-width="3"/>
+  <path d="M450 220V144" stroke="#1E7B4F" stroke-width="3"/>
+  <path d="M450 312V416" stroke="#1E7B4F" stroke-width="3"/>
+
+  <text x="224" y="528" font-family="Georgia, serif" font-size="28" font-weight="700" fill="#173325">Cairn centralise le contexte projet pour humains et IA</text>
+</svg>

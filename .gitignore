@@ -1,0 +1,16 @@
+node_modules/
+.next/
+dist/
+coverage/
+.turbo/
+*.log
+.env
+.env.*
+!.env.example
+*.keytab
+*.pem
+*.p12
+*.jks
+playwright-report/
+test-results/
+.DS_Store

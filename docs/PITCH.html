@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cairn | Enterprise AI Delivery Readiness</title>
+  <style>
+    :root {
+      --bg: #f5f7f2;
+      --bg-2: #e9f0e3;
+      --ink: #122018;
+      --muted: #4e6356;
+      --card: #ffffffcc;
+      --line: #c9d8ca;
+      --brand: #1e7b4f;
+      --brand-2: #0f5c39;
+      --accent: #e2a822;
+      --danger: #b02d2d;
+      --info: #2669a8;
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(18, 32, 24, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Aptos", "Segoe UI Variable", "Segoe UI", "Trebuchet MS", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 700px at 120% -10%, #d7e8d6 0%, transparent 60%),
+        radial-gradient(900px 500px at -10% 15%, #edf5e8 0%, transparent 65%),
+        linear-gradient(170deg, var(--bg), var(--bg-2));
+      line-height: 1.45;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .grain::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      background-image: radial-gradient(#000 0.55px, transparent 0.55px);
+      background-size: 6px 6px;
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: min(1100px, 92vw);
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, #ffffffea, #f5fbf3ea);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 34px;
+      animation: rise 550ms ease-out both;
+    }
+
+    .kicker {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brand-2);
+      font-weight: 700;
+      background: #e4f3e8;
+      border: 1px solid #b7d8c0;
+      border-radius: 999px;
+      padding: 6px 10px;
+    }
+
+    h1 {
+      margin: 14px 0 8px;
+      font-family: "Georgia", "Cambria", serif;
+      font-size: clamp(30px, 4.8vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 900px;
+      font-size: clamp(17px, 1.8vw, 22px);
+      color: var(--muted);
+    }
+
+    .pill-row {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      background: #fff;
+      color: #183327;
+    }
+
+    .section {
+      margin-top: 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      animation: rise 620ms ease-out both;
+    }
+
+    .card h2,
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--ink);
+    }
+
+    .list li { margin: 7px 0; }
+
+    .value-line {
+      margin: 8px 0;
+      padding: 10px 12px;
+      border-left: 4px solid var(--brand);
+      background: #f2f9f3;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .matrix th,
+    .matrix td {
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    .matrix th {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #395646;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      margin-right: 8px;
+      transform: translateY(-1px);
+    }
+
+    .ok { background: var(--brand); }
+    .warn { background: var(--accent); }
+    .risk { background: var(--danger); }
+    .info { background: var(--info); }
+
+    .cta {
+      margin-top: 24px;
+      background: linear-gradient(155deg, #1d6f46, #195f3c);
+      border-radius: 20px;
+      color: #ecfff3;
+      padding: 22px;
+      box-shadow: 0 16px 38px rgba(25, 95, 60, 0.34);
+      animation: rise 720ms ease-out both;
+    }
+
+    .cta h2 {
+      margin: 0 0 8px;
+      font-size: clamp(22px, 2.8vw, 34px);
+      font-family: "Georgia", "Cambria", serif;
+      line-height: 1.1;
+    }
+
+    .cta p {
+      margin: 0;
+      font-size: 16px;
+      color: #d9f0df;
+    }
+
+    .footer {
+      margin-top: 22px;
+      font-size: 12px;
+      color: #45604f;
+      text-align: right;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        padding: 24px;
+      }
+      .wrap {
+        width: min(1100px, 94vw);
+      }
+      .footer {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body class="grain">
+  <main class="wrap">
+    <section class="hero">
+      <span class="kicker">Cairn Pitch</span>
+      <h1>The Missing Layer For Enterprise AI Delivery</h1>
+      <p class="lead">
+        GitHub tracks code changes. Jira tracks tasks. Sonar tracks code quality.
+        <strong>Cairn tracks AI-readiness, AI maturity, and AI efficiency at project level</strong>,
+        so enterprises can control what is happening and take the right actions.
+      </p>
+      <div class="pill-row">
+        <span class="pill">AI-Friendly Projects</span>
+        <span class="pill">Architecture Shared By Default</span>
+        <span class="pill">Living Documentation</span>
+        <span class="pill">Token Burn Control</span>
+        <span class="pill">Actionable Dashboards</span>
+      </div>
+    </section>
+
+    <section class="section grid-2">
+      <article class="card">
+        <h2>Enterprise Challenge</h2>
+        <ul class="list">
+          <li><span class="dot risk"></span>High token burn with little operational control.</li>
+          <li><span class="dot warn"></span>Architecture and project rules stay as tribal knowledge.</li>
+          <li><span class="dot warn"></span>New developers lose time finding context and documentation.</li>
+          <li><span class="dot risk"></span>Dependencies and third-party links are not centrally visible.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>What Cairn Changes</h2>
+        <div class="value-line">From unmanaged AI usage to measurable AI performance.</div>
+        <div class="value-line">From scattered project context to structured, shared knowledge.</div>
+        <div class="value-line">From passive reporting to prioritized, trackable actions.</div>
+      </article>
+    </section>
+
+    <section class="section">
+      <article class="card">
+        <h2>Category Positioning</h2>
+        <table class="matrix" aria-label="Positioning matrix">
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Primary Role</th>
+              <th>Blind Spot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>GitHub</td>
+              <td>Tracks code changes and collaboration.</td>
+              <td>Does not measure AI readiness and token efficiency per project.</td>
+            </tr>
+            <tr>
+              <td>Jira</td>
+              <td>Tracks tickets and planning status.</td>
+              <td>Does not govern AI context quality and architecture usage.</td>
+            </tr>
+            <tr>
+              <td>Sonar</td>
+              <td>Tracks code quality and technical debt.</td>
+              <td>Does not manage AI maturity, mission context, and token burn causes.</td>
+            </tr>
+            <tr>
+              <td><strong>Cairn</strong></td>
+              <td><strong>Tracks project AI readiness, maturity, governance, and efficiency.</strong></td>
+              <td><strong>Completes the enterprise control loop with dashboards plus actions.</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+
+    <section class="section grid-3">
+      <article class="card">
+        <h3>Control</h3>
+        <p>
+          Executives and engineering leaders get portfolio visibility: maturity distribution,
+          token consumption trends, architecture risk exposure, and project-level priorities.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Visibility</h3>
+        <p>
+          Teams see what happens inside every project: documentation drift, onboarding blockers,
+          context quality, and hidden dependency connections across systems.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Action</h3>
+        <p>
+          Cairn recommends the next best actions with impact and effort estimates, then tracks
+          improvements in score, maturity, and tokens per delivered task.
+        </p>
+      </article>
+    </section>
+
+    <section class="section grid-2">
+      <article class="card">
+        <h2>Dashboard Promise For Enterprises</h2>
+        <ul class="list">
+          <li><span class="dot info"></span><strong>Portfolio Dashboard:</strong> where risk and opportunity are concentrated.</li>
+          <li><span class="dot info"></span><strong>Team Dashboard:</strong> where token burn is wasted and why.</li>
+          <li><span class="dot info"></span><strong>Project Dashboard:</strong> what changed, what broke, what to fix first.</li>
+          <li><span class="dot info"></span><strong>Governance Dashboard:</strong> policy posture and AI security controls.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>Business Outcomes</h2>
+        <ul class="list">
+          <li>Lower tokens per delivered task.</li>
+          <li>Faster onboarding for new developers.</li>
+          <li>Less architecture drift across repositories.</li>
+          <li>Continuously usable documentation for humans and AI.</li>
+          <li>Clear governance evidence for internal controls and audits.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="cta">
+      <h2>Cairn gives enterprises control of AI engineering operations.</h2>
+      <p>
+        Not only to see what is happening inside projects, but to decide, prioritize, and act with confidence.
+      </p>
+    </section>
+
+    <p class="footer">Cairn - AI Delivery Readiness Platform</p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cairn | Pitch Entreprise</title>
+  <style>
+    :root {
+      --bg: #f3f7f0;
+      --bg2: #e8f0e6;
+      --ink: #112219;
+      --muted: #425b4c;
+      --line: #bfd1c1;
+      --card: #ffffffe0;
+      --brand: #1d7a4f;
+      --brand-strong: #145c3a;
+      --amber: #d99617;
+      --red: #ab2f2f;
+      --blue: #27659b;
+      --radius-xl: 24px;
+      --radius-lg: 16px;
+      --shadow: 0 12px 35px rgba(17, 34, 25, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Aptos", "Segoe UI Variable", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 500px at 110% -8%, #d6e8d8 0%, transparent 60%),
+        radial-gradient(800px 420px at -10% 12%, #edf5ea 0%, transparent 62%),
+        linear-gradient(165deg, var(--bg), var(--bg2));
+      min-height: 100vh;
+      line-height: 1.45;
+    }
+
+    .container {
+      width: min(1160px, 92vw);
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-art {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: fadeUp 580ms ease-out both;
+    }
+
+    .hero-copy { padding: 28px; }
+
+    .kicker {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brand-strong);
+      font-weight: 800;
+      border: 1px solid #b1d1b8;
+      background: #e8f5ea;
+      border-radius: 999px;
+      padding: 6px 12px;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(33px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      font-family: "Georgia", "Cambria", serif;
+    }
+
+    .lead {
+      margin: 0;
+      font-size: clamp(17px, 1.8vw, 22px);
+      color: var(--muted);
+      max-width: 58ch;
+    }
+
+    .chips {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 13px;
+      padding: 8px 12px;
+      color: #193426;
+      font-weight: 600;
+    }
+
+    .hero-art img {
+      width: 100%;
+      height: 100%;
+      min-height: 340px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .section {
+      margin-top: 22px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      animation: fadeUp 660ms ease-out both;
+    }
+
+    .card h2,
+    .card h3 {
+      margin: 0 0 8px;
+      line-height: 1.2;
+    }
+
+    .card h2 { font-size: 23px; }
+    .card h3 { font-size: 19px; }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .list li { margin: 8px 0; }
+
+    .tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #2b4f3b;
+      background: #edf7ef;
+      border: 1px solid #c4d8c7;
+      border-radius: 999px;
+      padding: 5px 9px;
+    }
+
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .matrix th,
+    .matrix td {
+      text-align: left;
+      padding: 11px 10px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    .matrix th {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #395646;
+    }
+
+    .media {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .media img {
+      width: 100%;
+      height: 100%;
+      min-height: 280px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .cta {
+      margin-top: 22px;
+      border-radius: 22px;
+      background: linear-gradient(150deg, #1c7248, #135837);
+      color: #edfff2;
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(20, 88, 55, 0.32);
+      animation: fadeUp 740ms ease-out both;
+    }
+
+    .cta h2 {
+      margin: 0 0 8px;
+      font-family: "Georgia", "Cambria", serif;
+      font-size: clamp(24px, 3vw, 38px);
+      line-height: 1.1;
+    }
+
+    .cta p {
+      margin: 0;
+      color: #d9f0df;
+      font-size: 16px;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .kpi {
+      border: 1px solid rgba(232, 255, 239, 0.28);
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 13px;
+      color: #e8fff0;
+    }
+
+    .footer {
+      margin-top: 18px;
+      font-size: 12px;
+      color: #45614f;
+      text-align: right;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      margin-right: 8px;
+      transform: translateY(-1px);
+    }
+
+    .g { background: var(--brand); }
+    .a { background: var(--amber); }
+    .r { background: var(--red); }
+    .b { background: var(--blue); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .two,
+      .three {
+        grid-template-columns: 1fr;
+      }
+      .kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .footer { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <article class="hero-copy">
+        <span class="kicker">Pitch Cairn</span>
+        <h1>La couche manquante pour piloter l'IA dans les projets software</h1>
+        <p class="lead">
+          GitHub suit les changements de code, Jira suit les taches, Sonar suit la qualite du code.
+          <strong>Cairn suit la maturite IA, l'efficacite IA et la gouvernance IA des projets</strong> pour donner a l'entreprise une vraie capacite de controle et d'action.
+        </p>
+        <div class="chips">
+          <span class="chip">AI-Friendly Projects</span>
+          <span class="chip">Maturite IA mesurable</span>
+          <span class="chip">Documentation vivante</span>
+          <span class="chip">Maitrise du token burn</span>
+          <span class="chip">Dashboards orientes action</span>
+        </div>
+      </article>
+      <aside class="hero-art">
+        <img src="assets/hero-control.svg" alt="Illustration de pilotage Cairn: controle, dashboard et actions" />
+      </aside>
+    </section>
+
+    <section class="section two">
+      <article class="card">
+        <h2>Le probleme entreprise aujourd'hui</h2>
+        <ul class="list">
+          <li><span class="dot r"></span>Le token burn explose sans cadre operationnel.</li>
+          <li><span class="dot a"></span>Les bonnes pratiques et l'architecture restent dans la tete de quelques experts.</li>
+          <li><span class="dot a"></span>Les nouveaux developpeurs perdent du temps a chercher contexte, docs et dependances.</li>
+          <li><span class="dot r"></span>Peu de visibilite sur les connexions inter-projets et systemes tiers.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Ce que Cairn change</h2>
+        <p>
+          Cairn transforme l'usage IA en performance IA: mesurer, prioriser, agir, prouver.
+          L'entreprise ne regarde plus seulement des indicateurs, elle pilote des decisions concretes.
+        </p>
+        <span class="tag">Controle + Visibilite + Action</span>
+      </article>
+    </section>
+
+    <section class="section">
+      <article class="card">
+        <h2>Positionnement de categorie</h2>
+        <table class="matrix" aria-label="Matrice de positionnement">
+          <thead>
+            <tr>
+              <th>Plateforme</th>
+              <th>Ce qu'elle suit</th>
+              <th>Ce qui manque</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>GitHub</td>
+              <td>Changements de code et collaboration.</td>
+              <td>Pas de mesure de readiness IA et d'efficacite tokens par projet.</td>
+            </tr>
+            <tr>
+              <td>Jira</td>
+              <td>Backlog, execution, avancement.</td>
+              <td>Pas de pilotage du contexte IA, de la maturite et des pratiques projet.</td>
+            </tr>
+            <tr>
+              <td>Sonar</td>
+              <td>Qualite technique et dette code.</td>
+              <td>Pas de gouvernance IA, pas de mission context, pas de token economics.</td>
+            </tr>
+            <tr>
+              <td><strong>Cairn</strong></td>
+              <td><strong>Readiness IA, maturite IA, gouvernance IA, cout IA.</strong></td>
+              <td><strong>Comble la boucle complete: comprendre, controler, agir.</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+
+    <section class="section two">
+      <article class="card media">
+        <img src="assets/dashboard-action.svg" alt="Dashboard Cairn montrant score, maturite, burn tokens et actions prioritaires" />
+      </article>
+      <article class="card">
+        <h2>Promesse dashboard entreprise</h2>
+        <ul class="list">
+          <li><span class="dot b"></span><strong>Portfolio:</strong> ou se concentrent risque, cout et opportunites.</li>
+          <li><span class="dot b"></span><strong>Equipe:</strong> ou le token burn est perdu, pourquoi, et quoi corriger.</li>
+          <li><span class="dot b"></span><strong>Projet:</strong> ce qui derive (docs, architecture, onboarding, contexte IA).</li>
+          <li><span class="dot b"></span><strong>Gouvernance:</strong> politiques, controles securite et evidences d'audit.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="section two">
+      <article class="card">
+        <h2>Valeur metier concrete</h2>
+        <ul class="list">
+          <li><span class="dot g"></span>Reduction des tokens par tache livree.</li>
+          <li><span class="dot g"></span>Onboarding plus rapide des nouveaux developpeurs.</li>
+          <li><span class="dot g"></span>Moins de derive d'architecture entre equipes.</li>
+          <li><span class="dot g"></span>Documentation continuellement exploitable pour humains et IA.</li>
+          <li><span class="dot g"></span>Meilleure maitrise des risques et des dependances transverses.</li>
+        </ul>
+      </article>
+      <article class="card media">
+        <img src="assets/knowledge-map.svg" alt="Cartographie Cairn du contexte projet relie a architecture, documentation et actions" />
+      </article>
+    </section>
+
+    <section class="cta">
+      <h2>Cairn donne a l'entreprise le controle de ses projets augmentes par l'IA.</h2>
+      <p>
+        Voir ce qui se passe a l'interieur, prioriser les ecarts, lancer des actions, mesurer les gains, et prouver la maitrise.
+      </p>
+      <div class="kpis" aria-label="KPI decisionnaires">
+        <div class="kpi">Tokens par tache livree</div>
+        <div class="kpi">Progression maturite IA</div>
+        <div class="kpi">Fraicheur documentation</div>
+        <div class="kpi">Tendance ecarts architecture</div>
+        <div class="kpi">Time-to-productivity onboarding</div>
+      </div>
+    </section>
+
+    <p class="footer">Cairn - AI Delivery Readiness Platform</p>
+  </main>
+</body>
+</html>

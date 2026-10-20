@@ -1,0 +1,44 @@
+<svg width="900" height="560" viewBox="0 0 900 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cardBg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F4FAF4"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="560" rx="24" fill="#ECF4EC"/>
+  <rect x="24" y="24" width="852" height="512" rx="20" fill="url(#cardBg)" stroke="#C1D3C2"/>
+
+  <rect x="52" y="60" width="260" height="138" rx="14" fill="#EFF7EF" stroke="#C8DBC9"/>
+  <text x="72" y="92" font-family="Segoe UI, Arial" font-size="17" font-weight="700" fill="#19372A">Score AI Readiness</text>
+  <text x="72" y="140" font-family="Segoe UI, Arial" font-size="42" font-weight="700" fill="#1F7A4F">74</text>
+  <text x="154" y="139" font-family="Segoe UI, Arial" font-size="24" fill="#446151">/100</text>
+  <text x="72" y="171" font-family="Segoe UI, Arial" font-size="14" fill="#446151">+8 points en 90 jours</text>
+
+  <rect x="330" y="60" width="260" height="138" rx="14" fill="#FFFFFF" stroke="#C8DBC9"/>
+  <text x="350" y="92" font-family="Segoe UI, Arial" font-size="17" font-weight="700" fill="#19372A">Maturite IA</text>
+  <text x="350" y="140" font-family="Segoe UI, Arial" font-size="42" font-weight="700" fill="#1F7A4F">Niveau 3</text>
+  <text x="350" y="171" font-family="Segoe UI, Arial" font-size="14" fill="#446151">Blocage principal: contrat d'architecture</text>
+
+  <rect x="608" y="60" width="240" height="138" rx="14" fill="#FFFFFF" stroke="#C8DBC9"/>
+  <text x="628" y="92" font-family="Segoe UI, Arial" font-size="17" font-weight="700" fill="#19372A">Burn tokens</text>
+  <text x="628" y="140" font-family="Segoe UI, Arial" font-size="34" font-weight="700" fill="#B02D2D">+19%</text>
+  <text x="628" y="171" font-family="Segoe UI, Arial" font-size="14" fill="#446151">Cause #1: exploration aveugle</text>
+
+  <text x="52" y="246" font-family="Segoe UI, Arial" font-size="18" font-weight="700" fill="#19372A">Actions prioritaires</text>
+
+  <rect x="52" y="266" width="796" height="66" rx="12" fill="#FFFFFF" stroke="#C8DBC9"/>
+  <circle cx="84" cy="299" r="8" fill="#1F7A4F"/>
+  <text x="104" y="304" font-family="Segoe UI, Arial" font-size="15" fill="#1B3328">Generer REPO_MAP et instructions scopees (gain estime: -14% tokens)</text>
+  <rect x="700" y="282" width="128" height="34" rx="8" fill="#1F7A4F"/>
+  <text x="726" y="304" font-family="Segoe UI, Arial" font-size="13" font-weight="700" fill="#ECFFF3">Lancer</text>
+
+  <rect x="52" y="344" width="796" height="66" rx="12" fill="#FFFFFF" stroke="#C8DBC9"/>
+  <circle cx="84" cy="377" r="8" fill="#E2A822"/>
+  <text x="104" y="382" font-family="Segoe UI, Arial" font-size="15" fill="#1B3328">Verifier quick-start en CI (gain estime: onboarding -1.2 jours)</text>
+  <rect x="700" y="360" width="128" height="34" rx="8" fill="#1F7A4F"/>
+  <text x="726" y="382" font-family="Segoe UI, Arial" font-size="13" font-weight="700" fill="#ECFFF3">Lancer</text>
+
+  <rect x="52" y="422" width="796" height="86" rx="12" fill="#F0F7F1" stroke="#C8DBC9"/>
+  <text x="72" y="453" font-family="Segoe UI, Arial" font-size="16" font-weight="700" fill="#19372A">Promesse dashboard entreprise</text>
+  <text x="72" y="478" font-family="Segoe UI, Arial" font-size="14" fill="#3E5B4A">Voir ce qui se passe dans chaque projet, prioriser les ecarts, declencher des actions, mesurer les gains.</text>
+</svg>
