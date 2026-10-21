@@ -1,4 +1,5 @@
-import { AXES, AXIS_LABEL, MATURITY_NAMES, MATURITY_USAGE } from "@cairn/shared";
+import { listImportViewsForRepository } from "@cairn/db";
+import { AXES, AXIS_LABEL, can, MATURITY_NAMES, MATURITY_USAGE } from "@cairn/shared";
 import { Check } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -6,19 +7,45 @@ import { GateBadge } from "@/components/badges";
 import { Radar } from "@/components/charts/radar";
 import { ScoreRing } from "@/components/charts/score-ring";
 import { Sparkline } from "@/components/charts/sparkline";
+import { ImportedProject } from "@/components/import/imported-project";
 import { IssueTable } from "@/components/issue-table";
 import { PageHeader, ProgressBar } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getApi } from "@/lib/api";
 import { formatDate } from "@/lib/format";
+import { getDb, isImportConfigured, viewerMayImport } from "@/lib/import/runtime";
+import { loadImportedScan } from "@/lib/import/scan";
+import { getViewer } from "@/lib/session";
 import { cn } from "@/lib/utils";
+
+export const dynamic = "force-dynamic";
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const api = await getApi();
   const project = await api.projects.get(id);
-  if (!project) notFound();
+
+  if (!project) {
+    // Demo projects use slugs; imported repositories use UUIDs and live in the database.
+    const viewer = await getViewer();
+    if (UUID.test(id) && isImportConfigured() && can(viewer.role, "see.allTeams")) {
+      const runs = await listImportViewsForRepository(getDb(), id);
+      if (runs.length > 0) {
+        const imported = await loadImportedScan(id);
+        return (
+          <ImportedProject
+            runs={runs}
+            scan={imported?.scan ?? null}
+            canRescan={viewerMayImport(viewer)}
+          />
+        );
+      }
+    }
+    notFound();
+  }
   const issues = await api.issues.list({ projectId: id });
   const next = Math.min(project.maturity + 1, 5);
 
@@ -37,12 +64,30 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
           </span>
         }
         actions={
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <Link
               href={`/projects/${project.id}/architecture`}
               className="text-sm underline underline-offset-4 hover:text-primary"
             >
               Voir l'architecture
+            </Link>
+            <Link
+              href={`/projects/${project.id}/code-map`}
+              className="text-sm underline underline-offset-4 hover:text-primary"
+            >
+              Carte du code
+            </Link>
+            <Link
+              href={`/projects/${project.id}/delivery`}
+              className="text-sm underline underline-offset-4 hover:text-primary"
+            >
+              Livraison
+            </Link>
+            <Link
+              href={`/projects/${project.id}/onboarding`}
+              className="text-sm underline underline-offset-4 hover:text-primary"
+            >
+              Démarrage
             </Link>
             <GateBadge status={project.gate} />
           </div>

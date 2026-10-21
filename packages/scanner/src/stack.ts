@@ -19,9 +19,16 @@ const MARKERS: ReadonlyArray<{ tech: string; patterns: string[] }> = [
 
 const IGNORED = ["**/node_modules/**", "**/.git/**", "**/target/**", "**/dist/**", "**/.next/**"];
 
-/** Read-only and deterministic: same tree in, same facts out. File contents are never read here. */
+/** Read-only and deterministic: same tree in, same facts out. File contents are never read here.
+ * Symlinks are never followed: the tree comes from an untrusted repository. */
 export async function detectStack(root: string): Promise<StackFacts> {
-  const options = { cwd: root, ignore: IGNORED, dot: true, onlyFiles: true } as const;
+  const options = {
+    cwd: root,
+    ignore: IGNORED,
+    dot: true,
+    onlyFiles: true,
+    followSymbolicLinks: false,
+  } as const;
   const all = await fg("**/*", options);
   const technologies: string[] = [];
   for (const { tech, patterns } of MARKERS) {

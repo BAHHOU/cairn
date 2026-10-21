@@ -3,30 +3,58 @@ import Link from "next/link";
 import { GateBadge, ProvenanceBadge, SeverityBadge } from "@/components/badges";
 import { ScoreRing } from "@/components/charts/score-ring";
 import { Sparkline } from "@/components/charts/sparkline";
+import { RealOverview } from "@/components/import/real-overview";
 import { KpiCard, LockedCard, PageHeader, ProgressBar } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getApi } from "@/lib/api";
 import { formatEuros, formatTokens, scoreTone, TONE_TEXT } from "@/lib/format";
+import { loadRealScans } from "@/lib/import/scan";
 import { getViewer, ROLE_LABEL } from "@/lib/session";
+
+export const dynamic = "force-dynamic";
 
 export default async function OverviewPage() {
   const viewer = await getViewer();
   const api = await getApi();
-  const [o, tokens] = await Promise.all([api.overview(), api.tokens.summary()]);
+  const [o, tokens, realScans] = await Promise.all([
+    api.overview(),
+    api.tokens.summary(),
+    loadRealScans(),
+  ]);
   const firstName = viewer.name.split(" ")[0];
   const scope =
     viewer.role === "admin" || viewer.role === "superadmin"
       ? "Toutes les équipes"
       : `Équipe ${viewer.team}`;
   const maxMaturity = Math.max(...o.maturityDistribution, 1);
+  const hasReal = realScans.length > 0;
 
   return (
     <>
       <PageHeader
         title={`Bonjour ${firstName}`}
-        description={`${ROLE_LABEL[viewer.role]} · ${scope} · ${o.projectCount} projets suivis`}
+        description={
+          hasReal
+            ? `${ROLE_LABEL[viewer.role]} · ${scope} · ${realScans.length} dépôt${realScans.length > 1 ? "s" : ""} réel${realScans.length > 1 ? "s" : ""} analysé${realScans.length > 1 ? "s" : ""}`
+            : `${ROLE_LABEL[viewer.role]} · ${scope} · ${o.projectCount} projets suivis`
+        }
       />
+
+      {hasReal ? <RealOverview scans={realScans} /> : null}
+
+      {hasReal ? (
+        <div className="flex flex-col gap-1 border-t pt-6">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold">Exemple de pilotage</h2>
+            <Badge variant="warning">Démo · données fictives</Badge>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Scores, maturité, portes qualité et budget tokens ne sont pas encore mesurés sur les dépôts
+            réels : {o.projectCount} projets fictifs illustrent ce que Cairn affichera.
+          </p>
+        </div>
+      ) : null}
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Indicateurs clés">
         <KpiCard

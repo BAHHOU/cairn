@@ -1,12 +1,13 @@
 services:
   postgres:
-    image: postgres:17
+    # Override when the registry is mirrored, e.g. CAIRN_PG_IMAGE=my-mirror/library/postgres:16-alpine
+    image: ${CAIRN_PG_IMAGE:-postgres:17}
     environment:
       POSTGRES_USER: cairn
       POSTGRES_PASSWORD: cairn
       POSTGRES_DB: cairn
     ports:
-      - "5432:5432"
+      - "${CAIRN_PG_PORT:-5432}:5432"
     volumes:
       - cairn-pg:/var/lib/postgresql/data
     healthcheck:

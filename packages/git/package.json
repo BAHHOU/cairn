@@ -1,0 +1,24 @@
+{
+  "name": "@cairn/git",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./testing": "./src/testing/fake-forge.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "forge": "tsx src/testing/serve.ts",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "tsx": "^4",
+    "typescript": "6.0.3",
+    "vitest": "5.0.5"
+  }
+}

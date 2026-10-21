@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getApi } from "@/lib/api";
 import { formatDate } from "@/lib/format";
+import { loadImportedScan } from "@/lib/import/scan";
 
 /**
  * The canvas is the only client leaf of this route.
@@ -22,14 +23,20 @@ export default async function ArchitecturePage({ params }: { params: Promise<{ i
   const { id } = await params;
   const api = await getApi();
   const project = await api.projects.get(id);
-  if (!project) notFound();
+  const imported = project ? null : await loadImportedScan(id);
+  if (!project && !imported) notFound();
+  const name = project?.name ?? imported?.name ?? id;
+  const tech = project?.tech ?? [];
+  const demoLinks = Boolean(project);
 
-  const architecture = await api.projects.architecture(id);
+  const architecture = project
+    ? await api.projects.architecture(id)
+    : (imported?.scan?.architecture ?? null);
 
   return (
     <>
       <PageHeader
-        title={`Architecture — ${project.name}`}
+        title={`Architecture — ${name}`}
         description={
           architecture ? (
             <>
@@ -42,9 +49,24 @@ export default async function ArchitecturePage({ params }: { params: Promise<{ i
           )
         }
         actions={
-          <Link href={`/projects/${project.id}`} className="text-sm underline underline-offset-4">
-            Retour à la fiche projet
-          </Link>
+          <div className="flex flex-wrap gap-4 text-sm">
+            <Link href={`/projects/${id}/code-map`} className="underline underline-offset-4">
+              Carte du code
+            </Link>
+            {demoLinks ? (
+              <>
+                <Link href={`/projects/${id}/delivery`} className="underline underline-offset-4">
+                  De dev à production
+                </Link>
+                <Link href={`/projects/${id}/onboarding`} className="underline underline-offset-4">
+                  Démarrage local
+                </Link>
+              </>
+            ) : null}
+            <Link href={`/projects/${id}`} className="underline underline-offset-4">
+              Fiche projet
+            </Link>
+          </div>
         }
       />
 
@@ -65,10 +87,10 @@ export default async function ArchitecturePage({ params }: { params: Promise<{ i
           <CardContent className="flex flex-col gap-3 text-sm">
             <p className="text-muted-foreground">
               L'extraction s'appuie sur les fichiers de construction, la configuration et les
-              manifestes de déploiement. Elle n'a pas encore été lancée sur {project.name}.
+              manifestes de déploiement. Elle n'a pas encore été lancée sur {name}.
             </p>
             <div className="flex flex-wrap gap-2">
-              {project.tech.map((t) => (
+              {tech.map((t) => (
                 <Badge key={t} variant="outline">
                   {t}
                 </Badge>

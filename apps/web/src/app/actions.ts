@@ -1,9 +1,10 @@
 "use server";
 
-import { type BlastRadius, roleSchema } from "@cairn/shared";
+import { type BlastRadius, computeBlastRadius, roleSchema } from "@cairn/shared";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { getApi } from "@/lib/api";
+import { loadImportedScan } from "@/lib/import/scan";
 import { isDemo, ROLE_COOKIE } from "@/lib/session";
 
 /**
@@ -18,7 +19,13 @@ export async function blastRadiusAction(
   nodeId: string,
 ): Promise<BlastRadius | null> {
   const api = await getApi();
-  return api.projects.blastRadius(projectId, nodeId);
+  const radius = await api.projects.blastRadius(projectId, nodeId);
+  if (radius) return radius;
+  // Imported repositories are not known to the demo API: compute from their stored scan.
+  const imported = await loadImportedScan(projectId);
+  const architecture = imported?.scan?.architecture;
+  if (!architecture?.nodes.some((n) => n.id === nodeId)) return null;
+  return computeBlastRadius(architecture, nodeId);
 }
 
 /** Demo only: lets testers look at the product as each role. */

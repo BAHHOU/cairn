@@ -11,6 +11,8 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@cairn/db": "workspace:*",
+    "@cairn/git": "workspace:*",
     "@cairn/llm": "workspace:*",
     "@cairn/shared": "workspace:*",
     "@dagrejs/dagre": "^3.1.1",

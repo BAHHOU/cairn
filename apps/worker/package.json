@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "tsx watch --env-file=../../.env src/index.ts",
     "start": "tsx --env-file=../../.env src/index.ts",
+    "smoke": "tsx --env-file=../../.env src/smoke.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "@cairn/db": "workspace:*",
+    "@cairn/git": "workspace:*",
     "@cairn/llm": "workspace:*",
     "@cairn/scanner": "workspace:*",
     "@cairn/shared": "workspace:*",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@types/node": "^24",
+    "drizzle-orm": "0.45.4",
     "tsx": "^4",
     "typescript": "6.0.3",
     "vitest": "5.0.5"

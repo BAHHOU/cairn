@@ -8,18 +8,20 @@
   },
   "scripts": {
     "generate": "drizzle-kit generate",
-    "migrate": "drizzle-kit migrate",
+    "migrate": "tsx --env-file=../../.env src/migrate.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@cairn/shared": "workspace:*",
     "drizzle-orm": "0.45.4",
-    "pg": "^8"
+    "pg": "^8",
+    "pg-boss": "12.38.0"
   },
   "devDependencies": {
     "@types/node": "^24",
     "@types/pg": "^8",
     "drizzle-kit": "0.31.11",
+    "tsx": "^4",
     "typescript": "6.0.3"
   }
 }

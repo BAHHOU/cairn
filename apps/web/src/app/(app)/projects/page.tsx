@@ -1,8 +1,12 @@
-import { MATURITY_NAMES } from "@cairn/shared";
+import { listImportViews } from "@cairn/db";
+import { can, MATURITY_NAMES } from "@cairn/shared";
+import { FolderInput } from "lucide-react";
 import Link from "next/link";
 import { GateBadge } from "@/components/badges";
+import { ImportsTable } from "@/components/import/imports-table";
 import { PageHeader, ProgressBar } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Table,
@@ -14,20 +18,50 @@ import {
 } from "@/components/ui/table";
 import { getApi } from "@/lib/api";
 import { formatDate, scoreTone, TONE_TEXT } from "@/lib/format";
+import { getDb, isImportConfigured, viewerMayImport } from "@/lib/import/runtime";
 import { getViewer } from "@/lib/session";
 import { cn } from "@/lib/utils";
+
+export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
   const viewer = await getViewer();
   const projects = await (await getApi()).projects.list();
   const sorted = [...projects].sort((a, b) => a.score - b.score);
 
+  let imports: Awaited<ReturnType<typeof listImportViews>> = [];
+  if (can(viewer.role, "see.allTeams") && isImportConfigured()) {
+    try {
+      imports = await listImportViews(getDb(), 20);
+    } catch {
+      // The demo table below keeps working when the database is down.
+    }
+  }
+
   return (
     <>
       <PageHeader
         title="Projets"
         description={`${projects.length} projets · tri par score croissant`}
+        actions={
+          viewerMayImport(viewer) ? (
+            <Link href="/projects/import" className={buttonVariants({ size: "sm" })}>
+              <FolderInput aria-hidden /> Importer un dépôt
+            </Link>
+          ) : null
+        }
       />
+      {imports.length > 0 ? (
+        <section className="flex flex-col gap-2">
+          <h2 className="flex items-center gap-2 text-sm font-semibold">
+            Dépôts importés
+            <Badge variant="success">Données réelles</Badge>
+          </h2>
+          <Card className="gap-0 py-0">
+            <ImportsTable imports={imports} />
+          </Card>
+        </section>
+      ) : null}
       <Card className="gap-0 py-0">
         <Table>
           <TableHeader>

@@ -2,6 +2,9 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as schema from "./schema";
 
+export * from "./imports";
+export * from "./queue";
+export * from "./scans";
 export * from "./schema";
 export { schema };
 

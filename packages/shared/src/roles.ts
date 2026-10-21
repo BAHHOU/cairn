@@ -10,6 +10,7 @@ export type Capability =
   | "see.euros"
   | "manage.rules"
   | "manage.users"
+  | "import.repositories"
   | "see.audit";
 
 const MATRIX: Record<Role, readonly Capability[]> = {
@@ -19,6 +20,7 @@ const MATRIX: Record<Role, readonly Capability[]> = {
     "see.euros",
     "manage.rules",
     "manage.users",
+    "import.repositories",
     "see.audit",
   ],
   admin: ["see.allTeams", "see.tokens", "manage.rules"],

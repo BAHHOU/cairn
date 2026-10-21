@@ -1,6 +1,6 @@
 "use client";
 
-import { Coins, FolderGit2, LayoutDashboard, TriangleAlert } from "lucide-react";
+import { Coins, FolderGit2, FolderInput, LayoutDashboard, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { NavGroup, NavIcon } from "@/lib/nav";
@@ -11,12 +11,17 @@ const ICONS: Record<NavIcon, React.ComponentType<{ className?: string }>> = {
   projects: FolderGit2,
   issues: TriangleAlert,
   tokens: Coins,
+  import: FolderInput,
 };
 
 export function SidebarNav({ groups }: { groups: NavGroup[] }) {
   const pathname = usePathname();
-  const isActive = (href: string) =>
+  const matches = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+  // "/projects/import" must not also light up "/projects": only the longest matching href is active.
+  const hrefs = groups.flatMap((g) => g.items.map((i) => i.href));
+  const isActive = (href: string) =>
+    matches(href) && !hrefs.some((other) => other.length > href.length && matches(other));
 
   return (
     <nav aria-label="Navigation principale" className="flex flex-col gap-5">

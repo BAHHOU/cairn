@@ -100,8 +100,9 @@ export function BottomPanel({ architecture, state, update }: Props) {
                   ))}
                 </ul>
                 <p className="mt-3 text-muted-foreground text-xs">
-                  Validé par {architecture.contract.validatedBy} le{" "}
-                  {architecture.contract.validatedAt}.
+                  {architecture.contract.validatedBy
+                    ? `Validé par ${architecture.contract.validatedBy} le ${architecture.contract.validatedAt}.`
+                    : "Contrat par défaut de Cairn : aucune équipe ne l'a encore validé."}
                 </p>
               </div>
             </div>

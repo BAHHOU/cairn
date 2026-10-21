@@ -1,6 +1,6 @@
 import type { Role } from "@cairn/shared";
 
-export type NavIcon = "dashboard" | "projects" | "issues" | "tokens";
+export type NavIcon = "dashboard" | "projects" | "issues" | "tokens" | "import";
 
 export interface NavItem {
   href: string;
@@ -25,6 +25,12 @@ export const NAV: NavGroup[] = [
     title: "Dépôts",
     items: [
       { href: "/projects", label: "Projets", icon: "projects", roles: ALL },
+      {
+        href: "/projects/import",
+        label: "Importer un dépôt",
+        icon: "import",
+        roles: ["superadmin"],
+      },
       { href: "/issues", label: "Problèmes", icon: "issues", roles: ALL },
     ],
   },

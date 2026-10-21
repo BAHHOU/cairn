@@ -1,10 +1,13 @@
 import type {
   BlastRadius,
   CairnApi,
+  CodeGraph,
+  DeliveryPipeline,
   Issue,
   OrgOverview,
   Project,
   ProjectArchitecture,
+  ProjectOnboarding,
   TokenSummary,
 } from "@cairn/shared";
 
@@ -37,6 +40,11 @@ export function createHttpApi(baseUrl: string, token?: string): CairnApi {
         get<BlastRadius | null>(
           `/projects/${encodeURIComponent(id)}/architecture/blast-radius?node=${encodeURIComponent(nodeId)}`,
         ),
+      codeGraph: (id) => get<CodeGraph | null>(`/projects/${encodeURIComponent(id)}/code-graph`),
+      delivery: (id) =>
+        get<DeliveryPipeline | null>(`/projects/${encodeURIComponent(id)}/delivery`),
+      onboarding: (id) =>
+        get<ProjectOnboarding | null>(`/projects/${encodeURIComponent(id)}/onboarding`),
     },
     issues: {
       list: (filter) => {

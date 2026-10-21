@@ -11,6 +11,8 @@ import {
   type Viewer,
 } from "@cairn/shared";
 import { ARCHITECTURES } from "./architecture-data";
+import { CODE_GRAPHS } from "./code-graph-data";
+import { DELIVERIES } from "./delivery-data";
 import {
   EURO_PER_MILLION_TOKENS,
   ISSUES,
@@ -21,6 +23,7 @@ import {
   TEAM_QUOTA,
   TOKENS,
 } from "./mock-data";
+import { ONBOARDINGS } from "./onboarding-data";
 
 const SEVERITY_RANK: Record<Severity, number> = { blocker: 0, critical: 1, major: 2, minor: 3 };
 
@@ -109,6 +112,19 @@ export function createMockApi(viewer: Viewer): CairnApi {
           ...radius,
           impactedIssueIds: radius.impactedIssueIds.filter((i) => visible.has(i)),
         };
+      },
+      /** Same scoping rule: the code map of a project out of scope does not exist. */
+      async codeGraph(id) {
+        if (!scopedIds.has(id)) return null;
+        return CODE_GRAPHS[id] ?? null;
+      },
+      async delivery(id) {
+        if (!scopedIds.has(id)) return null;
+        return DELIVERIES[id] ?? null;
+      },
+      async onboarding(id) {
+        if (!scopedIds.has(id)) return null;
+        return ONBOARDINGS[id] ?? null;
       },
     },
 

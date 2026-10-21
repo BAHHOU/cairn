@@ -10,6 +10,12 @@ describe("roles", () => {
     expect(can("admin", "see.euros")).toBe(false);
     expect(can("superadmin", "see.euros")).toBe(true);
   });
+  it("reserves repository import to the superadmin", () => {
+    expect(can("superadmin", "import.repositories")).toBe(true);
+    expect(can("admin", "import.repositories")).toBe(false);
+    expect(can("manager", "import.repositories")).toBe(false);
+    expect(can("dev", "import.repositories")).toBe(false);
+  });
 });
 
 describe("usage", () => {

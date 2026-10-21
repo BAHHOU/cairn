@@ -1,5 +1,8 @@
 import type { BlastRadius, ProjectArchitecture } from "./architecture";
+import type { CodeGraph } from "./code-graph";
+import type { DeliveryPipeline } from "./delivery";
 import type { Issue, OrgOverview, Project, Severity, TokenSummary } from "./domain";
+import type { ProjectOnboarding } from "./onboarding";
 
 /**
  * The single contract between the UI and its data.
@@ -16,6 +19,12 @@ export interface CairnApi {
     architecture(id: string): Promise<ProjectArchitecture | null>;
     /** What breaks if the given node changes. Computed next to the data, never in the UI. */
     blastRadius(id: string, nodeId: string): Promise<BlastRadius | null>;
+    /** The symbol-level map: modules, classes, tables, docs. null when never extracted. */
+    codeGraph(id: string): Promise<CodeGraph | null>;
+    /** The chain from commit to production: stages, gates, environments. */
+    delivery(id: string): Promise<DeliveryPipeline | null>;
+    /** What a new developer needs to run the project locally. */
+    onboarding(id: string): Promise<ProjectOnboarding | null>;
   };
   issues: {
     list(filter?: { projectId?: string; severity?: Severity }): Promise<Issue[]>;
