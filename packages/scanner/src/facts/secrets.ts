@@ -14,6 +14,7 @@ const TOKENS: { family: string; re: RegExp }[] = [
   },
   { family: "aws", re: /\bAKIA[0-9A-Z]{16}\b/g },
   { family: "slack", re: /\bxox[baprs]-[A-Za-z0-9-]{10,}/g },
+  { family: "sonar", re: /\bsq[bpua]_[0-9a-f]{30,}/g },
 ];
 
 /** `password = "abc12345"`, `"apiKey": "..."`. A value with a space is prose, not a credential. */

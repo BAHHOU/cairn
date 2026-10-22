@@ -1,7 +1,10 @@
 import {
   type CodeGraph,
+  type DeliveryView,
+  type DocsView,
   IMPORT_STATUSES,
   type ImportFacts,
+  type OnboardingView,
   type ProjectArchitecture,
   type ScanFileRecord,
   type ScanReport,
@@ -100,6 +103,10 @@ export const repositoryScans = pgTable(
     report: jsonb("report").$type<ScanReport>().notNull(),
     architecture: jsonb("architecture").$type<ProjectArchitecture>().notNull(),
     codeGraph: jsonb("code_graph").$type<CodeGraph>().notNull(),
+    /** Null for scans made before the guides existed, and for repositories without a pipeline file. */
+    delivery: jsonb("delivery").$type<DeliveryView>(),
+    onboarding: jsonb("onboarding").$type<OnboardingView>(),
+    docs: jsonb("docs").$type<DocsView>(),
     fileIndex: jsonb("file_index").$type<ScanFileRecord[]>(),
     createdAt: createdAt(),
   },

@@ -2,6 +2,7 @@ import { type ImportView, isImportActive, type ScanView } from "@cairn/shared";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { ProjectTabs } from "@/components/guide/bits";
 import { AutoRefresh } from "@/components/import/auto-refresh";
 import { RescanButton } from "@/components/import/rescan-button";
 import { ScanNumbers } from "@/components/import/scan-numbers";
@@ -12,18 +13,29 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate, formatNumber } from "@/lib/format";
 
-/** Views Cairn cannot draw yet for an imported repository. */
-const PENDING_VIEWS = [
-  { label: "Livraison", hint: "Du commit à la production (CI/CD)" },
-  { label: "Démarrage", hint: "Installation locale pour un nouveau développeur" },
-] as const;
-
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex items-baseline justify-between gap-4 border-b py-2 text-sm last:border-b-0">
       <dt className="shrink-0 text-muted-foreground">{label}</dt>
       <dd className="min-w-0 text-right">{children}</dd>
     </div>
+  );
+}
+
+function ViewLink({ href, label, summary }: { href: string; label: string; summary: string }) {
+  return (
+    <li>
+      <Link
+        href={href}
+        className="flex items-center justify-between gap-3 rounded-lg border p-3 text-sm transition-colors hover:bg-accent/50"
+      >
+        <span className="flex flex-col">
+          <span className="font-medium">{label}</span>
+          <span className="text-muted-foreground text-xs">{summary}</span>
+        </span>
+        <Badge>Ouvrir</Badge>
+      </Link>
+    </li>
   );
 }
 
@@ -98,6 +110,7 @@ export function ImportedProject({
           </>
         }
       />
+      <ProjectTabs id={repo.id} active="overview" />
 
       <section className="grid items-start gap-4 lg:grid-cols-2">
         <Card>
@@ -191,24 +204,40 @@ export function ImportedProject({
                       <Badge>Ouvrir</Badge>
                     </Link>
                   </li>
+                  <ViewLink
+                    href={`/projects/${repo.id}/delivery`}
+                    label="CI/CD"
+                    summary={
+                      scan.delivery
+                        ? `${scan.delivery.stages.length} étapes · ${scan.delivery.counts.jobs} jobs · ${scan.delivery.findings.length} point(s) d'attention`
+                        : "Du commit à la production (CI/CD)"
+                    }
+                  />
+                  <ViewLink
+                    href={`/projects/${repo.id}/onboarding`}
+                    label="Démarrage"
+                    summary={
+                      scan.onboarding
+                        ? `${scan.onboarding.tools.length} outils · ${scan.onboarding.steps.length} étapes`
+                        : "Installation locale pour un nouveau développeur"
+                    }
+                  />
+                  <ViewLink
+                    href={`/projects/${repo.id}/docs`}
+                    label="Documentation"
+                    summary={
+                      scan.docs
+                        ? `${scan.docs.stats.files} documents · ${scan.docs.drift.length} contradiction(s)`
+                        : "Ce qui est écrit et ce qui manque"
+                    }
+                  />
                 </>
               ) : (
                 <li className="rounded-lg border border-dashed p-3 text-muted-foreground text-sm">
-                  Architecture et carte du code : disponibles après la première analyse réussie.
+                  Architecture, carte du code, CI/CD, démarrage et documentation : disponibles après
+                  la première analyse réussie.
                 </li>
               )}
-              {PENDING_VIEWS.map((view) => (
-                <li
-                  key={view.label}
-                  className="flex items-center justify-between gap-3 rounded-lg border border-dashed p-3 text-sm"
-                >
-                  <span className="flex flex-col">
-                    <span className="font-medium">{view.label}</span>
-                    <span className="text-xs text-muted-foreground">{view.hint}</span>
-                  </span>
-                  <Badge variant="secondary">À venir</Badge>
-                </li>
-              ))}
             </ul>
           </CardContent>
         </Card>

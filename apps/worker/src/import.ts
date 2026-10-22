@@ -110,6 +110,9 @@ export async function processImport(deps: ImportDeps, importId: string): Promise
         report: scan.report,
         architecture: scan.architecture,
         codeGraph: scan.codeGraph,
+        delivery: scan.delivery,
+        onboarding: scan.onboarding,
+        docs: scan.docs,
         fileIndex: scan.files,
       });
       scanSummary = {

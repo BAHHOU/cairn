@@ -1,7 +1,10 @@
 import {
   type CodeGraph,
+  type DeliveryView,
+  type DocsView,
   EXTRACTOR_VERSION,
   estimateTokens,
+  type OnboardingView,
   type ProjectArchitecture,
   SCAN_SCHEMA_VERSION,
   type ScanFileRecord,
@@ -11,7 +14,10 @@ import {
 import { buildArchitecture } from "./architecture";
 import { classify } from "./classify";
 import { buildCodeGraph } from "./codegraph";
+import { buildDelivery } from "./delivery";
+import { buildDocs } from "./docs";
 import { extractFile } from "./facts";
+import { buildOnboarding } from "./onboarding";
 import { Project } from "./project";
 import { computeStats } from "./stats";
 import type { TreeEntry } from "./tree";
@@ -40,6 +46,10 @@ export interface ScanResult {
   report: ScanReport;
   architecture: ProjectArchitecture;
   codeGraph: CodeGraph;
+  /** Null when the repository has no pipeline file. */
+  delivery: DeliveryView | null;
+  onboarding: OnboardingView;
+  docs: DocsView;
   /** Per-file records, kept so the next scan can skip every file whose hash did not change. */
   files: ScanFileRecord[];
 }
@@ -154,6 +164,15 @@ export async function scanRepository(input: ScanInput): Promise<ScanResult> {
     generatedAt,
   });
 
+  const delivery = buildDelivery(project, {
+    architecture,
+    repoProvider:
+      input.provider === "github" ? "github" : input.provider === "gitlab" ? "gitlab" : null,
+    repoName: input.repoName,
+  });
+  const onboarding = buildOnboarding(project, delivery);
+  const docs = buildDocs(project, stats);
+
   const findings: ScanFinding[] = [];
   for (const f of files) {
     for (const finding of f.facts?.findings ?? []) {
@@ -186,5 +205,5 @@ export async function scanRepository(input: ScanInput): Promise<ScanResult> {
     },
   };
 
-  return { report, architecture, codeGraph, files };
+  return { report, architecture, codeGraph, delivery, onboarding, docs, files };
 }

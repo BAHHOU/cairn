@@ -13,7 +13,8 @@
       "!**/.next",
       "!**/dist",
       "!**/next-env.d.ts",
-      "!**/prisma/migrations"
+      "!**/prisma/migrations",
+      "!**/brand-icons.ts"
     ]
   },
   "formatter": {

@@ -39,6 +39,8 @@ export const containerNodeId = (unit: Unit): string =>
   `ctr-${slug(unit.key === "." ? unit.name : unit.key)}`;
 export const componentNodeId = (unit: Unit, role: JavaRole): string =>
   `cmp-${slug(unit.key === "." ? unit.name : unit.key)}-${role}`;
+/** Id of the node drawn for a container image, shared with the delivery view. */
+export const imageNodeId = (image: string): string => `img-${slug(imageRepository(image))}`;
 
 const providerLabel = (provider: string) =>
   provider === "github" ? "GitHub" : provider === "gitlab" ? "GitLab" : provider;
@@ -787,7 +789,7 @@ export function buildArchitecture(input: ArchitectureInput): ProjectArchitecture
       for (const push of job.pushes) {
         const image = imageRepository(push.image);
         if (!image) continue;
-        const id = `img-${slug(image)}`;
+        const id = imageNodeId(image);
         const dockerPath = push.dockerfile ? findDockerfile(project, push.dockerfile) : undefined;
         addNode({
           id,

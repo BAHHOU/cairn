@@ -81,7 +81,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
               href={`/projects/${project.id}/delivery`}
               className="text-sm underline underline-offset-4 hover:text-primary"
             >
-              Livraison
+              CI/CD
             </Link>
             <Link
               href={`/projects/${project.id}/onboarding`}

@@ -9,10 +9,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SeverityBadge } from "@/components/badges";
 import { EnvironmentCard, Source, StageRow } from "@/components/delivery/board";
+import { ImportedDelivery } from "@/components/guide/delivery-view";
 import { PageHeader } from "@/components/page";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getApi } from "@/lib/api";
 import { formatDate } from "@/lib/format";
+import { loadImportedScan } from "@/lib/import/scan";
 
 /**
  * The chain from a commit to production.
@@ -29,7 +31,11 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
   const { id } = await params;
   const api = await getApi();
   const project = await api.projects.get(id);
-  if (!project) notFound();
+  if (!project) {
+    const imported = await loadImportedScan(id);
+    if (!imported) notFound();
+    return <ImportedDelivery id={id} imported={imported} />;
+  }
 
   const pipeline = await api.projects.delivery(id);
   const architecture = await api.projects.architecture(id);
@@ -42,7 +48,7 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
   return (
     <>
       <PageHeader
-        title={`Livraison — ${project.name}`}
+        title={`CI/CD — ${project.name}`}
         description={
           pipeline && board && last ? (
             <>
@@ -53,7 +59,7 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
               {formatDate(pipeline.generatedAt)}
             </>
           ) : (
-            "Aucune chaîne de livraison n'a encore été extraite pour ce projet."
+            "Aucune chaîne CI/CD n'a encore été extraite pour ce projet."
           )
         }
         actions={
@@ -179,7 +185,7 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>Pas encore de chaîne de livraison</CardTitle>
+            <CardTitle>Pas encore de chaîne CI/CD</CardTitle>
             <CardDescription>
               Elle se lit dans les fichiers de pipeline et les manifestes de déploiement, pas dans
               un tableau tenu à la main.

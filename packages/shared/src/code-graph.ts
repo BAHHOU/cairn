@@ -175,7 +175,8 @@ export function detectCommunities(
   // a tenth of everything. Letting them vote glues all their users into one blob, so they
   // sit out the vote and join the plurality of their neighbours afterwards. Small graphs
   // keep the plain algorithm.
-  const hubCutoff = ordered.length >= 100 ? Math.ceil(ordered.length * 0.1) : Number.POSITIVE_INFINITY;
+  const hubCutoff =
+    ordered.length >= 100 ? Math.ceil(ordered.length * 0.1) : Number.POSITIVE_INFINITY;
   const hubs = new Set(ordered.filter((id) => (adj.get(id)?.size ?? 0) > hubCutoff));
 
   for (let pass = 0; pass < passes; pass += 1) {

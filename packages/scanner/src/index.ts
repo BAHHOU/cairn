@@ -1,6 +1,10 @@
 export { buildArchitecture } from "./architecture";
 export { classify } from "./classify";
 export { buildCodeGraph } from "./codegraph";
+export { buildDelivery, humanizeCondition } from "./delivery";
+export { buildDocs } from "./docs";
+export { redact } from "./facts/redact";
+export { buildOnboarding } from "./onboarding";
 export { Project } from "./project";
 export { type ScanInput, type ScanResult, scanRepository } from "./scan";
 export * from "./stack";

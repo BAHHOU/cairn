@@ -3,6 +3,7 @@ export * from "./architecture";
 export * from "./code-graph";
 export * from "./delivery";
 export * from "./domain";
+export * from "./guide";
 export * from "./imports";
 export * from "./onboarding";
 export * from "./roles";

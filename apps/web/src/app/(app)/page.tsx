@@ -50,8 +50,8 @@ export default async function OverviewPage() {
             <Badge variant="warning">Démo · données fictives</Badge>
           </div>
           <p className="text-sm text-muted-foreground">
-            Scores, maturité, portes qualité et budget tokens ne sont pas encore mesurés sur les dépôts
-            réels : {o.projectCount} projets fictifs illustrent ce que Cairn affichera.
+            Scores, maturité, portes qualité et budget tokens ne sont pas encore mesurés sur les
+            dépôts réels : {o.projectCount} projets fictifs illustrent ce que Cairn affichera.
           </p>
         </div>
       ) : null}

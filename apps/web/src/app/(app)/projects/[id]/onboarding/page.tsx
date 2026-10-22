@@ -10,12 +10,14 @@ import {
 import { CalendarClock, Timer } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ImportedOnboarding } from "@/components/guide/onboarding-view";
 import { IssueTable } from "@/components/issue-table";
 import { AccessRow, PitfallCard, PrereqRow, StepCard } from "@/components/onboarding/steps";
 import { PageHeader } from "@/components/page";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getApi } from "@/lib/api";
 import { formatDate } from "@/lib/format";
+import { loadImportedScan } from "@/lib/import/scan";
 
 /**
  * Getting a new developer running locally.
@@ -28,7 +30,11 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
   const { id } = await params;
   const api = await getApi();
   const project = await api.projects.get(id);
-  if (!project) notFound();
+  if (!project) {
+    const imported = await loadImportedScan(id);
+    if (!imported) notFound();
+    return <ImportedOnboarding id={id} imported={imported} />;
+  }
 
   const onboarding = await api.projects.onboarding(id);
   const issues = onboarding ? await api.issues.list({ projectId: id }) : [];
@@ -70,7 +76,7 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
               href={`/projects/${project.id}/delivery`}
               className="underline underline-offset-4"
             >
-              Chaîne de livraison
+              Chaîne CI/CD
             </Link>
             <Link href={`/projects/${project.id}`} className="underline underline-offset-4">
               Fiche projet

@@ -15,6 +15,13 @@
       "when": 1792583582614,
       "tag": "0001_silky_longshot",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792587339294,
+      "tag": "0002_guides",
+      "breakpoints": true
     }
   ]
 }

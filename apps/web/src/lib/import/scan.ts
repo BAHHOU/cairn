@@ -7,12 +7,15 @@ import {
 import { can, type ScanView } from "@cairn/shared";
 import { getViewer } from "@/lib/session";
 import { getDb, isImportConfigured } from "./runtime";
+import type { SourceBase } from "./source-link";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export interface ImportedScan {
   repositoryId: string;
   name: string;
+  /** Where the files can be opened on the forge. */
+  source: SourceBase;
   /** Null while the first scan has not finished (or for an import made before scans existed). */
   scan: ScanView | null;
 }
@@ -32,7 +35,16 @@ export async function loadImportedScan(id: string): Promise<ImportedScan | null>
   ]);
   const latest = runs[0];
   if (!latest) return null;
-  return { repositoryId: id, name: latest.repository.fullPath, scan };
+  return {
+    repositoryId: id,
+    name: latest.repository.fullPath,
+    source: {
+      webUrl: latest.repository.webUrl ?? null,
+      branch: latest.repository.branch,
+      provider: latest.repository.provider,
+    },
+    scan,
+  };
 }
 
 /**

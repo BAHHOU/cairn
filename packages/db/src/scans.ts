@@ -10,6 +10,9 @@ export interface SaveScanInput {
   report: ScanView["report"];
   architecture: ScanView["architecture"];
   codeGraph: ScanView["codeGraph"];
+  delivery: ScanView["delivery"];
+  onboarding: ScanView["onboarding"];
+  docs: ScanView["docs"];
   fileIndex: ScanFileRecord[];
 }
 
@@ -26,6 +29,9 @@ export async function saveScan(db: Db, input: SaveScanInput): Promise<string> {
           report: input.report,
           architecture: input.architecture,
           codeGraph: input.codeGraph,
+          delivery: input.delivery,
+          onboarding: input.onboarding,
+          docs: input.docs,
           fileIndex: input.fileIndex,
         },
       })
@@ -56,6 +62,9 @@ export async function getLatestScan(db: Db, repositoryId: string): Promise<ScanV
       report: repositoryScans.report,
       architecture: repositoryScans.architecture,
       codeGraph: repositoryScans.codeGraph,
+      delivery: repositoryScans.delivery,
+      onboarding: repositoryScans.onboarding,
+      docs: repositoryScans.docs,
     })
     .from(repositoryScans)
     .where(eq(repositoryScans.repositoryId, repositoryId))

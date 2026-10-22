@@ -1,6 +1,8 @@
 import type { FileFacts, FileKind } from "@cairn/shared";
 import { extractCi, extractDocker } from "./ci";
 import { extractConfig, type Finding } from "./config";
+import { extractDeploy } from "./deploy";
+import { extractDoc } from "./docs";
 import { extractJava } from "./java";
 import { extractPom } from "./pom";
 import { scanSecrets } from "./secrets";
@@ -46,6 +48,7 @@ export function extractFile(path: string, kind: FileKind, text: string): Extract
 
   try {
     if (ext === "java") facts.java = extractJava(text);
+    else if (ext === "md" && kind !== "generated") facts.doc = extractDoc(text);
     else if ((ext === "ts" || ext === "tsx") && !lower.endsWith(".d.ts"))
       facts.ts = extractTs(text);
     else if (lower === "pom.xml") {
@@ -66,6 +69,20 @@ export function extractFile(path: string, kind: FileKind, text: string): Extract
     }
   } catch (error) {
     facts.unreadable = `extraction impossible : ${(error as Error).message.slice(0, 120)}`;
+  }
+
+  if (
+    kind !== "generated" &&
+    kind !== "data" &&
+    kind !== "binary" &&
+    (ext === "yml" || ext === "yaml" || ext === "tf")
+  ) {
+    try {
+      const deploy = extractDeploy(path, text);
+      if (deploy) facts.deploy = deploy;
+    } catch {
+      // A manifest that cannot be read is not a delivery fact; the config pass reports unreadable YAML.
+    }
   }
 
   const structured = ext === "yml" || ext === "yaml" || ext === "properties";
@@ -93,4 +110,12 @@ export function extractFile(path: string, kind: FileKind, text: string): Extract
   return Object.keys(facts).length > 0 ? { lines, facts } : { lines };
 }
 
-export { extractCi, extractConfig, extractDocker, extractJava, extractPom, extractTs };
+export {
+  extractCi,
+  extractConfig,
+  extractDeploy,
+  extractDocker,
+  extractJava,
+  extractPom,
+  extractTs,
+};

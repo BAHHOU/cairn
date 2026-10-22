@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { ProjectTabs } from "@/components/guide/bits";
 import { PageHeader } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -69,6 +70,7 @@ export default async function ArchitecturePage({ params }: { params: Promise<{ i
           </div>
         }
       />
+      {imported ? <ProjectTabs id={id} active="architecture" /> : null}
 
       {architecture ? (
         <Suspense

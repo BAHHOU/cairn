@@ -8,11 +8,12 @@
 
 import type { ProjectArchitecture } from "./architecture";
 import type { CodeGraph } from "./code-graph";
+import type { DeliveryView, DocsView, OnboardingView } from "./guide";
 
 export const SCAN_SCHEMA_VERSION = 1;
 
 /** Bump when an extractor changes: cached per-file facts of an older version are recomputed. */
-export const EXTRACTOR_VERSION = 1;
+export const EXTRACTOR_VERSION = 4;
 
 export const FILE_KINDS = [
   "source",
@@ -144,21 +145,78 @@ export interface DockerFacts {
   copies: string[];
 }
 
+export interface CiRule {
+  /** The condition as written (`$CI_COMMIT_BRANCH == "develop"`). Absent for an unconditional rule. */
+  if?: string;
+  when?: string;
+  allowFailure?: boolean;
+}
+
 export interface CiJob {
   name: string;
   stage?: string;
   image?: string;
   manual: boolean;
   tools: string[];
-  /** Image repositories pushed by the job, tag removed. */
-  pushes: { image: string; dockerfile?: string }[];
+  /** Image repositories pushed by the job, tag removed. `registry` is the host or variable written before the path. */
+  pushes: { image: string; tag?: string; dockerfile?: string; registry?: string }[];
   environment?: string;
+  line?: number;
+  /** `when:` of the job itself. */
+  when?: string;
+  allowFailure?: boolean;
+  rules?: CiRule[];
+  needs?: string[];
+  artifacts?: string[];
+  junit?: boolean;
+  retry?: number;
+  /** Weakening patterns found in the script, see `PIPELINE_FLAGS`. Scripts themselves are not kept. */
+  flags?: string[];
+  /** Variable names the script reads. Never their values. */
+  vars?: string[];
 }
 
 export interface CiFacts {
   provider: "gitlab" | "github" | "jenkins";
   stages: string[];
   jobs: CiJob[];
+  /** Conditions of the `workflow:` block, as written. */
+  workflow?: string[];
+  includes?: string[];
+  /** Variables the file defines itself, with the line and the variables their value refers to. */
+  definedVars?: { name: string; line?: number; from?: string[] }[];
+}
+
+/**
+ * How a repository describes where it runs: Kubernetes and Argo CD objects, compose services, Helm
+ * charts, Terraform. Read with patterns, never executed; a URL loses its credentials and its query.
+ */
+export interface DeployObject {
+  kind: string;
+  apiVersion: string;
+  name?: string;
+  namespace?: string;
+  line: number;
+  /** Container images the object runs, as written. */
+  images: string[];
+  /** Argo CD `Application` / Flux: what is synchronised from where to where. */
+  sync?: {
+    repoUrl?: string;
+    path?: string;
+    chart?: string;
+    revision?: string;
+    destNamespace?: string;
+    destCluster?: string;
+    automated?: boolean;
+  };
+}
+
+export interface DeployFacts {
+  objects: DeployObject[];
+  compose?: { name: string; image?: string; built: boolean; ports: string[]; line: number }[];
+  chart?: { name: string; version?: string; dependencies: string[] };
+  kustomize?: { resources: number; images: string[] };
+  terraform?: { providers: string[]; resources: number };
 }
 
 /** A configuration value worth knowing about. Secrets are never kept, URLs are reduced to a host. */
@@ -168,6 +226,27 @@ export interface ConfigEntry {
   line: number;
 }
 
+/** What a Markdown file says about the project, with every command and path redacted of credentials. */
+export interface DocFacts {
+  title?: string;
+  words: number;
+  headings: { level: number; text: string; line: number }[];
+  /** Fenced code blocks, with the heading they sit under and the sentence that introduces them. */
+  blocks: { line: number; lang?: string; lines: string[]; heading?: string; lead?: string }[];
+  /** List items, to read the "tools to install" lists. */
+  bullets: { line: number; text: string; heading?: string }[];
+  /** Repository paths written in backticks. */
+  paths: { path: string; line: number }[];
+  /** Lines that warn: "do not commit", "does not work". */
+  notes: { line: number; text: string }[];
+  /** Paths that belong to the author's machine (`C:/dev/...`, `<your_path>/...`). */
+  machinePaths: { text: string; line: number }[];
+  /** `http://localhost:PORT/...` addresses. */
+  localUrls: { url: string; line: number }[];
+  /** Tool versions written in prose (`Java 8`, `Node 18`). */
+  mentions: { tool: string; version: string; line: number }[];
+}
+
 export interface FileFacts {
   java?: JavaFacts;
   ts?: TsFacts;
@@ -175,6 +254,8 @@ export interface FileFacts {
   pkg?: PackageJsonFacts;
   docker?: DockerFacts;
   ci?: CiFacts;
+  deploy?: DeployFacts;
+  doc?: DocFacts;
   config?: ConfigEntry[];
   findings?: Omit<ScanFinding, "path">[];
   /** Why a file could not be read, so a gap is declared rather than silent. */
@@ -300,4 +381,8 @@ export interface ScanView {
   report: ScanReport;
   architecture: ProjectArchitecture;
   codeGraph: CodeGraph;
+  /** Null for a scan made before these guides existed: a re-scan fills them. */
+  delivery: DeliveryView | null;
+  onboarding: OnboardingView | null;
+  docs: DocsView | null;
 }
