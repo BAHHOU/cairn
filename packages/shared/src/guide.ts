@@ -56,12 +56,6 @@ export const PIPELINE_JOB_ROLE_LABEL: Record<PipelineJobRole, string> = {
 /** `auto` runs by itself, `manual` waits for someone, `conditional` depends on the branch or tag. */
 export type PipelineTrigger = "auto" | "manual" | "conditional";
 
-export const PIPELINE_TRIGGER_LABEL: Record<PipelineTrigger, string> = {
-  auto: "Automatique",
-  manual: "Manuel",
-  conditional: "Selon la branche",
-};
-
 /** Things the job does that weaken what it is supposed to guarantee. */
 export const PIPELINE_FLAGS = [
   "tests-skipped",
@@ -71,14 +65,6 @@ export const PIPELINE_FLAGS = [
   "runs-always",
 ] as const;
 export type PipelineFlag = (typeof PIPELINE_FLAGS)[number];
-
-export const PIPELINE_FLAG_LABEL: Record<PipelineFlag, string> = {
-  "tests-skipped": "Tests désactivés",
-  "test-failures-ignored": "Échecs de tests ignorés",
-  "tls-unverified": "Certificats TLS non vérifiés",
-  "lockfile-removed": "Verrou des dépendances supprimé",
-  "runs-always": "S'exécute même après un échec",
-};
 
 export interface PipelineJobView {
   name: string;
@@ -126,12 +112,6 @@ export interface PipelineImageView {
 export const PIPELINE_VARIABLE_KINDS = ["gitlab", "secret", "project"] as const;
 export type PipelineVariableKind = (typeof PIPELINE_VARIABLE_KINDS)[number];
 
-export const PIPELINE_VARIABLE_KIND_LABEL: Record<PipelineVariableKind, string> = {
-  gitlab: "Fournie par la plateforme CI",
-  secret: "À fournir, sensible",
-  project: "À fournir dans les réglages CI/CD",
-};
-
 export interface PipelineVariableView {
   name: string;
   kind: PipelineVariableKind;
@@ -154,24 +134,6 @@ export interface PipelineEnvironmentView {
 /** Columns of the picture, left to right. */
 export const TOPOLOGY_LANES = ["source", "pipeline", "services", "deliver", "run", "data"] as const;
 export type TopologyLane = (typeof TOPOLOGY_LANES)[number];
-
-export const TOPOLOGY_LANE_LABEL: Record<TopologyLane, string> = {
-  source: "Code",
-  pipeline: "Pipeline",
-  services: "Dépôts et services reliés",
-  deliver: "Déploiement",
-  run: "Exécution",
-  data: "Dépendances",
-};
-
-export const TOPOLOGY_LANE_HINT: Record<TopologyLane, string> = {
-  source: "Où vit le code",
-  pipeline: "Ce que la chaîne exécute",
-  services: "Registres, dépôts d'artefacts, qualité",
-  deliver: "Ce qui met en ligne",
-  run: "Ce qui tourne",
-  data: "Ce dont l'application a besoin",
-};
 
 /** Technologies that get a logo. Anything else falls back to a generic icon of its `role`. */
 export const TOPOLOGY_BRANDS = [
@@ -247,12 +209,6 @@ export type TopologyRole = (typeof TOPOLOGY_ROLES)[number];
  */
 export type TopologyBasis = "found" | "inferred" | "missing";
 
-export const TOPOLOGY_BASIS_LABEL: Record<TopologyBasis, string> = {
-  found: "Lu dans le dépôt",
-  inferred: "Déduit",
-  missing: "Non décrit dans le dépôt",
-};
-
 export interface TopologyNode {
   id: string;
   lane: TopologyLane;
@@ -314,24 +270,6 @@ export interface DeliveryView {
 
 export const GUIDE_PHASES = ["prerequis", "services", "build", "run", "verify", "other"] as const;
 export type GuidePhase = (typeof GUIDE_PHASES)[number];
-
-export const GUIDE_PHASE_LABEL: Record<GuidePhase, string> = {
-  prerequis: "Prérequis",
-  services: "Services locaux",
-  build: "Compilation",
-  run: "Démarrage",
-  verify: "Vérification",
-  other: "Autres étapes",
-};
-
-export const GUIDE_PHASE_HINT: Record<GuidePhase, string> = {
-  prerequis: "Ce qui doit être installé sur le poste",
-  services: "Base de données, messagerie : ce qui tourne à côté de l'application",
-  build: "Construire le projet",
-  run: "Lancer l'application",
-  verify: "Savoir que ça marche",
-  other: "Le reste du README",
-};
 
 export interface GuideTool {
   id: string;
@@ -398,15 +336,6 @@ export const DOC_KINDS = [
   "other",
 ] as const;
 export type DocKind = (typeof DOC_KINDS)[number];
-
-export const DOC_KIND_LABEL: Record<DocKind, string> = {
-  readme: "README",
-  guide: "Guide",
-  changelog: "Historique des versions",
-  contributing: "Contribution",
-  license: "Licence",
-  other: "Autre document",
-};
 
 export interface DocFileView {
   path: string;

@@ -1,14 +1,17 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { CommandPalette, type PaletteEntry } from "@/components/command-palette";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 import { RoleSwitcher } from "@/components/role-switcher";
 import { SidebarNav } from "@/components/sidebar-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { getApi } from "@/lib/api";
 import { navFor } from "@/lib/nav";
-import { getViewer, isDemo, ROLE_LABEL } from "@/lib/session";
+import { getViewer, isDemo } from "@/lib/session";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  const t = await getTranslations();
   const viewer = await getViewer();
   const api = await getApi();
   const projects = await api.projects.list();
@@ -16,9 +19,17 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   const entries: PaletteEntry[] = [
     ...groups.flatMap((g) =>
-      g.items.map((i) => ({ group: "Pages", label: i.label, href: i.href })),
+      g.items.map((i) => ({
+        group: t("palette.groupPages"),
+        label: t(`nav.item.${i.label}`),
+        href: i.href,
+      })),
     ),
-    ...projects.map((p) => ({ group: "Projets", label: p.name, href: `/projects/${p.id}` })),
+    ...projects.map((p) => ({
+      group: t("palette.groupProjects"),
+      label: p.name,
+      href: `/projects/${p.id}`,
+    })),
   ];
 
   const initials = viewer.name
@@ -42,7 +53,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <SidebarNav groups={groups} />
 
         <div className="mt-auto flex flex-col gap-3">
-          {isDemo() ? <RoleSwitcher current={viewer.role} labels={ROLE_LABEL} /> : null}
+          {isDemo() ? <RoleSwitcher current={viewer.role} /> : null}
           <div className="flex items-center gap-2 rounded-md border p-2">
             <span className="grid size-8 place-items-center rounded-full bg-muted text-xs font-medium">
               {initials}
@@ -50,7 +61,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <div className="flex min-w-0 flex-col">
               <span className="truncate text-sm font-medium">{viewer.name}</span>
               <span className="truncate text-xs text-muted-foreground">
-                {ROLE_LABEL[viewer.role]} · {viewer.team}
+                {t(`domain.role.${viewer.role}`)} · {viewer.team}
               </span>
             </div>
           </div>
@@ -61,7 +72,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/80 px-6 backdrop-blur">
           <CommandPalette entries={entries} />
           <div className="ml-auto flex items-center gap-2">
-            {isDemo() ? <Badge variant="warning">Démo · données fictives</Badge> : null}
+            {isDemo() ? <Badge variant="warning">{t("shell.demoBadge")}</Badge> : null}
+            <LocaleSwitcher />
             <ThemeToggle />
           </div>
         </header>

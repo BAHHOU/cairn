@@ -27,17 +27,6 @@ export const FILE_KINDS = [
 ] as const;
 export type FileKind = (typeof FILE_KINDS)[number];
 
-export const FILE_KIND_LABEL: Record<FileKind, string> = {
-  source: "Code source",
-  test: "Tests",
-  config: "Configuration",
-  doc: "Documentation",
-  build: "Build et CI",
-  data: "Données et exemples",
-  generated: "Fichiers générés",
-  binary: "Binaires et archives",
-};
-
 /** What an AI assistant should normally never read: it costs tokens and teaches nothing. */
 export const AI_NOISE_KINDS: readonly FileKind[] = ["data", "generated", "binary"];
 
@@ -46,12 +35,6 @@ export const estimateTokens = (bytes: number): number => Math.ceil(bytes / 4);
 
 export const FINDING_RULES = ["hardcoded-secret", "private-key", "access-token"] as const;
 export type FindingRule = (typeof FINDING_RULES)[number];
-
-export const FINDING_RULE_LABEL: Record<FindingRule, string> = {
-  "hardcoded-secret": "Secret en clair dans le dépôt",
-  "private-key": "Clé privée dans le dépôt",
-  "access-token": "Jeton d'accès dans le dépôt",
-};
 
 /** Where a leak sits. The value itself is never read back, stored or displayed. */
 export interface ScanFinding {

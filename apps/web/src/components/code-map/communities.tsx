@@ -1,6 +1,7 @@
 "use client";
 
 import type { CodeCommunity, GodNode } from "@cairn/shared";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { colorOfRank } from "./layout";
 
@@ -29,26 +30,25 @@ export function CommunityPanel({
   onReset: () => void;
   onSelect: (nodeId: string) => void;
 }) {
+  const t = useTranslations("codeMap.communities");
   const hiddenSet = new Set(hidden);
 
   return (
     <aside className="flex w-64 shrink-0 flex-col gap-4 overflow-y-auto border-l bg-card/40 p-3">
       <section className="flex flex-col gap-1">
         <header className="flex items-baseline justify-between">
-          <h3 className="font-semibold text-xs uppercase tracking-wider">Communautés</h3>
+          <h3 className="font-semibold text-xs uppercase tracking-wider">{t("title")}</h3>
           {hidden.length > 0 ? (
             <button
               type="button"
               onClick={onReset}
               className="text-[11px] text-muted-foreground underline underline-offset-2"
             >
-              tout afficher
+              {t("showAll")}
             </button>
           ) : null}
         </header>
-        <p className="mb-1 text-[11px] text-muted-foreground leading-snug">
-          Détectées par propagation d'étiquettes, nommées d'après leur membre le plus connecté.
-        </p>
+        <p className="mb-1 text-[11px] text-muted-foreground leading-snug">{t("hint")}</p>
         <ul className="flex flex-col">
           {communities.map((community) => {
             const off = hiddenSet.has(community.id);
@@ -84,9 +84,9 @@ export function CommunityPanel({
                   type="button"
                   onClick={() => onOnly(community.id)}
                   className="shrink-0 text-[10px] text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
-                  title="N'afficher que cette communauté"
+                  title={t("onlyHint")}
                 >
-                  seule
+                  {t("only")}
                 </button>
               </li>
             );
@@ -95,10 +95,8 @@ export function CommunityPanel({
       </section>
 
       <section className="flex flex-col gap-1">
-        <h3 className="font-semibold text-xs uppercase tracking-wider">Nœuds centraux</h3>
-        <p className="mb-1 text-[11px] text-muted-foreground leading-snug">
-          Ce par quoi tout passe. Un changement ici se paie partout.
-        </p>
+        <h3 className="font-semibold text-xs uppercase tracking-wider">{t("gods")}</h3>
+        <p className="mb-1 text-[11px] text-muted-foreground leading-snug">{t("godsHint")}</p>
         <ul className="flex flex-col">
           {gods.map((god) => (
             <li key={god.nodeId}>

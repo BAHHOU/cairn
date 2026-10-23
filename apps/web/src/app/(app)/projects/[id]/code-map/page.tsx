@@ -1,13 +1,14 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { ProjectTabs } from "@/components/guide/bits";
 import { PageHeader } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getFormat } from "@/i18n/format";
 import { getApi } from "@/lib/api";
-import { formatDate } from "@/lib/format";
 import { loadImportedScan } from "@/lib/import/scan";
 
 /**
@@ -24,6 +25,9 @@ const CodeMapCanvas = dynamic(() =>
 
 export default async function CodeMapPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const t = await getTranslations("codeMap.page");
+  const tn = await getTranslations("projectNav");
+  const fmt = await getFormat();
   const api = await getApi();
   const project = await api.projects.get(id);
   const imported = project ? null : await loadImportedScan(id);
@@ -37,34 +41,35 @@ export default async function CodeMapPage({ params }: { params: Promise<{ id: st
   return (
     <>
       <PageHeader
-        title={`Carte du code — ${name}`}
+        title={t("title", { name })}
         description={
-          graph ? (
-            <>
-              {graph.nodes.length} symboles · {graph.edges.length} liens · dépôt {graph.repoId} ·
-              commit {graph.commit} · extrait le {formatDate(graph.generatedAt)}
-            </>
-          ) : (
-            "Aucune extraction n'a encore été faite sur ce dépôt."
-          )
+          graph
+            ? t("summary", {
+                nodes: graph.nodes.length,
+                edges: graph.edges.length,
+                repo: graph.repoId,
+                commit: graph.commit,
+                date: fmt.date(graph.generatedAt),
+              })
+            : t("none")
         }
         actions={
           <div className="flex flex-wrap gap-4 text-sm">
             <Link href={`/projects/${id}/architecture`} className="underline underline-offset-4">
-              Vue architecture
+              {tn("architecture")}
             </Link>
             {demoLinks ? (
               <>
                 <Link href={`/projects/${id}/delivery`} className="underline underline-offset-4">
-                  De dev à production
+                  {tn("delivery")}
                 </Link>
                 <Link href={`/projects/${id}/onboarding`} className="underline underline-offset-4">
-                  Démarrage local
+                  {tn("onboarding")}
                 </Link>
               </>
             ) : null}
             <Link href={`/projects/${id}`} className="underline underline-offset-4">
-              Fiche projet
+              {tn("project")}
             </Link>
           </div>
         }
@@ -73,20 +78,17 @@ export default async function CodeMapPage({ params }: { params: Promise<{ id: st
 
       {graph ? (
         <>
-          <Suspense
-            fallback={<p className="text-muted-foreground text-sm">Chargement de la carte…</p>}
-          >
+          <Suspense fallback={<p className="text-muted-foreground text-sm">{t("loading")}</p>}>
             <CodeMapCanvas graph={graph} />
           </Suspense>
 
           {graph.skipped.length > 0 ? (
             <Card className="mt-4">
               <CardHeader>
-                <CardTitle className="text-base">Non lus ({graph.skipped.length})</CardTitle>
-                <CardDescription>
-                  Déclarés plutôt que passés sous silence : une carte muette sur ses trous se fait
-                  croire complète.
-                </CardDescription>
+                <CardTitle className="text-base">
+                  {t("skipped", { count: graph.skipped.length })}
+                </CardTitle>
+                <CardDescription>{t("skippedHint")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="flex flex-col gap-2 text-sm">
@@ -104,26 +106,28 @@ export default async function CodeMapPage({ params }: { params: Promise<{ id: st
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>Pas encore de carte</CardTitle>
-            <CardDescription>
-              L'extraction lit la syntaxe du dépôt, pas une documentation : tant qu'elle n'a pas
-              tourné, il n'y a rien d'honnête à montrer.
-            </CardDescription>
+            <CardTitle>{t("emptyTitle")}</CardTitle>
+            <CardDescription>{t("emptyHint")}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3 text-sm">
             <div className="flex flex-wrap gap-2">
-              {tech.map((t) => (
-                <Badge key={t} variant="outline">
-                  {t}
+              {tech.map((item) => (
+                <Badge key={item} variant="outline">
+                  {item}
                 </Badge>
               ))}
             </div>
             <p className="text-muted-foreground">
-              Exemple disponible :{" "}
-              <Link href="/projects/qis-dist-cms/code-map" className="underline underline-offset-4">
-                qis-dist-cms
-              </Link>
-              .
+              {tn.rich("exampleAvailable", {
+                link: (chunks) => (
+                  <Link
+                    href="/projects/qis-dist-cms/code-map"
+                    className="underline underline-offset-4"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              })}
             </p>
           </CardContent>
         </Card>

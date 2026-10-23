@@ -1,13 +1,8 @@
 "use client";
 
-import {
-  ARCH_NODE_KIND_LABEL,
-  ARCH_PAYLOAD_LABEL,
-  ARCH_PROVENANCE_LABEL,
-  type BlastRadius,
-  type ProjectArchitecture,
-} from "@cairn/shared";
+import type { BlastRadius, ProjectArchitecture } from "@cairn/shared";
 import { ArrowRight, FileCode2, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { ViewGraph, ViewNode } from "./views";
@@ -42,6 +37,8 @@ export function Inspector({
   onSelect,
   onShowImpact,
 }: Props) {
+  const t = useTranslations("diagram.inspector");
+  const td = useTranslations("domain");
   const incoming = graph.edges.filter((e) => e.target === node.id);
   const outgoing = graph.edges.filter((e) => e.source === node.id);
   const label = (id: string) => graph.nodes.find((n) => n.id === id)?.label ?? id;
@@ -56,13 +53,13 @@ export function Inspector({
       <header className="flex items-start gap-2 px-4 py-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 text-muted-foreground text-xs">
-            <span>{ARCH_NODE_KIND_LABEL[node.kind]}</span>
+            <span>{td(`archNodeKind.${node.kind}`)}</span>
             <span aria-hidden>·</span>
             <span>{repo?.name ?? node.repoId}</span>
           </div>
           <h2 className="truncate font-semibold text-base">{node.label}</h2>
         </div>
-        <Button variant="ghost" size="icon" onClick={onClose} aria-label="Fermer l'inspecteur">
+        <Button variant="ghost" size="icon" onClick={onClose} aria-label={t("close")}>
           <X />
         </Button>
       </header>
@@ -77,20 +74,20 @@ export function Inspector({
                 : "secondary"
           }
         >
-          {ARCH_PROVENANCE_LABEL[node.provenance]}
+          {td(`archProvenance.${node.provenance}`)}
         </Badge>
-        {node.tech.map((t) => (
-          <Badge key={t} variant="outline">
-            {t}
+        {node.tech.map((tech) => (
+          <Badge key={tech} variant="outline">
+            {tech}
           </Badge>
         ))}
       </div>
 
       <p className="px-4 pb-3 text-sm leading-relaxed">{node.description}</p>
 
-      <Section title="D'où vient cette information">
+      <Section title={t("sources")}>
         {node.sources.length === 0 ? (
-          <p className="text-muted-foreground text-sm">Aucune source enregistrée.</p>
+          <p className="text-muted-foreground text-sm">{t("noSource")}</p>
         ) : (
           <ul className="space-y-1.5">
             {node.sources.map((s) => (
@@ -110,17 +107,14 @@ export function Inspector({
       </Section>
 
       {node.mergedIds.length > 1 && (
-        <Section title={`Regroupe ${node.mergedIds.length} éléments`}>
-          <p className="text-muted-foreground text-xs">
-            Cette boîte représente plusieurs nœuds du graphe à ce niveau de détail. Passez à une vue
-            plus fine pour les voir séparément.
-          </p>
+        <Section title={t("merged", { count: node.mergedIds.length })}>
+          <p className="text-muted-foreground text-xs">{t("mergedHint")}</p>
         </Section>
       )}
 
-      <Section title="Liens">
+      <Section title={t("links")}>
         {incoming.length === 0 && outgoing.length === 0 ? (
-          <p className="text-muted-foreground text-sm">Aucun lien dans cette vue.</p>
+          <p className="text-muted-foreground text-sm">{t("noLink")}</p>
         ) : (
           <ul className="space-y-1">
             {[
@@ -146,9 +140,9 @@ export function Inspector({
                   </span>
                   <span className="truncate text-muted-foreground">
                     {e.label}
-                    {e.payload ? ` · ${ARCH_PAYLOAD_LABEL[e.payload]}` : ""}
+                    {e.payload ? ` · ${td(`archPayload.${e.payload}`)}` : ""}
                   </span>
-                  {e.crossRepo && <Badge variant="outline">inter-dépôt</Badge>}
+                  {e.crossRepo && <Badge variant="outline">{t("crossRepo")}</Badge>}
                 </button>
               </li>
             ))}
@@ -157,7 +151,7 @@ export function Inspector({
       </Section>
 
       {violations.length > 0 && (
-        <Section title="Écarts au contrat">
+        <Section title={t("violations")}>
           <ul className="space-y-2">
             {violations.map((v) => (
               <li
@@ -173,7 +167,7 @@ export function Inspector({
       )}
 
       {(node.docs?.length || node.adrs?.length) && (
-        <Section title="Documentation et décisions">
+        <Section title={t("docs")}>
           <ul className="space-y-1 text-xs">
             {[...(node.docs ?? []), ...(node.adrs ?? [])].map((l) => (
               <li key={l.id}>
@@ -186,29 +180,32 @@ export function Inspector({
         </Section>
       )}
 
-      <Section title="Rayon d'impact">
+      <Section title={t("blastRadius")}>
         {loadingRadius ? (
-          <p className="text-muted-foreground text-sm">Calcul en cours…</p>
+          <p className="text-muted-foreground text-sm">{t("computing")}</p>
         ) : blastRadius ? (
           <div className="space-y-2 text-xs">
             <p>
-              <strong>{Object.keys(blastRadius.hops).length - 1}</strong> nœuds touchés, dont{" "}
-              <strong>{blastRadius.directIds.length}</strong> directement.
+              {t.rich("touched", {
+                count: Object.keys(blastRadius.hops).length - 1,
+                direct: blastRadius.directIds.length,
+                strong: (chunks) => <strong>{chunks}</strong>,
+              })}
             </p>
             <p className="text-muted-foreground">
-              Dépôts concernés : {blastRadius.impactedRepoIds.join(", ")}
+              {t("impactedRepos", { repos: blastRadius.impactedRepoIds.join(", ") })}
             </p>
             {blastRadius.impactedIssueIds.length > 0 && (
               <p className="text-muted-foreground">
-                {blastRadius.impactedIssueIds.length} constat(s) ouverts dans le périmètre.
+                {t("impactedIssues", { count: blastRadius.impactedIssueIds.length })}
               </p>
             )}
             <Button variant="outline" size="sm" onClick={onShowImpact}>
-              Voir sur le diagramme
+              {t("showOnDiagram")}
             </Button>
           </div>
         ) : (
-          <p className="text-muted-foreground text-sm">Indisponible.</p>
+          <p className="text-muted-foreground text-sm">{t("unavailable")}</p>
         )}
       </Section>
     </aside>

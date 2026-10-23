@@ -1,15 +1,8 @@
 import { type ImportStatus, type ImportView, isImportActive } from "@cairn/shared";
 import { Check, CircleDashed, Loader2, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-export const STATUS_LABEL: Record<ImportStatus, string> = {
-  queued: "En file d'attente",
-  cloning: "Clonage en cours",
-  scanning: "Analyse en cours",
-  done: "Importé",
-  failed: "Échec",
-};
 
 const STATUS_VARIANT: Record<ImportStatus, "secondary" | "info" | "success" | "destructive"> = {
   queued: "secondary",
@@ -20,19 +13,21 @@ const STATUS_VARIANT: Record<ImportStatus, "secondary" | "info" | "success" | "d
 };
 
 export function ImportStatusBadge({ status }: { status: ImportStatus }) {
+  const t = useTranslations("import.status");
   return (
     <Badge variant={STATUS_VARIANT[status]}>
       {isImportActive(status) ? <Loader2 className="size-3 animate-spin" aria-hidden /> : null}
-      {STATUS_LABEL[status]}
+      {t(status)}
     </Badge>
   );
 }
 
+/** Labels: `import.step.<key>`. */
 const STEPS = [
-  { key: "queued", label: "Demande enregistrée" },
-  { key: "cloning", label: "Clonage de la branche" },
-  { key: "scanning", label: "Analyse de la pile technique" },
-  { key: "done", label: "Résultat enregistré" },
+  { key: "queued" },
+  { key: "cloning" },
+  { key: "scanning" },
+  { key: "done" },
 ] as const;
 
 type StepState = "done" | "active" | "failed" | "todo";
@@ -49,9 +44,10 @@ function stepStates(view: ImportView): StepState[] {
 }
 
 export function ImportTimeline({ view }: { view: ImportView }) {
+  const t = useTranslations("import");
   const states = stepStates(view);
   return (
-    <ol className="flex flex-col gap-3" aria-label="Progression de l'import">
+    <ol className="flex flex-col gap-3" aria-label={t("timelineLabel")}>
       {STEPS.map((step, i) => {
         const state = states[i] ?? "todo";
         return (
@@ -81,7 +77,7 @@ export function ImportTimeline({ view }: { view: ImportView }) {
                 state === "active" && "font-medium",
               )}
             >
-              {step.label}
+              {t(`step.${step.key}`)}
             </span>
           </li>
         );

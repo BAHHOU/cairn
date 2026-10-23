@@ -1,14 +1,16 @@
 "use client";
 
 import { ROLES, type Role } from "@cairn/shared";
+import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { setDemoRole } from "@/app/actions";
 
-export function RoleSwitcher({ current, labels }: { current: Role; labels: Record<Role, string> }) {
+export function RoleSwitcher({ current }: { current: Role }) {
+  const t = useTranslations();
   const [pending, start] = useTransition();
   return (
     <label className="flex flex-col gap-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-      Voir en tant que
+      {t("shell.viewAs")}
       <select
         value={current}
         disabled={pending}
@@ -17,7 +19,7 @@ export function RoleSwitcher({ current, labels }: { current: Role; labels: Recor
       >
         {ROLES.map((r) => (
           <option key={r} value={r}>
-            {labels[r]}
+            {t(`domain.role.${r}`)}
           </option>
         ))}
       </select>

@@ -1,6 +1,7 @@
 "use client";
 
-import { CODE_NODE_KIND_LABEL, type CodeNodeKind } from "@cairn/shared";
+import type { CodeNodeKind } from "@cairn/shared";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 const FILTERABLE: CodeNodeKind[] = ["class", "function", "table", "config", "doc", "external"];
@@ -26,6 +27,8 @@ export function CodeMapToolbar({
   onToggleExtracted: () => void;
   onToggleFullscreen: () => void;
 }) {
+  const t = useTranslations("codeMap.toolbar");
+  const td = useTranslations("domain");
   const inferredShare = stats.edges ? Math.round((stats.inferred / stats.edges) * 100) : 0;
 
   return (
@@ -33,7 +36,7 @@ export function CodeMapToolbar({
       <input
         value={search}
         onChange={(e) => onSearch(e.target.value)}
-        placeholder="Chercher un symbole, un fichier…"
+        placeholder={t("search")}
         className="h-8 w-56 rounded-md border bg-background px-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
       />
 
@@ -51,35 +54,31 @@ export function CodeMapToolbar({
                 on ? "bg-primary text-primary-foreground" : "hover:bg-accent",
               )}
             >
-              {CODE_NODE_KIND_LABEL[kind]}
+              {td(`codeNodeKind.${kind}`)}
             </button>
           );
         })}
         {kinds.length > 0 ? (
-          <span className="text-[11px] text-muted-foreground">
-            (sans filtre de type, tout est affiché)
-          </span>
+          <span className="text-[11px] text-muted-foreground">{t("noTypeFilter")}</span>
         ) : null}
       </div>
 
       <label className="flex cursor-pointer items-center gap-1.5 text-xs">
         <input type="checkbox" checked={extractedOnly} onChange={onToggleExtracted} />
-        Liens extraits seulement
+        {t("extractedOnly")}
       </label>
 
       <div className="ml-auto flex items-center gap-3">
         <span className="text-[11px] text-muted-foreground tabular-nums">
-          {stats.shown}/{stats.total} symboles · {stats.edges} liens ·{" "}
-          <span title="Part des liens résolus par heuristique plutôt que lus dans la syntaxe">
-            {inferredShare}% déduits
-          </span>
+          {t("counts", { shown: stats.shown, total: stats.total, edges: stats.edges })} ·{" "}
+          <span title={t("inferredHint")}>{t("inferred", { pct: inferredShare })}</span>
         </span>
         <button
           type="button"
           onClick={onToggleFullscreen}
           className="rounded-md border px-2 py-1 text-xs hover:bg-accent"
         >
-          {fullscreen ? "Réduire" : "Plein écran"}
+          {fullscreen ? t("exitFullscreen") : t("fullscreen")}
         </button>
       </div>
     </div>
@@ -102,14 +101,14 @@ export function PathBar({
   onClear: () => void;
   onSelect: (id: string) => void;
 }) {
+  const t = useTranslations("codeMap.path");
   if (!from && !to) return null;
 
   return (
     <div className="flex flex-wrap items-center gap-2 border-b bg-muted/50 px-3 py-1.5 text-xs">
-      <span className="font-medium">Chemin</span>
+      <span className="font-medium">{t("title")}</span>
       <span className="text-muted-foreground">
-        {from ? (labels[from] ?? from) : "choisissez un départ"} →{" "}
-        {to ? (labels[to] ?? to) : "choisissez une arrivée"}
+        {from ? (labels[from] ?? from) : t("pickStart")} → {to ? (labels[to] ?? to) : t("pickEnd")}
       </span>
       {from && to ? (
         hops ? (
@@ -127,13 +126,11 @@ export function PathBar({
                 </button>
               </span>
             ))}
-            <span className="text-muted-foreground">({hops.length - 1} sauts)</span>
+            <span className="text-muted-foreground">{t("hops", { count: hops.length - 1 })}</span>
           </span>
         ) : (
           // An honest dead end: the two symbols genuinely never meet.
-          <span className="text-destructive">
-            aucun chemin : ces deux symboles ne se touchent pas
-          </span>
+          <span className="text-destructive">{t("noPath")}</span>
         )
       ) : null}
       <button
@@ -141,7 +138,7 @@ export function PathBar({
         onClick={onClear}
         className="ml-auto text-muted-foreground underline underline-offset-2"
       >
-        effacer
+        {t("clear")}
       </button>
     </div>
   );

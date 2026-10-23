@@ -1,4 +1,5 @@
 import { PROVENANCES } from "@cairn/shared";
+import { getTranslations } from "next-intl/server";
 import { ProvenanceBadge } from "@/components/badges";
 import { KpiCard, PageHeader, ProgressBar, Restricted } from "@/components/page";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,15 +11,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getFormat } from "@/i18n/format";
 import { getApi } from "@/lib/api";
-import { formatEuros, formatTokens } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
-const MONTHS = ["mai", "juin", "juil.", "août", "sept.", "oct."];
+/** The demo series ends in October (month index 9). */
+const LAST_MONTH = 9;
 
 export default async function TokensPage() {
   const s = await (await getApi()).tokens.summary();
   if (!s) return <Restricted />;
+  const t = await getTranslations("tokens");
+  const fmt = await getFormat();
+  const months = s.monthly.map((_, i) => fmt.month(LAST_MONTH - (s.monthly.length - 1 - i)));
 
   const over = s.projection > s.quota;
   const max = Math.max(...s.monthly, 1);
@@ -26,28 +31,26 @@ export default async function TokensPage() {
   return (
     <>
       <PageHeader
-        title="Budget tokens"
-        description={`${s.label} · mois en cours, jour 18 sur 30`}
+        title={t("title")}
+        description={t("description", { label: s.label, day: 18, days: 30 })}
       />
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard
-          label="Consommé"
-          value={formatTokens(s.consumed)}
-          hint={`sur un quota de ${formatTokens(s.quota)}`}
+          label={t("consumed")}
+          value={fmt.tokens(s.consumed)}
+          hint={t("ofQuota", { quota: fmt.tokens(s.quota) })}
         />
         <KpiCard
-          label="Projection fin de mois"
-          value={
-            <span className={cn(over && "text-destructive")}>{formatTokens(s.projection)}</span>
-          }
-          hint={over ? "Dépasse le quota" : "Dans le quota"}
+          label={t("projection")}
+          value={<span className={cn(over && "text-destructive")}>{fmt.tokens(s.projection)}</span>}
+          hint={over ? t("overQuota") : t("withinQuota")}
         />
         {s.euros !== undefined ? (
-          <KpiCard label="Coût projeté" value={formatEuros(s.euros)} hint="Tarif interne moyen" />
+          <KpiCard label={t("cost")} value={fmt.euros(s.euros)} hint={t("costHint")} />
         ) : null}
         <KpiCard
-          label="Part du quota"
+          label={t("quotaShare")}
           value={`${Math.round((s.consumed / s.quota) * 100)} %`}
           visual={
             <div className="w-20">
@@ -60,19 +63,15 @@ export default async function TokensPage() {
       <section className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Évolution sur six mois</CardTitle>
-            <CardDescription>Le dernier mois est partiel</CardDescription>
+            <CardTitle>{t("trend")}</CardTitle>
+            <CardDescription>{t("trendHint")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div
-              className="flex h-44 items-stretch gap-3"
-              role="img"
-              aria-label="Consommation mensuelle de tokens"
-            >
+            <div className="flex h-44 items-stretch gap-3" role="img" aria-label={t("trendLabel")}>
               {s.monthly.map((v, i) => (
-                <div key={MONTHS[i]} className="flex h-full flex-1 flex-col items-center gap-1">
+                <div key={months[i]} className="flex h-full flex-1 flex-col items-center gap-1">
                   <span className="text-xs tabular-nums text-muted-foreground">
-                    {formatTokens(v)}
+                    {fmt.tokens(v)}
                   </span>
                   <div className="flex w-full flex-1 items-end">
                     <div
@@ -83,7 +82,7 @@ export default async function TokensPage() {
                       style={{ height: `${(v / max) * 100}%` }}
                     />
                   </div>
-                  <span className="text-xs text-muted-foreground">{MONTHS[i]}</span>
+                  <span className="text-xs text-muted-foreground">{months[i]}</span>
                 </div>
               ))}
             </div>
@@ -92,8 +91,8 @@ export default async function TokensPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>D'où viennent les chiffres</CardTitle>
-            <CardDescription>Répartition par niveau de fiabilité</CardDescription>
+            <CardTitle>{t("sources")}</CardTitle>
+            <CardDescription>{t("sourcesHint")}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {PROVENANCES.map((p) => (
@@ -110,25 +109,23 @@ export default async function TokensPage() {
                 <span className="w-10 text-right text-sm tabular-nums">{s.provenance[p]} %</span>
               </div>
             ))}
-            <p className="text-xs text-muted-foreground">
-              Un plafond théorique n'est jamais présenté comme un résultat mesuré.
-            </p>
+            <p className="text-xs text-muted-foreground">{t("ceilingNote")}</p>
           </CardContent>
         </Card>
       </section>
 
       <Card className="gap-0 py-0">
         <CardHeader className="py-5">
-          <CardTitle>Par projet</CardTitle>
-          <CardDescription>Compteurs par projet, jamais par personne</CardDescription>
+          <CardTitle>{t("byProject")}</CardTitle>
+          <CardDescription>{t("byProjectHint")}</CardDescription>
         </CardHeader>
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              <TableHead>Projet</TableHead>
-              <TableHead>Équipe</TableHead>
-              <TableHead className="text-right">Tokens</TableHead>
-              <TableHead className="w-56">Part perdue</TableHead>
+              <TableHead>{t("project")}</TableHead>
+              <TableHead>{t("team")}</TableHead>
+              <TableHead className="text-right">{t("tokensCol")}</TableHead>
+              <TableHead className="w-56">{t("wasted")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -136,7 +133,7 @@ export default async function TokensPage() {
               <TableRow key={r.projectId}>
                 <TableCell className="font-medium">{r.projectName}</TableCell>
                 <TableCell>{r.team}</TableCell>
-                <TableCell className="text-right tabular-nums">{formatTokens(r.tokens)}</TableCell>
+                <TableCell className="text-right tabular-nums">{fmt.tokens(r.tokens)}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <span className="w-12 whitespace-nowrap text-right tabular-nums">

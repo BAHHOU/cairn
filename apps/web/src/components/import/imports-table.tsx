@@ -1,5 +1,6 @@
 import type { ImportView } from "@cairn/shared";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ImportStatusBadge } from "@/components/import/status";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,19 +11,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDate } from "@/lib/format";
+import { useFormat } from "@/i18n/format";
 
 export function ImportsTable({ imports }: { imports: ImportView[] }) {
+  const t = useTranslations("import.table");
+  const fmt = useFormat();
   return (
     <Table>
       <TableHeader>
         <TableRow className="hover:bg-transparent">
-          <TableHead>Dépôt</TableHead>
-          <TableHead>Branche</TableHead>
-          <TableHead>Statut</TableHead>
-          <TableHead>Commit analysé</TableHead>
-          <TableHead>Technologies</TableHead>
-          <TableHead>Demandé</TableHead>
+          <TableHead>{t("repository")}</TableHead>
+          <TableHead>{t("branch")}</TableHead>
+          <TableHead>{t("status")}</TableHead>
+          <TableHead>{t("commit")}</TableHead>
+          <TableHead>{t("technologies")}</TableHead>
+          <TableHead>{t("requested")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -38,7 +41,7 @@ export function ImportsTable({ imports }: { imports: ImportView[] }) {
             </TableCell>
             <TableCell className="font-mono text-xs">{i.repository.branch}</TableCell>
             <TableCell>
-              <Link href={`/projects/import/${i.id}`} title="Détail de l'exécution">
+              <Link href={`/projects/import/${i.id}`} title={t("runDetail")}>
                 <ImportStatusBadge status={i.status} />
               </Link>
             </TableCell>
@@ -46,9 +49,9 @@ export function ImportsTable({ imports }: { imports: ImportView[] }) {
             <TableCell>
               <div className="flex flex-wrap gap-1">
                 {i.facts?.technologies.length ? (
-                  i.facts.technologies.map((t) => (
-                    <Badge key={t} variant="outline">
-                      {t}
+                  i.facts.technologies.map((tech) => (
+                    <Badge key={tech} variant="outline">
+                      {tech}
                     </Badge>
                   ))
                 ) : (
@@ -57,7 +60,7 @@ export function ImportsTable({ imports }: { imports: ImportView[] }) {
               </div>
             </TableCell>
             <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
-              {formatDate(i.createdAt)}
+              {fmt.date(i.createdAt)}
             </TableCell>
           </TableRow>
         ))}

@@ -1,23 +1,18 @@
-import { SEVERITIES, type Severity } from "@cairn/shared";
+import { SEVERITIES } from "@cairn/shared";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { IssueTable } from "@/components/issue-table";
 import { PageHeader } from "@/components/page";
 import { Card } from "@/components/ui/card";
 import { getApi } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
-const LABEL: Record<Severity, string> = {
-  blocker: "Bloquants",
-  critical: "Critiques",
-  major: "Majeurs",
-  minor: "Mineurs",
-};
-
 export default async function IssuesPage({
   searchParams,
 }: {
   searchParams: Promise<{ severity?: string }>;
 }) {
+  const t = await getTranslations("issues.page");
   const { severity } = await searchParams;
   const active = SEVERITIES.find((s) => s === severity);
   const issues = await (await getApi()).issues.list(active ? { severity: active } : undefined);
@@ -38,13 +33,10 @@ export default async function IssuesPage({
 
   return (
     <>
-      <PageHeader
-        title="Problèmes"
-        description="Ce qui gêne un assistant IA ou un nouvel arrivant dans vos dépôts"
-      />
+      <PageHeader title={t("title")} description={t("description")} />
       <div className="flex flex-wrap gap-2">
-        {chip("/issues", "Tous", !active)}
-        {SEVERITIES.map((s) => chip(`/issues?severity=${s}`, LABEL[s], active === s))}
+        {chip("/issues", t("all"), !active)}
+        {SEVERITIES.map((s) => chip(`/issues?severity=${s}`, t(`filter.${s}`), active === s))}
       </div>
       <Card className="gap-0 py-0">
         <IssueTable issues={issues} />

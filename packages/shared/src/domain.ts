@@ -10,33 +10,10 @@ export const AXES = [
 ] as const;
 export type Axis = (typeof AXES)[number];
 
-export const AXIS_LABEL: Record<Axis, string> = {
-  documentation: "Documentation",
-  aiContext: "Contexte IA",
-  localStart: "Démarrage local",
-  configuration: "Configuration",
-  security: "Sécurité du contexte",
-};
-
 export type MaturityLevel = 0 | 1 | 2 | 3 | 4 | 5;
 
-export const MATURITY_NAMES = [
-  "Non préparé",
-  "Assisté",
-  "Guidé",
-  "Contexte maîtrisé",
-  "Prêt pour agents",
-  "Optimisé",
-] as const;
-
-export const MATURITY_USAGE = [
-  "Questions en chat uniquement, pas de génération de code sur les modules sensibles",
-  "Chat et complétion en ligne",
-  "Chat avec contexte de fichiers, petites modifications",
-  "Mode agent sur des tâches petites et bien définies",
-  "Mode agent sur des tâches normales, revue selon le risque",
-  "Agents autonomes avec budgets et garde-fous",
-] as const;
+/** Names and recommended AI usage per level: `domain.maturity` and `domain.maturityUsage`. */
+export const MATURITY_LEVELS = [0, 1, 2, 3, 4, 5] as const satisfies readonly MaturityLevel[];
 
 export type GateStatus = "passed" | "warning" | "failed";
 export type Severity = "blocker" | "critical" | "major" | "minor";
@@ -48,14 +25,6 @@ export type IssueType =
   | "token-hog"
   | "ambiguity"
   | "broken-onboarding";
-
-export const ISSUE_TYPE_LABEL: Record<IssueType, string> = {
-  "context-leak": "Fuite de contexte",
-  "doc-drift": "Dérive documentaire",
-  "token-hog": "Gouffre à tokens",
-  ambiguity: "Ambiguïté",
-  "broken-onboarding": "Démarrage cassé",
-};
 
 /** The person looking at the screen. Resolved from the session, never from the client. */
 export interface Viewer {

@@ -2,21 +2,20 @@ import {
   blockingAccesses,
   filledPhases,
   formatMinutes,
-  SETUP_PHASE_HINT,
-  SETUP_PHASE_LABEL,
   setupEffort,
   stepsOfPhase,
 } from "@cairn/shared";
 import { CalendarClock, Timer } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { ImportedOnboarding } from "@/components/guide/onboarding-view";
 import { IssueTable } from "@/components/issue-table";
 import { AccessRow, PitfallCard, PrereqRow, StepCard } from "@/components/onboarding/steps";
 import { PageHeader } from "@/components/page";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getFormat } from "@/i18n/format";
 import { getApi } from "@/lib/api";
-import { formatDate } from "@/lib/format";
 import { loadImportedScan } from "@/lib/import/scan";
 
 /**
@@ -36,6 +35,10 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
     return <ImportedOnboarding id={id} imported={imported} />;
   }
 
+  const t = await getTranslations("onboarding.page");
+  const td = await getTranslations("domain");
+  const tn = await getTranslations("projectNav");
+  const fmt = await getFormat();
   const onboarding = await api.projects.onboarding(id);
   const issues = onboarding ? await api.issues.list({ projectId: id }) : [];
 
@@ -52,17 +55,16 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
   return (
     <>
       <PageHeader
-        title={`Démarrage — ${project.name}`}
+        title={t("title", { name: project.name })}
         description={
-          onboarding && effort ? (
-            <>
-              {formatMinutes(effort.handsOnMin)} au clavier · jusqu'à {effort.waitingDays} jours
-              ouvrés d'attente d'accès · tenu par {onboarding.maintainer} · vérifié le{" "}
-              {formatDate(onboarding.generatedAt)}
-            </>
-          ) : (
-            "Aucune procédure d'installation n'a encore été décrite pour ce projet."
-          )
+          onboarding && effort
+            ? t("summary", {
+                handsOn: formatMinutes(effort.handsOnMin),
+                days: effort.waitingDays,
+                maintainer: onboarding.maintainer,
+                date: fmt.date(onboarding.generatedAt),
+              })
+            : t("none")
         }
         actions={
           <div className="flex flex-wrap gap-4 text-sm">
@@ -70,16 +72,16 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
               href={`/projects/${project.id}/architecture`}
               className="underline underline-offset-4"
             >
-              Vue architecture
+              {tn("architecture")}
             </Link>
             <Link
               href={`/projects/${project.id}/delivery`}
               className="underline underline-offset-4"
             >
-              Chaîne CI/CD
+              {t("deliveryLink")}
             </Link>
             <Link href={`/projects/${project.id}`} className="underline underline-offset-4">
-              Fiche projet
+              {tn("project")}
             </Link>
           </div>
         }
@@ -92,13 +94,14 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
             <Card className="border-warning/50 bg-warning/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <CalendarClock className="size-4 text-warning" aria-hidden />À demander
-                  aujourd'hui, avant toute chose
+                  <CalendarClock className="size-4 text-warning" aria-hidden />
+                  {t("askToday")}
                 </CardTitle>
                 <CardDescription>
-                  Les commandes plus bas prennent {formatMinutes(effort.handsOnMin)}. Ces accès
-                  prennent jusqu'à {effort.waitingDays} jours ouvrés, et rien ne tourne sans eux. Le
-                  plus lent d'abord.
+                  {t("askTodayHint", {
+                    handsOn: formatMinutes(effort.handsOnMin),
+                    days: effort.waitingDays,
+                  })}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -115,10 +118,8 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
             {/* ------------------------------------------------ prerequisites */}
             <Card className="lg:sticky lg:top-4">
               <CardHeader>
-                <CardTitle>Sur le poste</CardTitle>
-                <CardDescription>
-                  Les versions sont celles que le dépôt impose, pas les dernières publiées.
-                </CardDescription>
+                <CardTitle>{t("workstation")}</CardTitle>
+                <CardDescription>{t("workstationHint")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="flex flex-col">
@@ -133,16 +134,13 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
             <Card className="lg:col-span-2">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  Installation
+                  {t("install")}
                   <span className="flex items-center gap-1 font-normal text-muted-foreground text-xs tabular-nums">
                     <Timer className="size-3" aria-hidden />
                     {formatMinutes(effort.handsOnMin)}
                   </span>
                 </CardTitle>
-                <CardDescription>
-                  Chaque étape indique à quoi ressemble la réussite, et le fichier d'où elle est
-                  tirée.
-                </CardDescription>
+                <CardDescription>{t("installHint")}</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-6">
                 {phases.map((phase) => {
@@ -151,9 +149,11 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
                     <section key={phase} className="flex flex-col gap-3">
                       <header className="flex flex-col">
                         <h3 className="font-semibold text-sm uppercase tracking-wide">
-                          {SETUP_PHASE_LABEL[phase]}
+                          {td(`setupPhase.${phase}`)}
                         </h3>
-                        <p className="text-muted-foreground text-xs">{SETUP_PHASE_HINT[phase]}</p>
+                        <p className="text-muted-foreground text-xs">
+                          {td(`setupPhaseHint.${phase}`)}
+                        </p>
                       </header>
                       <ol className="flex flex-col">
                         {steps.map((step) => {
@@ -171,12 +171,8 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
           {/* ------------------------------------------------ known failures */}
           <Card>
             <CardHeader>
-              <CardTitle>Ça casse souvent ici</CardTitle>
-              <CardDescription>
-                Les pannes réellement rencontrées à l'arrivée, décrites par ce qui s'affiche à
-                l'écran plutôt que par leur cause — c'est le message d'erreur que vous aurez sous
-                les yeux.
-              </CardDescription>
+              <CardTitle>{t("pitfalls")}</CardTitle>
+              <CardDescription>{t("pitfallsHint")}</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-3 lg:grid-cols-2">
               {onboarding.pitfalls.map((p) => (
@@ -189,11 +185,8 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
           {firstIssues.length ? (
             <Card>
               <CardHeader>
-                <CardTitle>Pour une première contribution</CardTitle>
-                <CardDescription>
-                  Des sujets volontairement petits et localisés : l'objectif est de faire le tour
-                  complet — brancher, corriger, tester, faire relire — pas de livrer beaucoup.
-                </CardDescription>
+                <CardTitle>{t("firstContribution")}</CardTitle>
+                <CardDescription>{t("firstContributionHint")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <IssueTable issues={firstIssues} />
@@ -202,24 +195,26 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
           ) : null}
 
           <p className="text-muted-foreground text-sm">
-            Une étape fausse ou manquante ? C'est une anomalie du dépôt, pas de cette page :
-            prévenez {onboarding.maintainer}.
+            {t("wrongStep", { maintainer: onboarding.maintainer })}
           </p>
         </>
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>Pas encore de procédure</CardTitle>
-            <CardDescription>
-              Une installation inventée ferait perdre plus de temps qu'elle n'en ferait gagner.
-            </CardDescription>
+            <CardTitle>{t("emptyTitle")}</CardTitle>
+            <CardDescription>{t("emptyHint")}</CardDescription>
           </CardHeader>
           <CardContent className="text-muted-foreground text-sm">
-            Exemple disponible :{" "}
-            <Link href="/projects/qis-dist-cms/onboarding" className="underline underline-offset-4">
-              qis-dist-cms
-            </Link>
-            .
+            {tn.rich("exampleAvailable", {
+              link: (chunks) => (
+                <Link
+                  href="/projects/qis-dist-cms/onboarding"
+                  className="underline underline-offset-4"
+                >
+                  {chunks}
+                </Link>
+              ),
+            })}
           </CardContent>
         </Card>
       )}

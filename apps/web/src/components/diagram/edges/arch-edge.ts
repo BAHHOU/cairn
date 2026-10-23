@@ -1,6 +1,6 @@
 "use client";
 
-import { ARCH_PAYLOAD_LABEL, type ArchEdge } from "@cairn/shared";
+import type { ArchEdge } from "@cairn/shared";
 import type { Edge } from "@xyflow/react";
 import { MarkerType } from "@xyflow/react";
 import type { ViewEdge } from "../views";
@@ -31,11 +31,18 @@ const DASH: Partial<Record<ArchEdge["kind"], string>> = {
 
 export function toFlowEdge(
   edge: ViewEdge,
-  opts: { dimmed: boolean; highlighted: boolean; showLabel: boolean; animated: boolean },
+  opts: {
+    dimmed: boolean;
+    highlighted: boolean;
+    showLabel: boolean;
+    animated: boolean;
+    /** The payload in the reader's language, when the edge carries one. */
+    payloadLabel?: string;
+  },
 ): Edge {
   const stroke = edge.violating ? "var(--destructive)" : STROKE[edge.kind];
   const width = edge.violating ? 2.2 : opts.highlighted ? 2 : 1.2;
-  const label = edge.payload ? `${edge.label} · ${ARCH_PAYLOAD_LABEL[edge.payload]}` : edge.label;
+  const label = opts.payloadLabel ? `${edge.label} · ${opts.payloadLabel}` : edge.label;
 
   return {
     id: edge.id,

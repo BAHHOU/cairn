@@ -26,34 +26,12 @@ export const DELIVERY_STAGE_KINDS = [
 ] as const;
 export type DeliveryStageKind = (typeof DELIVERY_STAGE_KINDS)[number];
 
-export const DELIVERY_STAGE_KIND_LABEL: Record<DeliveryStageKind, string> = {
-  build: "Construction",
-  test: "Tests",
-  quality: "Qualité",
-  security: "Sécurité",
-  package: "Empaquetage",
-  deploy: "Déploiement",
-  verify: "Vérification",
-};
-
 export const DELIVERY_TRIGGERS = ["auto", "manual", "scheduled"] as const;
 export type DeliveryTrigger = (typeof DELIVERY_TRIGGERS)[number];
-
-export const DELIVERY_TRIGGER_LABEL: Record<DeliveryTrigger, string> = {
-  auto: "Automatique",
-  manual: "Manuel",
-  scheduled: "Planifié",
-};
 
 /** What a given environment runs on. The difference between the three matters a lot. */
 export const DELIVERY_DATA_KINDS = ["synthetic", "anonymised", "production"] as const;
 export type DeliveryDataKind = (typeof DELIVERY_DATA_KINDS)[number];
-
-export const DELIVERY_DATA_KIND_LABEL: Record<DeliveryDataKind, string> = {
-  synthetic: "Données fabriquées",
-  anonymised: "Données anonymisées",
-  production: "Données réelles",
-};
 
 export interface DeliveryStage {
   id: string;

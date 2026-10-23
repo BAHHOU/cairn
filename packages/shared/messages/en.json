@@ -1,0 +1,258 @@
+{
+  "domain": {
+    "role": {
+      "superadmin": "Super administrator",
+      "admin": "Administrator",
+      "manager": "Manager",
+      "dev": "Developer"
+    },
+    "axis": {
+      "documentation": "Documentation",
+      "aiContext": "AI context",
+      "localStart": "Local start",
+      "configuration": "Configuration",
+      "security": "Context security"
+    },
+    "maturity": {
+      "0": "Unprepared",
+      "1": "Assisted",
+      "2": "Guided",
+      "3": "Context-engineered",
+      "4": "Agent-ready",
+      "5": "Optimized"
+    },
+    "maturityUsage": {
+      "0": "Chat questions only, no code generation on sensitive modules",
+      "1": "Chat and inline completion",
+      "2": "Chat with file context, small edits",
+      "3": "Agent mode on small, well-defined tasks",
+      "4": "Agent mode on normal tasks, review by risk",
+      "5": "Autonomous agents with budgets and guardrails"
+    },
+    "gate": {
+      "passed": "Passed",
+      "warning": "Warning",
+      "failed": "Failed"
+    },
+    "severity": {
+      "blocker": "Blocker",
+      "critical": "Critical",
+      "major": "Major",
+      "minor": "Minor"
+    },
+    "issueType": {
+      "context-leak": "Context leak",
+      "doc-drift": "Documentation drift",
+      "token-hog": "Token hog",
+      "ambiguity": "Ambiguity",
+      "broken-onboarding": "Broken onboarding"
+    },
+    "provenance": {
+      "measured": "Measured",
+      "declared": "Declared",
+      "estimated": "Estimated"
+    },
+    "provenanceHint": {
+      "measured": "Counted by the internal AI gateway or the tool's telemetry",
+      "declared": "Reported by a provider or a Git signal, aggregated",
+      "estimated": "Computed from the size of the context"
+    },
+    "archView": {
+      "contexte": "Context",
+      "conteneurs": "Containers",
+      "flux": "Data flows",
+      "impact": "Impact"
+    },
+    "archViewHint": {
+      "contexte": "The system seen from outside: actors and third-party systems (C4 level 1)",
+      "conteneurs": "The deployable units and what connects them (C4 level 2)",
+      "flux": "Only the links that carry data, with the nature of the message",
+      "impact": "Pick a node: the blast radius is highlighted by number of hops"
+    },
+    "archNodeKind": {
+      "system": "System",
+      "service": "Service",
+      "component": "Component",
+      "datastore": "Storage",
+      "queue": "Queue",
+      "external": "External system",
+      "actor": "Actor",
+      "pipeline": "CI pipeline",
+      "deployment": "Deployment"
+    },
+    "archProvenance": {
+      "extracted": "Extracted",
+      "inferred": "Inferred",
+      "declared": "Declared"
+    },
+    "archPayload": {
+      "mt-message": "MT message",
+      "rest-json": "REST JSON",
+      "sql": "SQL",
+      "event": "Event",
+      "config": "Configuration",
+      "artifact": "Artifact"
+    },
+    "codeNodeKind": {
+      "module": "Module",
+      "class": "Class",
+      "interface": "Interface",
+      "function": "Function",
+      "table": "Table",
+      "config": "Configuration",
+      "doc": "Document",
+      "adr": "Decision (ADR)",
+      "rationale": "Rationale",
+      "external": "External dependency"
+    },
+    "codeConfidence": {
+      "extracted": "Extracted",
+      "inferred": "Inferred"
+    },
+    "codeEdgeKind": {
+      "imports": "imports",
+      "calls": "calls",
+      "inherits": "inherits from",
+      "implements": "implements",
+      "reads": "reads",
+      "writes": "writes",
+      "publishes": "publishes to",
+      "consumes": "consumes",
+      "configures": "configures",
+      "documents": "documents",
+      "decides": "decides",
+      "explains": "explains"
+    },
+    "deliveryStageKind": {
+      "build": "Build",
+      "test": "Tests",
+      "quality": "Quality",
+      "security": "Security",
+      "package": "Packaging",
+      "deploy": "Deployment",
+      "verify": "Verification"
+    },
+    "deliveryTrigger": {
+      "auto": "Automatic",
+      "manual": "Manual",
+      "scheduled": "Scheduled"
+    },
+    "deliveryDataKind": {
+      "synthetic": "Synthetic data",
+      "anonymised": "Anonymised data",
+      "production": "Real data"
+    },
+    "pipelineJobRole": {
+      "build": "Build",
+      "test": "Tests",
+      "quality": "Quality",
+      "security": "Security",
+      "package": "Image",
+      "publish": "Publish",
+      "deploy": "Deployment",
+      "other": "Other"
+    },
+    "pipelineTrigger": {
+      "auto": "Automatic",
+      "manual": "Manual",
+      "conditional": "Depends on the branch"
+    },
+    "pipelineFlag": {
+      "tests-skipped": "Tests disabled",
+      "test-failures-ignored": "Test failures ignored",
+      "tls-unverified": "TLS certificates not verified",
+      "lockfile-removed": "Dependency lock file removed",
+      "runs-always": "Runs even after a failure"
+    },
+    "pipelineVariableKind": {
+      "gitlab": "Provided by the CI platform",
+      "secret": "To provide, sensitive",
+      "project": "To provide in the CI/CD settings"
+    },
+    "topologyLane": {
+      "source": "Code",
+      "pipeline": "Pipeline",
+      "services": "Linked repositories and services",
+      "deliver": "Deployment",
+      "run": "Runtime",
+      "data": "Dependencies"
+    },
+    "topologyLaneHint": {
+      "source": "Where the code lives",
+      "pipeline": "What the pipeline runs",
+      "services": "Registries, artifact repositories, quality",
+      "deliver": "What puts it online",
+      "run": "What is running",
+      "data": "What the application needs"
+    },
+    "topologyBasis": {
+      "found": "Read in the repository",
+      "inferred": "Inferred",
+      "missing": "Not described in the repository"
+    },
+    "guidePhase": {
+      "prerequis": "Prerequisites",
+      "services": "Local services",
+      "build": "Build",
+      "run": "Start",
+      "verify": "Verification",
+      "other": "Other steps"
+    },
+    "guidePhaseHint": {
+      "prerequis": "What must be installed on the workstation",
+      "services": "Database, messaging: what runs next to the application",
+      "build": "Build the project",
+      "run": "Start the application",
+      "verify": "Know that it works",
+      "other": "The rest of the README"
+    },
+    "docKind": {
+      "readme": "README",
+      "guide": "Guide",
+      "changelog": "Release history",
+      "contributing": "Contributing",
+      "license": "License",
+      "other": "Other document"
+    },
+    "setupPhase": {
+      "prerequis": "Prerequisites",
+      "acces": "Access",
+      "recuperation": "Getting the code",
+      "services": "Local services",
+      "configuration": "Configuration",
+      "execution": "Start",
+      "verification": "Verification"
+    },
+    "setupPhaseHint": {
+      "prerequis": "What must already be installed on the workstation",
+      "acces": "Ask for these first: lead times, not commands, are what cost a week",
+      "recuperation": "Clone and move to the right place",
+      "services": "The dependencies that run next to the application",
+      "configuration": "The values that change from one workstation to another",
+      "execution": "Start the application",
+      "verification": "Know that it works, without having to assume it"
+    },
+    "fileKind": {
+      "source": "Source code",
+      "test": "Tests",
+      "config": "Configuration",
+      "doc": "Documentation",
+      "build": "Build and CI",
+      "data": "Data and samples",
+      "generated": "Generated files",
+      "binary": "Binaries and archives"
+    },
+    "findingRule": {
+      "hardcoded-secret": "Clear-text secret in the repository",
+      "private-key": "Private key in the repository",
+      "access-token": "Access token in the repository"
+    },
+    "archLayer": {
+      "experience": "Experience",
+      "application": "Application",
+      "domaine": "Domain",
+      "infrastructure": "Infrastructure",
+      "externe": "External"
+    }
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "domain": {
+    "role": {
+      "superadmin": "Super administrateur",
+      "admin": "Administrateur",
+      "manager": "Manager",
+      "dev": "Développeur"
+    },
+    "axis": {
+      "documentation": "Documentation",
+      "aiContext": "Contexte IA",
+      "localStart": "Démarrage local",
+      "configuration": "Configuration",
+      "security": "Sécurité du contexte"
+    },
+    "maturity": {
+      "0": "Non préparé",
+      "1": "Assisté",
+      "2": "Guidé",
+      "3": "Contexte maîtrisé",
+      "4": "Prêt pour agents",
+      "5": "Optimisé"
+    },
+    "maturityUsage": {
+      "0": "Questions en chat uniquement, pas de génération de code sur les modules sensibles",
+      "1": "Chat et complétion en ligne",
+      "2": "Chat avec contexte de fichiers, petites modifications",
+      "3": "Mode agent sur des tâches petites et bien définies",
+      "4": "Mode agent sur des tâches normales, revue selon le risque",
+      "5": "Agents autonomes avec budgets et garde-fous"
+    },
+    "gate": {
+      "passed": "Validé",
+      "warning": "Avertissement",
+      "failed": "Échec"
+    },
+    "severity": {
+      "blocker": "Bloquant",
+      "critical": "Critique",
+      "major": "Majeur",
+      "minor": "Mineur"
+    },
+    "issueType": {
+      "context-leak": "Fuite de contexte",
+      "doc-drift": "Dérive documentaire",
+      "token-hog": "Gouffre à tokens",
+      "ambiguity": "Ambiguïté",
+      "broken-onboarding": "Démarrage cassé"
+    },
+    "provenance": {
+      "measured": "Mesuré",
+      "declared": "Déclaré",
+      "estimated": "Estimé"
+    },
+    "provenanceHint": {
+      "measured": "Compté par la passerelle IA interne ou la télémétrie de l'outil",
+      "declared": "Rapporté par un fournisseur ou un signal Git, agrégé",
+      "estimated": "Calculé à partir de la taille du contexte"
+    },
+    "archView": {
+      "contexte": "Contexte",
+      "conteneurs": "Conteneurs",
+      "flux": "Flux de données",
+      "impact": "Impact"
+    },
+    "archViewHint": {
+      "contexte": "Le système vu de l'extérieur : acteurs et systèmes tiers (C4 niveau 1)",
+      "conteneurs": "Les unités déployables et ce qui les relie (C4 niveau 2)",
+      "flux": "Uniquement les liens qui transportent de la donnée, avec la nature du message",
+      "impact": "Choisissez un nœud : le rayon d'impact est mis en évidence par nombre de sauts"
+    },
+    "archNodeKind": {
+      "system": "Système",
+      "service": "Service",
+      "component": "Composant",
+      "datastore": "Stockage",
+      "queue": "File",
+      "external": "Système externe",
+      "actor": "Acteur",
+      "pipeline": "Chaîne CI",
+      "deployment": "Déploiement"
+    },
+    "archProvenance": {
+      "extracted": "Extrait",
+      "inferred": "Déduit",
+      "declared": "Déclaré"
+    },
+    "archPayload": {
+      "mt-message": "Message MT",
+      "rest-json": "REST JSON",
+      "sql": "SQL",
+      "event": "Événement",
+      "config": "Configuration",
+      "artifact": "Artefact"
+    },
+    "codeNodeKind": {
+      "module": "Module",
+      "class": "Classe",
+      "interface": "Interface",
+      "function": "Fonction",
+      "table": "Table",
+      "config": "Configuration",
+      "doc": "Document",
+      "adr": "Décision (ADR)",
+      "rationale": "Justification",
+      "external": "Dépendance externe"
+    },
+    "codeConfidence": {
+      "extracted": "Extrait",
+      "inferred": "Déduit"
+    },
+    "codeEdgeKind": {
+      "imports": "importe",
+      "calls": "appelle",
+      "inherits": "hérite de",
+      "implements": "implémente",
+      "reads": "lit",
+      "writes": "écrit",
+      "publishes": "publie vers",
+      "consumes": "consomme",
+      "configures": "configure",
+      "documents": "documente",
+      "decides": "décide de",
+      "explains": "explique"
+    },
+    "deliveryStageKind": {
+      "build": "Construction",
+      "test": "Tests",
+      "quality": "Qualité",
+      "security": "Sécurité",
+      "package": "Empaquetage",
+      "deploy": "Déploiement",
+      "verify": "Vérification"
+    },
+    "deliveryTrigger": {
+      "auto": "Automatique",
+      "manual": "Manuel",
+      "scheduled": "Planifié"
+    },
+    "deliveryDataKind": {
+      "synthetic": "Données fabriquées",
+      "anonymised": "Données anonymisées",
+      "production": "Données réelles"
+    },
+    "pipelineJobRole": {
+      "build": "Construction",
+      "test": "Tests",
+      "quality": "Qualité",
+      "security": "Sécurité",
+      "package": "Image",
+      "publish": "Publication",
+      "deploy": "Déploiement",
+      "other": "Autre"
+    },
+    "pipelineTrigger": {
+      "auto": "Automatique",
+      "manual": "Manuel",
+      "conditional": "Selon la branche"
+    },
+    "pipelineFlag": {
+      "tests-skipped": "Tests désactivés",
+      "test-failures-ignored": "Échecs de tests ignorés",
+      "tls-unverified": "Certificats TLS non vérifiés",
+      "lockfile-removed": "Verrou des dépendances supprimé",
+      "runs-always": "S'exécute même après un échec"
+    },
+    "pipelineVariableKind": {
+      "gitlab": "Fournie par la plateforme CI",
+      "secret": "À fournir, sensible",
+      "project": "À fournir dans les réglages CI/CD"
+    },
+    "topologyLane": {
+      "source": "Code",
+      "pipeline": "Pipeline",
+      "services": "Dépôts et services reliés",
+      "deliver": "Déploiement",
+      "run": "Exécution",
+      "data": "Dépendances"
+    },
+    "topologyLaneHint": {
+      "source": "Où vit le code",
+      "pipeline": "Ce que la chaîne exécute",
+      "services": "Registres, dépôts d'artefacts, qualité",
+      "deliver": "Ce qui met en ligne",
+      "run": "Ce qui tourne",
+      "data": "Ce dont l'application a besoin"
+    },
+    "topologyBasis": {
+      "found": "Lu dans le dépôt",
+      "inferred": "Déduit",
+      "missing": "Non décrit dans le dépôt"
+    },
+    "guidePhase": {
+      "prerequis": "Prérequis",
+      "services": "Services locaux",
+      "build": "Compilation",
+      "run": "Démarrage",
+      "verify": "Vérification",
+      "other": "Autres étapes"
+    },
+    "guidePhaseHint": {
+      "prerequis": "Ce qui doit être installé sur le poste",
+      "services": "Base de données, messagerie : ce qui tourne à côté de l'application",
+      "build": "Construire le projet",
+      "run": "Lancer l'application",
+      "verify": "Savoir que ça marche",
+      "other": "Le reste du README"
+    },
+    "docKind": {
+      "readme": "README",
+      "guide": "Guide",
+      "changelog": "Historique des versions",
+      "contributing": "Contribution",
+      "license": "Licence",
+      "other": "Autre document"
+    },
+    "setupPhase": {
+      "prerequis": "Prérequis",
+      "acces": "Accès",
+      "recuperation": "Récupération du code",
+      "services": "Services locaux",
+      "configuration": "Configuration",
+      "execution": "Démarrage",
+      "verification": "Vérification"
+    },
+    "setupPhaseHint": {
+      "prerequis": "Ce qui doit déjà être installé sur le poste",
+      "acces": "À demander en premier : ce sont les délais, pas les commandes, qui coûtent une semaine",
+      "recuperation": "Cloner et se placer au bon endroit",
+      "services": "Les dépendances qui tournent à côté de l'application",
+      "configuration": "Les valeurs qui changent d'un poste à l'autre",
+      "execution": "Lancer l'application",
+      "verification": "Savoir que ça marche, sans avoir à le supposer"
+    },
+    "fileKind": {
+      "source": "Code source",
+      "test": "Tests",
+      "config": "Configuration",
+      "doc": "Documentation",
+      "build": "Build et CI",
+      "data": "Données et exemples",
+      "generated": "Fichiers générés",
+      "binary": "Binaires et archives"
+    },
+    "findingRule": {
+      "hardcoded-secret": "Secret en clair dans le dépôt",
+      "private-key": "Clé privée dans le dépôt",
+      "access-token": "Jeton d'accès dans le dépôt"
+    },
+    "archLayer": {
+      "experience": "Expérience",
+      "application": "Application",
+      "domaine": "Domaine",
+      "infrastructure": "Infrastructure",
+      "externe": "Externe"
+    }
+  }
+}

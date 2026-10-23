@@ -2,7 +2,7 @@ import { computeBlastRadius, findCycles } from "@cairn/shared";
 import { describe, expect, it } from "vitest";
 import { ARCHITECTURES } from "../../lib/api/architecture-data";
 import { autoLayout } from "./layout";
-import { toMermaid } from "./to-mermaid";
+import { type MermaidText, toMermaid } from "./to-mermaid";
 import { parseGraphState, serializeGraphState } from "./use-graph-state";
 import { isDataEdge, projectGraph } from "./views";
 
@@ -129,10 +129,12 @@ describe("layout", () => {
   });
 });
 
+const TEXT: MermaidText = { header: (title) => `${title} — export`, payload: (p) => p };
+
 describe("toMermaid", () => {
   it("produces a flowchart whose nodes and links are all declared", () => {
     const view = projectGraph(graph, "conteneurs");
-    const text = toMermaid(view, "test");
+    const text = toMermaid(view, "test", TEXT);
     expect(text).toContain("flowchart LR");
     for (const n of view.nodes) expect(text).toContain(n.id.replace(/[^a-zA-Z0-9_]/g, "_"));
     expect(text.split("\n").filter((l) => l.includes("-->") || l.includes("-.->")).length).toBe(
@@ -142,7 +144,7 @@ describe("toMermaid", () => {
 
   it("escapes quotes so the generated block stays parseable", () => {
     const view = projectGraph(graph, "flux");
-    const text = toMermaid(view, 'un "titre" risqué');
+    const text = toMermaid(view, 'un "titre" risqué', TEXT);
     expect(text).not.toMatch(/%% .*".*"/);
   });
 });

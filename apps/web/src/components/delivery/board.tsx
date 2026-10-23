@@ -1,12 +1,11 @@
 import {
   type ArchSource,
-  DELIVERY_DATA_KIND_LABEL,
-  DELIVERY_STAGE_KIND_LABEL,
   type DeliveryEnvironment,
   type DeliveryStage,
   formatMinutes,
 } from "@cairn/shared";
 import { CircleCheck, CircleDashed, Clock, Hand, Lock, ShieldAlert, Timer } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 
 /**
@@ -47,6 +46,8 @@ const DATA_VARIANT: Record<
  * a report, and calling it a gate would be the lie this whole page exists to avoid.
  */
 export function StageRow({ stage }: { stage: DeliveryStage }) {
+  const t = useTranslations("delivery.board");
+  const td = useTranslations("domain");
   return (
     <li className="flex flex-col gap-1.5 rounded-lg border bg-background/60 p-3">
       <div className="flex items-start justify-between gap-3">
@@ -60,7 +61,7 @@ export function StageRow({ stage }: { stage: DeliveryStage }) {
         </span>
         <span className="flex shrink-0 items-center gap-1 text-muted-foreground text-xs tabular-nums">
           <Timer className="size-3" aria-hidden />
-          {stage.durationP50Min} min
+          {t("minutes", { count: stage.durationP50Min })}
           {stage.durationP90Min ? (
             <span className="text-muted-foreground/70">· p90 {stage.durationP90Min}</span>
           ) : null}
@@ -68,13 +69,13 @@ export function StageRow({ stage }: { stage: DeliveryStage }) {
       </div>
 
       <div className="flex flex-wrap items-center gap-1.5">
-        <Badge variant="outline">{DELIVERY_STAGE_KIND_LABEL[stage.kind]}</Badge>
+        <Badge variant="outline">{td(`deliveryStageKind.${stage.kind}`)}</Badge>
         {stage.trigger === "manual" ? (
           <Badge variant="warning">
-            <Hand className="size-3" aria-hidden /> Manuel
+            <Hand className="size-3" aria-hidden /> {td("deliveryTrigger.manual")}
           </Badge>
         ) : null}
-        {!stage.blocking ? <Badge variant="warning">N'arrête pas la chaîne</Badge> : null}
+        {!stage.blocking ? <Badge variant="warning">{t("nonBlocking")}</Badge> : null}
       </div>
 
       {stage.condition ? <p className="text-muted-foreground text-xs">{stage.condition}</p> : null}
@@ -91,11 +92,12 @@ export function StageRow({ stage }: { stage: DeliveryStage }) {
  * progress, and it belongs between the previous step and this one.
  */
 function GateStrip({ env }: { env: DeliveryEnvironment }) {
+  const t = useTranslations("delivery.board");
   if (!env.approval.required) {
     return (
       <p className="flex min-h-14 items-center gap-2 border-b bg-muted/30 px-4 py-2 text-muted-foreground text-xs">
         <CircleCheck className="size-3.5 shrink-0 text-primary" aria-hidden />
-        Sans validation — la chaîne continue toute seule
+        {t("noApproval")}
       </p>
     );
   }
@@ -107,12 +109,12 @@ function GateStrip({ env }: { env: DeliveryEnvironment }) {
     <div className="flex min-h-14 flex-col justify-center gap-0.5 border-warning/40 border-b bg-warning/10 px-4 py-2 text-xs">
       <span className="flex items-center gap-2 font-medium">
         <Lock className="size-3.5 shrink-0 text-warning" aria-hidden />
-        {env.approval.who ?? <span className="text-destructive">Personne de nommé</span>}
+        {env.approval.who ?? <span className="text-destructive">{t("nobodyNamed")}</span>}
       </span>
       {wait ? (
         <span className="flex items-center gap-1 pl-5 text-muted-foreground tabular-nums">
           <Clock className="size-3" aria-hidden />
-          {formatMinutes(wait)} d'attente observée
+          {t("observedWait", { duration: formatMinutes(wait) })}
         </span>
       ) : null}
     </div>
@@ -135,6 +137,8 @@ export function EnvironmentCard({
   nodeLabels: Record<string, string>;
   architectureHref: (nodeId: string) => string;
 }) {
+  const t = useTranslations("delivery.board");
+  const td = useTranslations("domain");
   return (
     <section className="flex min-w-0 flex-col overflow-hidden rounded-xl border bg-card">
       <GateStrip env={env} />
@@ -145,19 +149,22 @@ export function EnvironmentCard({
             <h3 className="font-semibold text-base">{env.label}</h3>
             {env.replicas ? (
               <span className="text-muted-foreground text-xs tabular-nums">
-                {env.replicas} réplique{env.replicas > 1 ? "s" : ""}
+                {t("replicas", { count: env.replicas })}
               </span>
             ) : null}
           </div>
 
           <Badge variant={DATA_VARIANT[env.dataKind]}>
             {env.dataKind === "production" ? <ShieldAlert className="size-3" aria-hidden /> : null}
-            {DELIVERY_DATA_KIND_LABEL[env.dataKind]}
+            {td(`deliveryDataKind.${env.dataKind}`)}
           </Badge>
 
           {env.current ? (
             <p className="break-words text-muted-foreground text-xs">
-              Tourne en <span className="font-mono">{env.current.version}</span>
+              {t.rich("runs", {
+                version: env.current.version,
+                mono: (chunks) => <span className="font-mono">{chunks}</span>,
+              })}
             </p>
           ) : null}
         </header>
@@ -165,11 +172,11 @@ export function EnvironmentCard({
         {/* The two clocks, side by side and never summed into one reassuring number. */}
         <dl className="grid grid-cols-2 gap-3 rounded-lg bg-muted/40 px-3 py-2">
           <div className="flex min-w-0 flex-col">
-            <dt className="text-[11px] text-muted-foreground">Machine</dt>
+            <dt className="text-[11px] text-muted-foreground">{t("machine")}</dt>
             <dd className="font-semibold text-sm tabular-nums">{formatMinutes(leadTimeMin)}</dd>
           </div>
           <div className="flex min-w-0 flex-col">
-            <dt className="text-[11px] text-muted-foreground">Attente</dt>
+            <dt className="text-[11px] text-muted-foreground">{t("wait")}</dt>
             <dd
               className={
                 waitMin > leadTimeMin
@@ -192,7 +199,7 @@ export function EnvironmentCard({
 
         <div className="mt-auto flex flex-col gap-1.5 pt-2">
           <span className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
-            Ce qui y tourne
+            {t("whatRuns")}
           </span>
           <div className="flex flex-wrap gap-1.5">
             {env.deploysNodeIds.map((nodeId) => {

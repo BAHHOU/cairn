@@ -1,64 +1,46 @@
-import {
-  type GateStatus,
-  ISSUE_TYPE_LABEL,
-  type IssueType,
-  type Provenance,
-  type Severity,
-} from "@cairn/shared";
+import type { GateStatus, IssueType, Provenance, Severity } from "@cairn/shared";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 
-const SEVERITY: Record<
-  Severity,
-  { label: string; variant: "destructive" | "warning" | "secondary" }
-> = {
-  blocker: { label: "Bloquant", variant: "destructive" },
-  critical: { label: "Critique", variant: "destructive" },
-  major: { label: "Majeur", variant: "warning" },
-  minor: { label: "Mineur", variant: "secondary" },
+const SEVERITY_VARIANT: Record<Severity, "destructive" | "warning" | "secondary"> = {
+  blocker: "destructive",
+  critical: "destructive",
+  major: "warning",
+  minor: "secondary",
 };
 
-export const SeverityBadge = ({ severity }: { severity: Severity }) => (
-  <Badge variant={SEVERITY[severity].variant}>{SEVERITY[severity].label}</Badge>
-);
+export function SeverityBadge({ severity }: { severity: Severity }) {
+  const t = useTranslations("domain.severity");
+  return <Badge variant={SEVERITY_VARIANT[severity]}>{t(severity)}</Badge>;
+}
 
-const GATE: Record<GateStatus, { label: string; variant: "success" | "warning" | "destructive" }> =
-  {
-    passed: { label: "Validé", variant: "success" },
-    warning: { label: "Avertissement", variant: "warning" },
-    failed: { label: "Échec", variant: "destructive" },
-  };
-
-export const GateBadge = ({ status }: { status: GateStatus }) => (
-  <Badge variant={GATE[status].variant}>{GATE[status].label}</Badge>
-);
-
-export const TypeBadge = ({ type }: { type: IssueType }) => (
-  <Badge variant="outline">{ISSUE_TYPE_LABEL[type]}</Badge>
-);
-
-const PROVENANCE: Record<
-  Provenance,
-  { label: string; variant: "success" | "info" | "warning"; hint: string }
-> = {
-  measured: {
-    label: "Mesuré",
-    variant: "success",
-    hint: "Compté par la passerelle IA interne ou la télémétrie de l'outil",
-  },
-  declared: {
-    label: "Déclaré",
-    variant: "info",
-    hint: "Rapporté par un fournisseur ou un signal Git, agrégé",
-  },
-  estimated: {
-    label: "Estimé",
-    variant: "warning",
-    hint: "Calculé à partir de la taille du contexte",
-  },
+const GATE_VARIANT: Record<GateStatus, "success" | "warning" | "destructive"> = {
+  passed: "success",
+  warning: "warning",
+  failed: "destructive",
 };
 
-export const ProvenanceBadge = ({ provenance }: { provenance: Provenance }) => (
-  <Badge variant={PROVENANCE[provenance].variant} title={PROVENANCE[provenance].hint}>
-    {PROVENANCE[provenance].label}
-  </Badge>
-);
+export function GateBadge({ status }: { status: GateStatus }) {
+  const t = useTranslations("domain.gate");
+  return <Badge variant={GATE_VARIANT[status]}>{t(status)}</Badge>;
+}
+
+export function TypeBadge({ type }: { type: IssueType }) {
+  const t = useTranslations("domain.issueType");
+  return <Badge variant="outline">{t(type)}</Badge>;
+}
+
+const PROVENANCE_VARIANT: Record<Provenance, "success" | "info" | "warning"> = {
+  measured: "success",
+  declared: "info",
+  estimated: "warning",
+};
+
+export function ProvenanceBadge({ provenance }: { provenance: Provenance }) {
+  const t = useTranslations("domain");
+  return (
+    <Badge variant={PROVENANCE_VARIANT[provenance]} title={t(`provenanceHint.${provenance}`)}>
+      {t(`provenance.${provenance}`)}
+    </Badge>
+  );
+}

@@ -1,20 +1,14 @@
 "use client";
 
-import {
-  ARCH_NODE_KIND_LABEL,
-  ARCH_PROVENANCE_LABEL,
-  type ProjectArchitecture,
-} from "@cairn/shared";
+import type { ProjectArchitecture } from "@cairn/shared";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { GraphState } from "./use-graph-state";
 
-const TABS = [
-  { id: "contract", label: "Contrat" },
-  { id: "violations", label: "Écarts" },
-  { id: "inventory", label: "Inventaire" },
-] as const;
+/** Labels: `diagram.panel.tab.<id>`. */
+const TABS = [{ id: "contract" }, { id: "violations" }, { id: "inventory" }] as const;
 
 interface Props {
   architecture: ProjectArchitecture;
@@ -30,6 +24,8 @@ const SEVERITY_VARIANT = {
 } as const;
 
 export function BottomPanel({ architecture, state, update }: Props) {
+  const t = useTranslations("diagram.panel");
+  const td = useTranslations("domain");
   const open = state.panel !== null;
   const layerLabel = (id: string) =>
     architecture.contract.layers.find((l) => l.id === id)?.label ?? id;
@@ -50,7 +46,7 @@ export function BottomPanel({ architecture, state, update }: Props) {
                 : "text-muted-foreground hover:bg-accent/50",
             )}
           >
-            {tab.label}
+            {t(`tab.${tab.id}`)}
             {tab.id === "violations" && architecture.violations.length > 0 && (
               <span className="ml-1.5 rounded-full bg-destructive px-1.5 text-[10px] text-background">
                 {architecture.violations.length}
@@ -59,7 +55,10 @@ export function BottomPanel({ architecture, state, update }: Props) {
           </button>
         ))}
         <span className="ml-auto text-muted-foreground text-xs">
-          Graphe extrait du commit <code className="font-mono">{architecture.commit}</code>
+          {t.rich("commit", {
+            commit: architecture.commit,
+            code: (chunks) => <code className="font-mono">{chunks}</code>,
+          })}
         </span>
         {open ? (
           <ChevronDown className="size-4 text-muted-foreground" aria-hidden />
@@ -73,9 +72,7 @@ export function BottomPanel({ architecture, state, update }: Props) {
           {state.panel === "contract" && (
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <h3 className="mb-2 font-medium text-sm">
-                  Couches, de l'extérieur vers l'intérieur
-                </h3>
+                <h3 className="mb-2 font-medium text-sm">{t("layers")}</h3>
                 <ol className="space-y-1.5">
                   {architecture.contract.layers.map((l, i) => (
                     <li key={l.id} className="text-xs">
@@ -88,7 +85,7 @@ export function BottomPanel({ architecture, state, update }: Props) {
                 </ol>
               </div>
               <div>
-                <h3 className="mb-2 font-medium text-sm">Dépendances interdites</h3>
+                <h3 className="mb-2 font-medium text-sm">{t("forbidden")}</h3>
                 <ul className="space-y-1.5">
                   {architecture.contract.forbidden.map((r) => (
                     <li key={`${r.from}->${r.to}`} className="text-xs">
@@ -101,8 +98,11 @@ export function BottomPanel({ architecture, state, update }: Props) {
                 </ul>
                 <p className="mt-3 text-muted-foreground text-xs">
                   {architecture.contract.validatedBy
-                    ? `Validé par ${architecture.contract.validatedBy} le ${architecture.contract.validatedAt}.`
-                    : "Contrat par défaut de Cairn : aucune équipe ne l'a encore validé."}
+                    ? t("validated", {
+                        by: architecture.contract.validatedBy,
+                        at: architecture.contract.validatedAt ?? "",
+                      })
+                    : t("defaultContract")}
                 </p>
               </div>
             </div>
@@ -124,14 +124,17 @@ export function BottomPanel({ architecture, state, update }: Props) {
                       </span>
                       {v.introducedBy && (
                         <span className="text-muted-foreground text-xs">
-                          introduit par {v.introducedBy.ref} · {v.introducedBy.title} (
-                          {v.introducedBy.date})
+                          {t("introducedBy", {
+                            ref: v.introducedBy.ref,
+                            title: v.introducedBy.title,
+                            date: v.introducedBy.date,
+                          })}
                         </span>
                       )}
                     </div>
                     <p className="mt-1 text-muted-foreground text-xs">{v.explanation}</p>
                     <p className="mt-1 text-xs">
-                      <span className="font-medium">Correction proposée :</span> {v.proposedFix}
+                      <span className="font-medium">{t("proposedFix")}</span> {v.proposedFix}
                     </p>
                   </button>
                 </li>
@@ -143,11 +146,11 @@ export function BottomPanel({ architecture, state, update }: Props) {
             <table className="w-full text-xs">
               <thead className="text-left text-muted-foreground">
                 <tr>
-                  <th className="pb-1 font-medium">Nœud</th>
-                  <th className="pb-1 font-medium">Type</th>
-                  <th className="pb-1 font-medium">Dépôt</th>
-                  <th className="pb-1 font-medium">Provenance</th>
-                  <th className="pb-1 font-medium">Sources</th>
+                  <th className="pb-1 font-medium">{t("node")}</th>
+                  <th className="pb-1 font-medium">{t("type")}</th>
+                  <th className="pb-1 font-medium">{t("repository")}</th>
+                  <th className="pb-1 font-medium">{t("provenance")}</th>
+                  <th className="pb-1 font-medium">{t("sources")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -162,10 +165,10 @@ export function BottomPanel({ architecture, state, update }: Props) {
                         {n.label}
                       </button>
                     </td>
-                    <td className="py-1 text-muted-foreground">{ARCH_NODE_KIND_LABEL[n.kind]}</td>
+                    <td className="py-1 text-muted-foreground">{td(`archNodeKind.${n.kind}`)}</td>
                     <td className="py-1 text-muted-foreground">{n.repoId}</td>
                     <td className="py-1 text-muted-foreground">
-                      {ARCH_PROVENANCE_LABEL[n.provenance]}
+                      {td(`archProvenance.${n.provenance}`)}
                     </td>
                     <td className="py-1 font-mono text-[10px] text-muted-foreground">
                       {n.sources[0]?.path ?? "—"}

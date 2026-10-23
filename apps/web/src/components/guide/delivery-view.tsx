@@ -1,10 +1,7 @@
-import {
-  type DeliveryView,
-  PIPELINE_VARIABLE_KIND_LABEL,
-  PIPELINE_VARIABLE_KINDS,
-} from "@cairn/shared";
+import { type DeliveryView, PIPELINE_VARIABLE_KINDS } from "@cairn/shared";
 import { Box, Layers, ShieldAlert, Workflow } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import {
   GuideUnavailable,
   LimitsNote,
@@ -17,7 +14,7 @@ import { Findings } from "@/components/guide/findings";
 import { PipelineFlow } from "@/components/guide/pipeline-flow";
 import { KpiCard, PageHeader } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
-import { formatDate } from "@/lib/format";
+import { useFormat } from "@/i18n/format";
 import type { ImportedScan } from "@/lib/import/scan";
 
 const PROVIDER_LABEL = {
@@ -35,12 +32,9 @@ function Images({
   id: string;
   imported: ImportedScan;
 }) {
+  const t = useTranslations("delivery.imported");
   return (
-    <Section
-      title="Images produites"
-      description="Ce que la chaîne construit et publie. Le lien ouvre le service dans l'architecture."
-      count={delivery.images.length}
-    >
+    <Section title={t("images")} description={t("imagesHint")} count={delivery.images.length}>
       <ul className="flex flex-col gap-3">
         {delivery.images.map((image) => (
           <li key={image.repository} className="flex flex-col gap-2 rounded-lg border p-3">
@@ -57,30 +51,30 @@ function Images({
                   href={`/projects/${id}/architecture?vue=flux&noeud=${encodeURIComponent(image.nodeId)}`}
                   className="ml-auto text-xs underline underline-offset-4 hover:text-primary"
                 >
-                  Voir dans l'architecture
+                  {t("seeInArchitecture")}
                 </Link>
               ) : null}
             </div>
             <dl className="grid gap-x-4 gap-y-1 text-xs sm:grid-cols-[auto_1fr]">
               {image.tag ? (
                 <>
-                  <dt className="text-muted-foreground">Étiquette</dt>
+                  <dt className="text-muted-foreground">{t("tag")}</dt>
                   <dd className="break-all font-mono">{image.tag}</dd>
                 </>
               ) : null}
               {image.baseImage ? (
                 <>
-                  <dt className="text-muted-foreground">Base</dt>
+                  <dt className="text-muted-foreground">{t("base")}</dt>
                   <dd className="break-all font-mono">{image.baseImage}</dd>
                 </>
               ) : null}
               {image.jar ? (
                 <>
-                  <dt className="text-muted-foreground">Exécute</dt>
+                  <dt className="text-muted-foreground">{t("runs")}</dt>
                   <dd className="font-mono">{image.jar}</dd>
                 </>
               ) : null}
-              <dt className="text-muted-foreground">Construite par</dt>
+              <dt className="text-muted-foreground">{t("builtBy")}</dt>
               <dd className="font-mono">{image.builtBy}</dd>
             </dl>
             {image.source ? <SourceRef source={image.source} base={imported.source} /> : null}
@@ -92,21 +86,23 @@ function Images({
 }
 
 function Variables({ delivery }: { delivery: DeliveryView }) {
+  const t = useTranslations("delivery.imported");
+  const td = useTranslations("domain");
   const groups = PIPELINE_VARIABLE_KINDS.map((kind) => ({
     kind,
     items: delivery.variables.filter((v) => v.kind === kind),
   })).filter((g) => g.items.length > 0);
   return (
     <Section
-      title="Variables"
-      description="Les noms que la chaîne lit. Leurs valeurs ne sont jamais lues ni conservées par Cairn."
+      title={t("variables")}
+      description={t("variablesHint")}
       count={delivery.variables.length}
     >
       <div className="flex flex-col gap-4">
         {groups.map((g) => (
           <div key={g.kind} className="flex flex-col gap-2">
             <h3 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
-              {PIPELINE_VARIABLE_KIND_LABEL[g.kind]}
+              {td(`pipelineVariableKind.${g.kind}`)}
             </h3>
             <ul className="flex flex-wrap gap-1.5">
               {g.items.map((v) => (
@@ -114,7 +110,7 @@ function Variables({ delivery }: { delivery: DeliveryView }) {
                   <Badge
                     variant={g.kind === "secret" ? "warning" : "secondary"}
                     className="font-mono"
-                    title={`Utilisée par ${v.usedBy.join(", ")}`}
+                    title={t("usedBy", { jobs: v.usedBy.join(", ") })}
                   >
                     {v.name}
                   </Badge>
@@ -129,21 +125,22 @@ function Variables({ delivery }: { delivery: DeliveryView }) {
 }
 
 function Environments({ delivery }: { delivery: DeliveryView }) {
+  const t = useTranslations("delivery.imported");
   return (
     <Section
-      title="Environnements dans le dépôt"
-      description="Dossiers de configuration nommés d'après un environnement. Ce n'est pas la liste de ce qui est déployé."
+      title={t("environments")}
+      description={t("environmentsHint")}
       count={delivery.environments.length}
     >
       {delivery.environments.length === 0 ? (
-        <p className="text-muted-foreground text-sm">Aucun dossier par environnement trouvé.</p>
+        <p className="text-muted-foreground text-sm">{t("noEnvironment")}</p>
       ) : (
         <ul className="grid gap-2 sm:grid-cols-2">
           {delivery.environments.map((e) => (
             <li key={e.name} className="flex flex-col gap-0.5 rounded-lg border p-3">
               <span className="font-medium text-sm">{e.name}</span>
               <span className="text-muted-foreground text-xs">
-                {e.files} fichier{e.files > 1 ? "s" : ""} de configuration
+                {t("configFiles", { count: e.files })}
               </span>
               {e.example ? (
                 <span className="truncate font-mono text-[11px] text-muted-foreground">
@@ -160,68 +157,59 @@ function Environments({ delivery }: { delivery: DeliveryView }) {
 
 /** The CI/CD page of a repository imported from Git: everything comes from its pipeline file. */
 export function ImportedDelivery({ id, imported }: { id: string; imported: ImportedScan }) {
+  const t = useTranslations("delivery.imported");
+  const fmt = useFormat();
   const delivery = imported.scan?.delivery ?? null;
   return (
     <>
       <PageHeader
-        title={`CI/CD — ${imported.name}`}
+        title={t("title", { name: imported.name })}
         description={
-          delivery ? (
-            <>
-              {PROVIDER_LABEL[delivery.provider]} · {delivery.path} · lu le{" "}
-              {formatDate(imported.scan?.report.generatedAt ?? "")}
-            </>
-          ) : (
-            "Du commit à la production, lu dans le pipeline du dépôt."
-          )
+          delivery
+            ? t("summary", {
+                provider: PROVIDER_LABEL[delivery.provider],
+                path: delivery.path,
+                date: fmt.date(imported.scan?.report.generatedAt ?? ""),
+              })
+            : t("description")
         }
       />
       <ProjectTabs id={id} active="delivery" />
 
       {!imported.scan ? (
-        <GuideUnavailable title="Aucune analyse pour l'instant">
-          La chaîne CI/CD apparaît après la première analyse réussie.
-        </GuideUnavailable>
+        <GuideUnavailable title={t("unavailableTitle")}>{t("unavailableBody")}</GuideUnavailable>
       ) : !delivery ? (
-        <GuideUnavailable title="Aucun pipeline trouvé">
-          Ni fichier GitLab CI, ni workflow GitHub Actions, ni Jenkinsfile n'a été trouvé dans ce
-          dépôt. Si l'analyse date d'avant cette vue, relancez-la depuis la fiche du projet.
-        </GuideUnavailable>
+        <GuideUnavailable title={t("noPipelineTitle")}>{t("noPipelineBody")}</GuideUnavailable>
       ) : (
         <>
           <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <KpiCard
-              label="Étapes"
+              label={t("stages")}
               value={delivery.stages.length}
               hint={delivery.stages.map((s) => s.name).join(" → ")}
               visual={<Layers className="size-5 text-muted-foreground" aria-hidden />}
             />
             <KpiCard
-              label="Jobs"
+              label={t("jobs")}
               value={delivery.counts.jobs}
-              hint={`${delivery.counts.manual} manuel(s)`}
+              hint={t("manualJobs", { count: delivery.counts.manual })}
               visual={<Workflow className="size-5 text-muted-foreground" aria-hidden />}
             />
             <KpiCard
-              label="Images produites"
+              label={t("images")}
               value={delivery.counts.images}
-              hint={
-                delivery.deploysToEnvironment ? "Déploiement décrit" : "Aucun déploiement décrit"
-              }
+              hint={delivery.deploysToEnvironment ? t("deployDescribed") : t("noDeploy")}
               visual={<Box className="size-5 text-muted-foreground" aria-hidden />}
             />
             <KpiCard
-              label="Points d'attention"
+              label={t("findings")}
               value={delivery.findings.length}
-              hint={`${delivery.counts.nonBlocking} job(s) qui n'arrêtent rien`}
+              hint={t("nonBlocking", { count: delivery.counts.nonBlocking })}
               visual={<ShieldAlert className="size-5 text-muted-foreground" aria-hidden />}
             />
           </section>
 
-          <Section
-            title="Architecture de déploiement"
-            description="Du commit à ce qui tourne : les outils, leurs logos et ce qu'ils se passent. Trait plein : écrit dans le dépôt. Pointillé : déduit, ou non décrit."
-          >
+          <Section title={t("topology")} description={t("topologyHint")}>
             {delivery.topology ? (
               <DeliveryMap
                 view={delivery.topology}
@@ -230,29 +218,23 @@ export function ImportedDelivery({ id, imported }: { id: string; imported: Impor
                 base={imported.source}
               />
             ) : (
-              <p className="text-muted-foreground text-sm">
-                Cette analyse date d'avant le schéma de déploiement. Relancez-la depuis la fiche du
-                projet pour le dessiner.
-              </p>
+              <p className="text-muted-foreground text-sm">{t("topologyOutdated")}</p>
             )}
           </Section>
 
-          <Section
-            title="Détail des jobs"
-            description="Les étapes dans l'ordre du pipeline. Cliquez sur un job pour voir quand il s'exécute, ce qu'il produit et ce qui l'affaiblit."
-          >
+          <Section title={t("jobsDetail")} description={t("jobsDetailHint")}>
             <PipelineFlow delivery={delivery} base={imported.source} />
           </Section>
 
           <Section
-            title="Points d'attention"
-            description="Des constats vérifiables dans le fichier, avec la ligne. Cairn propose, il ne modifie jamais le dépôt."
+            title={t("findings")}
+            description={t("findingsHint")}
             count={delivery.findings.length}
           >
             <Findings
               findings={delivery.findings}
               base={imported.source}
-              emptyText="Aucun point d'attention relevé dans le pipeline."
+              emptyText={t("noFinding")}
             />
           </Section>
 
@@ -266,12 +248,7 @@ export function ImportedDelivery({ id, imported }: { id: string; imported: Impor
             </div>
           </div>
 
-          <LimitsNote>
-            Tout vient du fichier de pipeline, lu sans l'exécuter. Les durées, les validations, les
-            reprises sur incident et l'historique des exécutions n'y figurent pas : Cairn ne les
-            invente pas. Lecture à base de motifs, pas d'analyse complète du YAML : un job généré
-            par inclusion ou par règle dynamique peut ne pas apparaître.
-          </LimitsNote>
+          <LimitsNote>{t("limits")}</LimitsNote>
         </>
       )}
     </>

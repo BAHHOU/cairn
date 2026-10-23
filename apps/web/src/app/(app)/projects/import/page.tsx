@@ -1,6 +1,7 @@
 import { listImportViews, listTeamNames } from "@cairn/db";
 import { loadGitConfig, PROVIDERS } from "@cairn/git";
 import { TriangleAlert } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { ImportsTable } from "@/components/import/imports-table";
 import { LockedCard, PageHeader } from "@/components/page";
@@ -36,13 +37,9 @@ export default async function ImportPage({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
+  const t = await getTranslations("import.page");
   const viewer = await getViewer();
-  const header = (
-    <PageHeader
-      title="Importer un dépôt"
-      description="Clone réel d'une branche depuis GitLab ou GitHub, puis analyse de la pile technique."
-    />
-  );
+  const header = <PageHeader title={t("title")} description={t("description")} />;
 
   if (!viewerMayImport(viewer)) {
     const demoBlocked = process.env.NODE_ENV === "production" && isDemo();
@@ -50,12 +47,8 @@ export default async function ImportPage({
       <>
         {header}
         <LockedCard
-          title="Import de dépôts"
-          reason={
-            demoBlocked
-              ? "Le rôle de démonstration (cookie) ne peut pas autoriser un import réel en production. Configurez l'authentification OIDC."
-              : "Réservé au super administrateur."
-          }
+          title={t("lockedTitle")}
+          reason={demoBlocked ? t("lockedDemo") : t("lockedRole")}
         />
       </>
     );
@@ -65,10 +58,8 @@ export default async function ImportPage({
     return (
       <>
         {header}
-        <Notice title="Base de données non configurée">
-          Définissez <code>DATABASE_URL</code> et <code>CAIRN_SECRET_KEY</code>, appliquez les
-          migrations (<code>pnpm db:migrate</code>) et démarrez le worker (
-          <code>pnpm dev:worker</code>).
+        <Notice title={t("dbMissingTitle")}>
+          {t.rich("dbMissingBody", { code: (chunks) => <code>{chunks}</code> })}
         </Notice>
       </>
     );
@@ -93,10 +84,8 @@ export default async function ImportPage({
     <>
       {header}
       {dbError ? (
-        <Notice title="Base de données injoignable">
-          Vérifiez que PostgreSQL tourne (
-          <code>docker compose -f infra/docker-compose.yml up -d</code>) et que{" "}
-          <code>DATABASE_URL</code> est correct.
+        <Notice title={t("dbDownTitle")}>
+          {t.rich("dbDownBody", { code: (chunks) => <code>{chunks}</code> })}
         </Notice>
       ) : (
         <>
@@ -107,7 +96,7 @@ export default async function ImportPage({
           />
           {recent.length > 0 ? (
             <section className="flex flex-col gap-2">
-              <h2 className="text-sm font-semibold">Imports récents</h2>
+              <h2 className="text-sm font-semibold">{t("recent")}</h2>
               <Card className="gap-0 py-0">
                 <ImportsTable imports={recent} />
               </Card>

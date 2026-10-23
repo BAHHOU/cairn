@@ -3,6 +3,7 @@
 import { Coins, FolderGit2, FolderInput, LayoutDashboard, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { NavGroup, NavIcon } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +16,7 @@ const ICONS: Record<NavIcon, React.ComponentType<{ className?: string }>> = {
 };
 
 export function SidebarNav({ groups }: { groups: NavGroup[] }) {
+  const t = useTranslations("nav");
   const pathname = usePathname();
   const matches = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
@@ -24,11 +26,11 @@ export function SidebarNav({ groups }: { groups: NavGroup[] }) {
     matches(href) && !hrefs.some((other) => other.length > href.length && matches(other));
 
   return (
-    <nav aria-label="Navigation principale" className="flex flex-col gap-5">
+    <nav aria-label={t("label")} className="flex flex-col gap-5">
       {groups.map((group) => (
         <div key={group.title} className="flex flex-col gap-0.5">
           <span className="px-2 pb-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-            {group.title}
+            {t(`group.${group.title}`)}
           </span>
           {group.items.map((item) => {
             const Icon = ICONS[item.icon];
@@ -46,7 +48,7 @@ export function SidebarNav({ groups }: { groups: NavGroup[] }) {
                 )}
               >
                 <Icon className="size-4" />
-                {item.label}
+                {t(`item.${item.label}`)}
               </Link>
             );
           })}

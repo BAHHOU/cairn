@@ -1,5 +1,6 @@
 import type { Issue } from "@cairn/shared";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { SeverityBadge, TypeBadge } from "@/components/badges";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatTokens } from "@/lib/format";
+import { useFormat } from "@/i18n/format";
 
 /** The token column only exists when the server sent the figure, i.e. for allowed roles. */
 export function IssueTable({
@@ -20,25 +21,25 @@ export function IssueTable({
   issues: Issue[];
   showProject?: boolean;
 }) {
+  const t = useTranslations("issues.table");
+  const fmt = useFormat();
   const showTokens = issues.some((i) => i.wastedTokensMonth !== undefined);
 
   if (issues.length === 0) {
-    return (
-      <p className="px-5 py-8 text-center text-sm text-muted-foreground">Aucun problème ouvert.</p>
-    );
+    return <p className="px-5 py-8 text-center text-sm text-muted-foreground">{t("empty")}</p>;
   }
 
   return (
     <Table>
       <TableHeader>
         <TableRow className="hover:bg-transparent">
-          <TableHead>Sévérité</TableHead>
-          <TableHead>Problème</TableHead>
-          {showProject ? <TableHead>Projet</TableHead> : null}
-          <TableHead>Fichier</TableHead>
-          <TableHead className="text-right">Effort</TableHead>
-          {showTokens ? <TableHead className="text-right">Tokens perdus / mois</TableHead> : null}
-          <TableHead>Correction</TableHead>
+          <TableHead>{t("severity")}</TableHead>
+          <TableHead>{t("issue")}</TableHead>
+          {showProject ? <TableHead>{t("project")}</TableHead> : null}
+          <TableHead>{t("file")}</TableHead>
+          <TableHead className="text-right">{t("effort")}</TableHead>
+          {showTokens ? <TableHead className="text-right">{t("wastedTokens")}</TableHead> : null}
+          <TableHead>{t("fix")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -72,18 +73,18 @@ export function IssueTable({
               {i.line ? `:${i.line}` : ""}
             </TableCell>
             <TableCell className="whitespace-nowrap text-right tabular-nums">
-              {i.effortMin} min
+              {t("minutes", { count: i.effortMin })}
             </TableCell>
             {showTokens ? (
               <TableCell className="text-right tabular-nums">
-                {i.wastedTokensMonth ? formatTokens(i.wastedTokensMonth) : "—"}
+                {i.wastedTokensMonth ? fmt.tokens(i.wastedTokensMonth) : "—"}
               </TableCell>
             ) : null}
             <TableCell>
               {i.fixable ? (
-                <Badge variant="success">Automatique</Badge>
+                <Badge variant="success">{t("fixAuto")}</Badge>
               ) : (
-                <Badge variant="secondary">Manuelle</Badge>
+                <Badge variant="secondary">{t("fixManual")}</Badge>
               )}
             </TableCell>
           </TableRow>

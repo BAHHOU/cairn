@@ -1,6 +1,7 @@
 import type { GuideSource } from "@cairn/shared";
 import { FileCode2, Info } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +18,7 @@ export function SourceRef({
   base: SourceBase | null;
   className?: string;
 }) {
+  const t = useTranslations("projectNav");
   const label = source.line ? `${source.path}:${source.line}` : source.path;
   const href = sourceHref(base, source);
   const body = (
@@ -35,7 +37,7 @@ export function SourceRef({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(style, "underline-offset-4 hover:text-foreground hover:underline")}
-      title="Ouvrir dans le dépôt"
+      title={t("openInRepo")}
     >
       {body}
     </a>
@@ -62,13 +64,14 @@ export function Inline({ text }: { text: string }) {
   );
 }
 
+/** Labels: `projectNav.tab.<key>`. */
 const TABS = [
-  { key: "overview", label: "Vue d'ensemble", path: "" },
-  { key: "architecture", label: "Architecture", path: "/architecture" },
-  { key: "code-map", label: "Carte du code", path: "/code-map" },
-  { key: "delivery", label: "CI/CD", path: "/delivery" },
-  { key: "onboarding", label: "Démarrage", path: "/onboarding" },
-  { key: "docs", label: "Documentation", path: "/docs" },
+  { key: "overview", path: "" },
+  { key: "architecture", path: "/architecture" },
+  { key: "code-map", path: "/code-map" },
+  { key: "delivery", path: "/delivery" },
+  { key: "onboarding", path: "/onboarding" },
+  { key: "docs", path: "/docs" },
 ] as const;
 
 export type ProjectTab = (typeof TABS)[number]["key"];
@@ -81,8 +84,9 @@ export type ProjectTab = (typeof TABS)[number]["key"];
  * scrollbar appear at the right-hand end.
  */
 export function ProjectTabs({ id, active }: { id: string; active: ProjectTab }) {
+  const t = useTranslations("projectNav");
   return (
-    <nav aria-label="Vues du projet" className="-mt-2 overflow-x-auto overflow-y-hidden">
+    <nav aria-label={t("tabsLabel")} className="-mt-2 overflow-x-auto overflow-y-hidden">
       <ul className="flex min-w-max gap-1 border-b">
         {TABS.map((tab) => (
           <li key={tab.key}>
@@ -96,7 +100,7 @@ export function ProjectTabs({ id, active }: { id: string; active: ProjectTab }) 
                   : "border-transparent text-muted-foreground hover:text-foreground",
               )}
             >
-              {tab.label}
+              {t(`tab.${tab.key}`)}
             </Link>
           </li>
         ))}

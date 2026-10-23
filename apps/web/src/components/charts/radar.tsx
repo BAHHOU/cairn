@@ -1,6 +1,8 @@
-import { AXES, AXIS_LABEL, type Axis } from "@cairn/shared";
+import { AXES, type Axis } from "@cairn/shared";
+import { useTranslations } from "next-intl";
 
 export function Radar({ values }: { values: Record<Axis, number> }) {
+  const t = useTranslations();
   const cx = 200;
   const cy = 125;
   const R = 68;
@@ -17,7 +19,7 @@ export function Radar({ values }: { values: Record<Axis, number> }) {
     ).join(" ");
 
   return (
-    <svg viewBox="0 0 400 250" className="w-full" role="img" aria-label="Radar des cinq axes">
+    <svg viewBox="0 0 400 250" className="w-full" role="img" aria-label={t("charts.radarLabel")}>
       {[0.25, 0.5, 0.75, 1].map((r) => (
         <polygon
           key={r}
@@ -61,7 +63,7 @@ export function Radar({ values }: { values: Record<Axis, number> }) {
             className="fill-muted-foreground"
           >
             <tspan x={x} dy="-0.2em">
-              {AXIS_LABEL[axis]}
+              {t(`domain.axis.${axis}`)}
             </tspan>
             <tspan x={x} dy="1.3em" className="fill-foreground font-medium">
               {values[axis]}

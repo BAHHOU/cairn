@@ -1,6 +1,6 @@
 "use client";
 
-import { toMermaid } from "./to-mermaid";
+import { type MermaidText, toMermaid } from "./to-mermaid";
 import type { ViewGraph } from "./views";
 
 /**
@@ -11,17 +11,28 @@ import type { ViewGraph } from "./views";
  * kind of artefact that goes stale without anyone noticing.
  */
 
-export async function copyMermaid(graph: ViewGraph, title: string): Promise<boolean> {
+export async function copyMermaid(
+  graph: ViewGraph,
+  title: string,
+  text: MermaidText,
+): Promise<boolean> {
   try {
-    await navigator.clipboard.writeText(toMermaid(graph, title));
+    await navigator.clipboard.writeText(toMermaid(graph, title, text));
     return true;
   } catch {
     return false;
   }
 }
 
-export function downloadMermaid(graph: ViewGraph, title: string, filename: string): void {
-  const blob = new Blob([toMermaid(graph, title)], { type: "text/vnd.mermaid;charset=utf-8" });
+export function downloadMermaid(
+  graph: ViewGraph,
+  title: string,
+  filename: string,
+  text: MermaidText,
+): void {
+  const blob = new Blob([toMermaid(graph, title, text)], {
+    type: "text/vnd.mermaid;charset=utf-8",
+  });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;

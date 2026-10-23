@@ -27,30 +27,12 @@ export const CODE_NODE_KINDS = [
 ] as const;
 export type CodeNodeKind = (typeof CODE_NODE_KINDS)[number];
 
-export const CODE_NODE_KIND_LABEL: Record<CodeNodeKind, string> = {
-  module: "Module",
-  class: "Classe",
-  interface: "Interface",
-  function: "Fonction",
-  table: "Table",
-  config: "Configuration",
-  doc: "Document",
-  adr: "Décision (ADR)",
-  rationale: "Justification",
-  external: "Dépendance externe",
-};
-
 /**
  * How the link was obtained. This is the single most important field of the graph:
  * a map that cannot distinguish what it read from what it guessed is a rumour.
  */
 export const CODE_CONFIDENCES = ["extracted", "inferred"] as const;
 export type CodeConfidence = (typeof CODE_CONFIDENCES)[number];
-
-export const CODE_CONFIDENCE_LABEL: Record<CodeConfidence, string> = {
-  extracted: "Extrait",
-  inferred: "Déduit",
-};
 
 export const CODE_EDGE_KINDS = [
   "imports",
@@ -67,21 +49,6 @@ export const CODE_EDGE_KINDS = [
   "explains",
 ] as const;
 export type CodeEdgeKind = (typeof CODE_EDGE_KINDS)[number];
-
-export const CODE_EDGE_KIND_LABEL: Record<CodeEdgeKind, string> = {
-  imports: "importe",
-  calls: "appelle",
-  inherits: "hérite de",
-  implements: "implémente",
-  reads: "lit",
-  writes: "écrit",
-  publishes: "publie vers",
-  consumes: "consomme",
-  configures: "configure",
-  documents: "documente",
-  decides: "décide de",
-  explains: "explique",
-};
 
 export interface CodeNode {
   id: string;

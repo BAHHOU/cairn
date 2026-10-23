@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  ARCH_NODE_KIND_LABEL,
-  ARCH_PROVENANCE_LABEL,
-  type ArchNodeKind,
-  type ArchProvenance,
-} from "@cairn/shared";
+import type { ArchNodeKind, ArchProvenance } from "@cairn/shared";
 import { Handle, type NodeProps, Position } from "@xyflow/react";
 import {
   Boxes,
@@ -18,6 +13,7 @@ import {
   Server,
   User,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { ArchNodeData } from "../types";
 
@@ -49,6 +45,8 @@ const PROVENANCE_DOT: Record<ArchProvenance, string> = {
 };
 
 export function ArchNodeCard({ data, selected }: NodeProps & { data: ArchNodeData }) {
+  const t = useTranslations("diagram.node");
+  const td = useTranslations("domain");
   const Icon = ICON[data.kind];
   const hop = data.hop;
 
@@ -71,10 +69,10 @@ export function ArchNodeCard({ data, selected }: NodeProps & { data: ArchNodeDat
 
       <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-muted-foreground">
         <Icon className="size-3 shrink-0" aria-hidden />
-        <span className="truncate">{ARCH_NODE_KIND_LABEL[data.kind]}</span>
+        <span className="truncate">{td(`archNodeKind.${data.kind}`)}</span>
         <span
           className={cn("ml-auto size-1.5 shrink-0 rounded-full", PROVENANCE_DOT[data.provenance])}
-          title={ARCH_PROVENANCE_LABEL[data.provenance]}
+          title={td(`archProvenance.${data.provenance}`)}
         />
       </div>
 
@@ -84,13 +82,15 @@ export function ArchNodeCard({ data, selected }: NodeProps & { data: ArchNodeDat
         {data.tech.length > 0 && (
           <span className="truncate">{data.tech.slice(0, 2).join(" · ")}</span>
         )}
-        {data.mergedCount > 1 && <span className="shrink-0">+{data.mergedCount - 1} internes</span>}
+        {data.mergedCount > 1 && (
+          <span className="shrink-0">{t("internal", { count: data.mergedCount - 1 })}</span>
+        )}
       </div>
 
       {data.issueCount > 0 && (
         <span
           className="absolute -top-2 -right-2 rounded-full bg-destructive px-1.5 py-px font-medium text-[10px] text-background"
-          title={`${data.issueCount} constat(s) ouvert(s)`}
+          title={t("openIssues", { count: data.issueCount })}
         >
           {data.issueCount}
         </span>
@@ -98,7 +98,7 @@ export function ArchNodeCard({ data, selected }: NodeProps & { data: ArchNodeDat
 
       {hop !== undefined && (
         <span className="absolute -top-2 -left-2 rounded-full border bg-background px-1.5 py-px font-medium text-[10px]">
-          {hop === 0 ? "origine" : `${hop} saut${hop > 1 ? "s" : ""}`}
+          {hop === 0 ? t("origin") : t("hops", { count: hop })}
         </span>
       )}
 

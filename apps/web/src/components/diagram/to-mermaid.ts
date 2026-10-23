@@ -1,4 +1,4 @@
-import { ARCH_PAYLOAD_LABEL, type ArchNodeKind } from "@cairn/shared";
+import type { ArchNodeKind, ArchPayload } from "@cairn/shared";
 import type { ViewGraph } from "./views";
 
 /**
@@ -27,8 +27,15 @@ const safeId = (id: string) => id.replace(/[^a-zA-Z0-9_]/g, "_");
 /** Quotes are what break a generated Mermaid block most often. */
 const clean = (text: string) => text.replace(/"/g, "'").replace(/\n/g, " ");
 
-export function toMermaid(graph: ViewGraph, title: string): string {
-  const lines = [`%% ${clean(title)} — exporté depuis Cairn`, "flowchart LR"];
+/** The words of the export, in the reader's language: the caller passes them from its catalog. */
+export interface MermaidText {
+  /** First comment line, for example "<title> — exported from Cairn". */
+  header: (title: string) => string;
+  payload: (payload: ArchPayload) => string;
+}
+
+export function toMermaid(graph: ViewGraph, title: string, text: MermaidText): string {
+  const lines = [`%% ${clean(text.header(title))}`, "flowchart LR"];
 
   const byRepo = new Map<string, typeof graph.nodes>();
   for (const n of graph.nodes) {
@@ -49,7 +56,7 @@ export function toMermaid(graph: ViewGraph, title: string): string {
 
   for (const e of graph.edges) {
     const arrow = e.kind === "async" ? "-.->" : "-->";
-    const payload = e.payload ? ` (${ARCH_PAYLOAD_LABEL[e.payload]})` : "";
+    const payload = e.payload ? ` (${text.payload(e.payload)})` : "";
     lines.push(`  ${safeId(e.source)} ${arrow}|"${clean(e.label)}${payload}"| ${safeId(e.target)}`);
   }
 

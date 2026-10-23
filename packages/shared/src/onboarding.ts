@@ -33,26 +33,6 @@ export const SETUP_PHASES = [
 ] as const;
 export type SetupPhase = (typeof SETUP_PHASES)[number];
 
-export const SETUP_PHASE_LABEL: Record<SetupPhase, string> = {
-  prerequis: "Prérequis",
-  acces: "Accès",
-  recuperation: "Récupération du code",
-  services: "Services locaux",
-  configuration: "Configuration",
-  execution: "Démarrage",
-  verification: "Vérification",
-};
-
-export const SETUP_PHASE_HINT: Record<SetupPhase, string> = {
-  prerequis: "Ce qui doit déjà être installé sur le poste",
-  acces: "À demander en premier : ce sont les délais, pas les commandes, qui coûtent une semaine",
-  recuperation: "Cloner et se placer au bon endroit",
-  services: "Les dépendances qui tournent à côté de l'application",
-  configuration: "Les valeurs qui changent d'un poste à l'autre",
-  execution: "Lancer l'application",
-  verification: "Savoir que ça marche, sans avoir à le supposer",
-};
-
 export const SETUP_SHELLS = ["pwsh", "bash", "any"] as const;
 export type SetupShell = (typeof SETUP_SHELLS)[number];
 

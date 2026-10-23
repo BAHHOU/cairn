@@ -24,13 +24,13 @@ import {
   resolveBranch,
 } from "@cairn/git";
 import { z } from "zod";
-import { describeError } from "@/lib/import/messages";
+import type { ImportErrorCode } from "@/lib/import/messages";
 import { ForbiddenError, getDb, getQueue, requireImporter } from "@/lib/import/runtime";
 
 export interface ActionFailure {
   ok: false;
-  code: string;
-  message: string;
+  /** Rendered as `importErrors.<code>` in the viewer's language. */
+  code: ImportErrorCode;
   /** Technical detail that is safe to show (never contains a credential). */
   detail?: string;
   /** Set when an import is already running for the same repository and branch. */
@@ -66,32 +66,25 @@ const startSchema = sourceSchema.extend({
   team: z
     .string()
     .trim()
-    .regex(/^[\p{L}\p{N}][\p{L}\p{N} ._-]{1,59}$/u, "Nom d'équipe invalide (2 à 60 caractères)."),
+    .regex(/^[\p{L}\p{N}][\p{L}\p{N} ._-]{1,59}$/u, "invalid_team"),
 });
 
 function failure(error: unknown): ActionFailure {
   if (error instanceof ForbiddenError) {
-    return { ok: false, code: "forbidden", message: "Action réservée au super administrateur." };
+    return { ok: false, code: "forbidden" };
   }
   if (error instanceof z.ZodError) {
-    return {
-      ok: false,
-      code: "invalid_input",
-      message: error.issues[0]?.message ?? "Saisie invalide.",
-    };
+    // A schema message is a code ("invalid_team") when the field has a dedicated explanation.
+    const custom = error.issues[0]?.message;
+    return { ok: false, code: custom === "invalid_team" ? "invalid_team" : "invalid_input" };
   }
   if (isGitError(error)) {
-    // The French message already says it all for these; the English detail would only repeat it.
+    // The translated message already says it all for the others; the detail would only repeat it.
     const informative = ["unreachable", "provider_error", "clone_failed"].includes(error.code);
-    return {
-      ok: false,
-      code: error.code,
-      message: describeError(error.code),
-      detail: informative ? error.message : undefined,
-    };
+    return { ok: false, code: error.code, detail: informative ? error.message : undefined };
   }
   console.error("[import] unexpected error", error instanceof Error ? error.message : "unknown");
-  return { ok: false, code: "internal", message: describeError("internal") };
+  return { ok: false, code: "internal" };
 }
 
 /**
@@ -107,11 +100,7 @@ export async function inspectRepositoryAction(form: FormData): Promise<InspectOu
     const remote = parseRepoInput(url, provider, config);
     const result = await inspectRepo(remote, token, { timeoutMs: config.apiTimeoutMs });
     if (result.branches.length === 0) {
-      return {
-        ok: false,
-        code: "empty_repository",
-        message: "Ce dépôt ne contient aucune branche.",
-      };
+      return { ok: false, code: "empty_repository" };
     }
     return { ok: true, provider: remote.provider, host: remote.host, ...result };
   } catch (error) {
@@ -140,22 +129,12 @@ export async function rescanRepositoryAction(repositoryId: string): Promise<Star
         code: "internal",
         message: "The job queue was unavailable when the rescan was requested",
       });
-      return {
-        ok: false,
-        code: "internal",
-        message: "La file de tâches est indisponible. Réessayez.",
-        importId,
-      };
+      return { ok: false, code: "queue_unavailable", importId };
     }
     return { ok: true, importId };
   } catch (error) {
     if (error instanceof ImportConflictError) {
-      return {
-        ok: false,
-        code: "conflict",
-        message: "Une analyse est déjà en cours pour ce dépôt.",
-        importId: error.importId,
-      };
+      return { ok: false, code: "rescan_conflict", importId: error.importId };
     }
     return failure(error);
   }
@@ -210,29 +189,15 @@ export async function startImportAction(form: FormData): Promise<StartOutcome> {
         code: "internal",
         message: "The job queue was unavailable when the import was requested",
       });
-      return {
-        ok: false,
-        code: "internal",
-        message: "La file de tâches est indisponible. Réessayez.",
-        importId,
-      };
+      return { ok: false, code: "queue_unavailable", importId };
     }
     return { ok: true, importId };
   } catch (error) {
     if (error instanceof ImportConflictError) {
-      return {
-        ok: false,
-        code: "conflict",
-        message: "Un import est déjà en cours pour ce dépôt et cette branche.",
-        importId: error.importId,
-      };
+      return { ok: false, code: "import_conflict", importId: error.importId };
     }
     if (error instanceof ProjectExistsError) {
-      return {
-        ok: false,
-        code: "exists",
-        message: "Un projet portant ce nom existe déjà dans cette équipe.",
-      };
+      return { ok: false, code: "exists" };
     }
     return failure(error);
   }

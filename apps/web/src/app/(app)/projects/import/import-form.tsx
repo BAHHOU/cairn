@@ -3,10 +3,12 @@
 import { GitBranch, Globe, Loader2, Lock, ShieldCheck, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useId, useState, useTransition } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { importErrorCode } from "@/lib/import/messages";
 import { cn } from "@/lib/utils";
 import {
   type ActionFailure,
@@ -39,6 +41,8 @@ export interface ImportFormProps {
 }
 
 export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
+  const t = useTranslations("import.form");
+  const te = useTranslations("importErrors");
   const router = useRouter();
   const ids = { provider: useId(), url: useId(), token: useId(), branch: useId(), team: useId() };
 
@@ -46,7 +50,7 @@ export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
   const [url, setUrl] = useState(initial.url ?? "");
   const [token, setToken] = useState("");
   const [branch, setBranch] = useState(initial.branch ?? "");
-  const [team, setTeam] = useState(teams[0] ?? "");
+  const [team, setTeam] = useState(teams[0] ?? "Cairn");
   const [inspected, setInspected] = useState<Inspected | null>(null);
   const [error, setError] = useState<ActionFailure | null>(null);
   const [verifying, startVerify] = useTransition();
@@ -95,6 +99,7 @@ export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
   };
 
   const head = inspected?.branches.find((b) => b.name === branch);
+  const branchIsListed = Boolean(head);
   const canVerify = url.trim().length > 0 && !verifying && !importing;
   const canImport = Boolean(inspected && branch.trim() && team.trim()) && !importing && !verifying;
 
@@ -102,16 +107,13 @@ export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
     <div className="flex flex-col gap-4">
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">1 · Dépôt à importer</CardTitle>
-          <CardDescription>
-            Cairn interroge réellement le fournisseur pour vérifier le jeton, le dépôt et ses
-            branches.
-          </CardDescription>
+          <CardTitle className="text-base">{t("step1")}</CardTitle>
+          <CardDescription>{t("step1Hint")}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-[180px_1fr]">
           <div className="flex flex-col gap-1.5">
             <label htmlFor={ids.provider} className="text-xs font-medium text-muted-foreground">
-              Fournisseur
+              {t("provider")}
             </label>
             <select
               id={ids.provider}
@@ -127,19 +129,19 @@ export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
               <option value="github">GitHub</option>
             </select>
             {forced ? (
-              <span className="text-[11px] text-muted-foreground">Détecté d'après l'hôte.</span>
+              <span className="text-[11px] text-muted-foreground">{t("providerDetected")}</span>
             ) : null}
           </div>
 
           <div className="flex flex-col gap-1.5">
             <label htmlFor={ids.url} className="text-xs font-medium text-muted-foreground">
-              URL du dépôt
+              {t("url")}
             </label>
             <input
               id={ids.url}
               className={FIELD}
               value={url}
-              placeholder="https://gitlab.exemple.com/groupe/sous-groupe/projet"
+              placeholder={t("urlPlaceholder")}
               autoComplete="off"
               spellCheck={false}
               onChange={(e) => {
@@ -148,13 +150,13 @@ export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
               }}
             />
             <span className="text-[11px] text-muted-foreground">
-              Hôtes autorisés : {hosts.join(", ")}
+              {t("allowedHosts", { hosts: hosts.join(", ") })}
             </span>
           </div>
 
           <div className="flex flex-col gap-1.5 md:col-span-2">
             <label htmlFor={ids.token} className="text-xs font-medium text-muted-foreground">
-              Jeton d'accès (facultatif pour un dépôt public)
+              {t("token")}
             </label>
             <input
               id={ids.token}
@@ -171,9 +173,7 @@ export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
             />
             <span className="flex items-start gap-1.5 text-[11px] text-muted-foreground">
               <ShieldCheck className="mt-px size-3.5 shrink-0" aria-hidden />
-              Lecture seule suffit : GitLab <code>read_api</code> + <code>read_repository</code>,
-              GitHub « Contents : Read ». Le jeton est chiffré (AES-256-GCM) avant stockage et n'est
-              jamais réaffiché.
+              {t.rich("tokenHint", { code: (chunks) => <code>{chunks}</code> })}
             </span>
           </div>
 
@@ -184,7 +184,7 @@ export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
               ) : (
                 <ShieldCheck aria-hidden />
               )}
-              Vérifier le dépôt
+              {t("verify")}
             </Button>
           </div>
         </CardContent>
@@ -197,13 +197,13 @@ export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
         >
           <TriangleAlert className="mt-0.5 size-4 shrink-0 text-destructive" aria-hidden />
           <div className="flex flex-col gap-1">
-            <span className="font-medium">{error.message}</span>
+            <span className="font-medium">{te(importErrorCode(error.code))}</span>
             {error.detail ? (
               <span className="text-xs text-muted-foreground">{error.detail}</span>
             ) : null}
             {error.importId ? (
               <Link href={`/projects/import/${error.importId}`} className="text-xs underline">
-                Voir l'import en cours
+                {t("seeRunning")}
               </Link>
             ) : null}
           </div>
@@ -214,7 +214,7 @@ export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
         <Card>
           <CardHeader>
             <CardTitle className="flex flex-wrap items-center gap-2 text-base">
-              2 · Branche à importer
+              {t("step2")}
             </CardTitle>
             <CardDescription className="flex flex-wrap items-center gap-2">
               <span className="font-medium text-foreground">{inspected.repo.fullPath}</span>
@@ -224,73 +224,83 @@ export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
                 ) : (
                   <Globe className="size-3" aria-hidden />
                 )}
-                {inspected.repo.isPrivate ? "Privé" : "Public"}
+                {inspected.repo.isPrivate ? t("private") : t("public")}
               </Badge>
               <Badge variant="outline">{PROVIDER_LABEL[inspected.provider]}</Badge>
               <span>
-                {inspected.branches.length}
-                {inspected.truncated ? "+" : ""} branches · défaut :{" "}
-                {inspected.repo.defaultBranch || "—"}
+                {t("branchSummary", {
+                  count: inspected.branches.length,
+                  more: inspected.truncated ? "+" : "",
+                  defaultBranch: inspected.repo.defaultBranch || "—",
+                })}
               </span>
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <label htmlFor={ids.branch} className="text-xs font-medium text-muted-foreground">
-                Branche
+                {t("branch")}
               </label>
               <div className="relative">
                 <GitBranch
                   className="pointer-events-none absolute left-2.5 top-2.5 size-4 text-muted-foreground"
                   aria-hidden
                 />
-                <input
+                <select
                   id={ids.branch}
                   className={cn(FIELD, "pl-8 font-mono")}
-                  value={branch}
-                  list={`${ids.branch}-list`}
-                  autoComplete="off"
-                  spellCheck={false}
-                  onChange={(e) => setBranch(e.target.value)}
-                />
-                <datalist id={`${ids.branch}-list`}>
+                  value={branchIsListed ? branch : "__custom__"}
+                  onChange={(e) => setBranch(e.target.value === "__custom__" ? "" : e.target.value)}
+                >
                   {inspected.branches.map((b) => (
                     <option key={b.name} value={b.name}>
-                      {b.isDefault ? "branche par défaut" : b.sha.slice(0, 8)}
+                      {b.isDefault ? t("branchDefault", { name: b.name }) : b.name}
                     </option>
                   ))}
-                </datalist>
+                  {inspected.truncated || !branchIsListed ? (
+                    <option value="__custom__">{t("branchOther")}</option>
+                  ) : null}
+                </select>
               </div>
+              {!branchIsListed ? (
+                <input
+                  className={cn(FIELD, "font-mono")}
+                  value={branch}
+                  placeholder={t("branchExact")}
+                  autoComplete="off"
+                  spellCheck={false}
+                  aria-label={t("branchExact")}
+                  onChange={(e) => setBranch(e.target.value)}
+                />
+              ) : null}
               <span className="text-[11px] text-muted-foreground">
                 {head
-                  ? `Dernier commit : ${head.sha.slice(0, 10)}`
+                  ? t("lastCommit", { sha: head.sha.slice(0, 10) })
                   : inspected.truncated
-                    ? "Liste tronquée : saisissez le nom exact, il sera vérifié à l'import."
-                    : "Cette branche sera vérifiée à l'import."}
+                    ? t("listTruncated")
+                    : t("checkedOnImport")}
               </span>
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor={ids.team} className="text-xs font-medium text-muted-foreground">
-                Équipe propriétaire
+                {t("team")}
               </label>
               <input
                 id={ids.team}
                 className={FIELD}
                 value={team}
                 list={`${ids.team}-list`}
-                placeholder="Ex. Paiements"
+                placeholder={t("teamPlaceholder")}
                 autoComplete="off"
                 onChange={(e) => setTeam(e.target.value)}
               />
               <datalist id={`${ids.team}-list`}>
-                {teams.map((t) => (
-                  <option key={t} value={t} />
+                {teams.map((name) => (
+                  <option key={name} value={name} />
                 ))}
               </datalist>
-              <span className="text-[11px] text-muted-foreground">
-                Obligatoire · créée si elle n'existe pas encore.
-              </span>
+              <span className="text-[11px] text-muted-foreground">{t("teamHint")}</span>
             </div>
 
             <div className="md:col-span-2">
@@ -300,12 +310,9 @@ export function ImportForm({ teams, hosts, initial }: ImportFormProps) {
                 ) : (
                   <GitBranch aria-hidden />
                 )}
-                Importer la branche
+                {t("importBranch")}
               </Button>
-              <p className="mt-2 text-xs text-muted-foreground">
-                Le worker clone uniquement cette branche (historique tronqué au dernier commit),
-                analyse la pile technique, puis supprime la copie de travail.
-              </p>
+              <p className="mt-2 text-xs text-muted-foreground">{t("importHint")}</p>
             </div>
           </CardContent>
         </Card>

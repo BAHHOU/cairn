@@ -12,13 +12,6 @@ export const DEMO_VIEWERS: Record<Role, Viewer> = {
   dev: { name: "Alex Martin", role: "dev", team: "Paiements" },
 };
 
-export const ROLE_LABEL: Record<Role, string> = {
-  superadmin: "Super administrateur",
-  admin: "Administrateur",
-  manager: "Manager",
-  dev: "Développeur",
-};
-
 export const isDemo = () => process.env.DEMO_MODE !== "false";
 
 export const getViewer = cache(async (): Promise<Viewer> => {

@@ -1,11 +1,6 @@
-import {
-  GUIDE_PHASE_HINT,
-  GUIDE_PHASE_LABEL,
-  GUIDE_PHASES,
-  type GuideStep,
-  type GuideTool,
-} from "@cairn/shared";
+import { GUIDE_PHASES, type GuideStep, type GuideTool } from "@cairn/shared";
 import { CircleAlert, KeyRound, ListChecks, Wrench } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   GuideUnavailable,
   LimitsNote,
@@ -21,13 +16,14 @@ import type { ImportedScan } from "@/lib/import/scan";
 import type { SourceBase } from "@/lib/import/source-link";
 
 function ToolRow({ tool, base }: { tool: GuideTool; base: SourceBase }) {
+  const t = useTranslations("onboarding.imported");
   return (
     <li className="flex flex-col gap-1.5 border-border/60 border-b py-3 last:border-0">
       <div className="flex flex-wrap items-center gap-2">
         <span className="font-medium text-sm">{tool.label}</span>
         {tool.version ? <span className="font-mono text-xs">{tool.version}</span> : null}
         <Badge variant={tool.basis === "pinned" ? "success" : "secondary"} className="ml-auto">
-          {tool.basis === "pinned" ? "Imposé par le dépôt" : "Écrit dans le README"}
+          {tool.basis === "pinned" ? t("pinned") : t("fromReadme")}
         </Badge>
       </div>
       {tool.check ? <CommandBlock command={tool.check} /> : null}
@@ -57,6 +53,8 @@ function StepRow({ step, index, base }: { step: GuideStep; index: number; base: 
 
 /** The local-setup page of a repository imported from Git: its README, read and ordered. */
 export function ImportedOnboarding({ id, imported }: { id: string; imported: ImportedScan }) {
+  const t = useTranslations("onboarding.imported");
+  const td = useTranslations("domain");
   const onboarding = imported.scan?.onboarding ?? null;
   const base = imported.source;
   let counter = 0;
@@ -64,58 +62,55 @@ export function ImportedOnboarding({ id, imported }: { id: string; imported: Imp
   return (
     <>
       <PageHeader
-        title={`Démarrage — ${imported.name}`}
+        title={t("title", { name: imported.name })}
         description={
-          onboarding?.readme ? (
-            <>
-              Installation locale pour un nouveau développeur, lue dans{" "}
-              <span className="font-mono">{onboarding.readme.path}</span> et les fichiers de build.
-            </>
-          ) : (
-            "Installation locale pour un nouveau développeur."
-          )
+          onboarding?.readme
+            ? t.rich("descriptionReadme", {
+                path: onboarding.readme.path,
+                mono: (chunks) => <span className="font-mono">{chunks}</span>,
+              })
+            : t("description")
         }
       />
       <ProjectTabs id={id} active="onboarding" />
 
       {!imported.scan || !onboarding ? (
-        <GuideUnavailable title="Aucune analyse pour l'instant">
-          Le guide de démarrage apparaît après une analyse réussie. Si l'analyse date d'avant cette
-          vue, relancez-la depuis la fiche du projet.
-        </GuideUnavailable>
+        <GuideUnavailable title={t("unavailableTitle")}>{t("unavailableBody")}</GuideUnavailable>
       ) : (
         <>
           <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <KpiCard
-              label="Outils"
+              label={t("tools")}
               value={onboarding.tools.length}
-              hint={`${onboarding.tools.filter((t) => t.basis === "pinned").length} imposé(s) par le dépôt`}
+              hint={t("toolsHint", {
+                count: onboarding.tools.filter((tool) => tool.basis === "pinned").length,
+              })}
               visual={<Wrench className="size-5 text-muted-foreground" aria-hidden />}
             />
             <KpiCard
-              label="Étapes écrites"
+              label={t("steps")}
               value={onboarding.steps.length}
-              hint={onboarding.readme ? "Dans le README" : "Aucun README"}
+              hint={onboarding.readme ? t("inReadme") : t("noReadme")}
               visual={<ListChecks className="size-5 text-muted-foreground" aria-hidden />}
             />
             <KpiCard
-              label="Mises en garde"
+              label={t("warnings")}
               value={onboarding.warnings.length}
-              hint="Écrites par les auteurs"
+              hint={t("warningsHint")}
               visual={<CircleAlert className="size-5 text-muted-foreground" aria-hidden />}
             />
             <KpiCard
-              label="À obtenir"
+              label={t("toObtain")}
               value={onboarding.secretsToObtain.length}
-              hint="Variables fournies hors du dépôt"
+              hint={t("toObtainHint")}
               visual={<KeyRound className="size-5 text-muted-foreground" aria-hidden />}
             />
           </section>
 
           {onboarding.warnings.length > 0 ? (
             <Section
-              title="À savoir avant de commencer"
-              description="Les avertissements que les auteurs ont eux-mêmes écrits dans le README."
+              title={t("beforeYouStart")}
+              description={t("beforeYouStartHint")}
               count={onboarding.warnings.length}
             >
               <ul className="flex flex-col gap-2">
@@ -137,31 +132,29 @@ export function ImportedOnboarding({ id, imported }: { id: string; imported: Imp
 
           <section className="grid items-start gap-4 lg:grid-cols-3">
             <Section
-              title="Sur le poste"
-              description="Versions tirées du pipeline et des fichiers de build quand c'est possible, sinon du README."
+              title={t("workstation")}
+              description={t("workstationHint")}
               count={onboarding.tools.length}
             >
               {onboarding.tools.length > 0 ? (
                 <ul className="flex flex-col">
-                  {onboarding.tools.map((t) => (
-                    <ToolRow key={t.id} tool={t} base={base} />
+                  {onboarding.tools.map((tool) => (
+                    <ToolRow key={tool.id} tool={tool} base={base} />
                   ))}
                 </ul>
               ) : (
-                <p className="text-muted-foreground text-sm">Aucun outil identifié.</p>
+                <p className="text-muted-foreground text-sm">{t("noTool")}</p>
               )}
             </Section>
 
             <div className="flex flex-col gap-4 lg:col-span-2">
               <Section
-                title="Installation"
-                description="Les commandes du README, dans l'ordre où il les donne, regroupées par moment. Les valeurs qui ressemblent à un identifiant sont masquées."
+                title={t("install")}
+                description={t("installHint")}
                 count={onboarding.steps.length}
               >
                 {onboarding.steps.length === 0 ? (
-                  <p className="text-muted-foreground text-sm">
-                    Le README ne contient aucune commande à exécuter.
-                  </p>
+                  <p className="text-muted-foreground text-sm">{t("noCommand")}</p>
                 ) : (
                   <div className="flex flex-col gap-6">
                     {GUIDE_PHASES.map((phase) => {
@@ -171,10 +164,10 @@ export function ImportedOnboarding({ id, imported }: { id: string; imported: Imp
                         <section key={phase} className="flex flex-col gap-3">
                           <header className="flex flex-col">
                             <h3 className="font-semibold text-sm uppercase tracking-wide">
-                              {GUIDE_PHASE_LABEL[phase]}
+                              {td(`guidePhase.${phase}`)}
                             </h3>
                             <p className="text-muted-foreground text-xs">
-                              {GUIDE_PHASE_HINT[phase]}
+                              {td(`guidePhaseHint.${phase}`)}
                             </p>
                           </header>
                           <ol className="flex flex-col">
@@ -197,8 +190,8 @@ export function ImportedOnboarding({ id, imported }: { id: string; imported: Imp
           <section className="grid items-start gap-4 lg:grid-cols-3">
             {onboarding.secretsToObtain.length > 0 ? (
               <Section
-                title="À obtenir"
-                description="Variables que la chaîne attend et que le dépôt ne fournit pas. Seuls les noms sont lus."
+                title={t("toObtain")}
+                description={t("toObtainSectionHint")}
                 count={onboarding.secretsToObtain.length}
               >
                 <ul className="flex flex-wrap gap-1.5">
@@ -214,8 +207,8 @@ export function ImportedOnboarding({ id, imported }: { id: string; imported: Imp
             ) : null}
             {onboarding.localPaths.length > 0 ? (
               <Section
-                title="À adapter à votre poste"
-                description="Chemins écrits pour la machine d'un auteur."
+                title={t("localPaths")}
+                description={t("localPathsHint")}
                 count={onboarding.localPaths.length}
               >
                 <ul className="flex flex-col gap-2">
@@ -229,11 +222,7 @@ export function ImportedOnboarding({ id, imported }: { id: string; imported: Imp
               </Section>
             ) : null}
             {onboarding.urls.length > 0 ? (
-              <Section
-                title="Adresses locales"
-                description="Ce que le README dit d'ouvrir une fois lancé."
-                count={onboarding.urls.length}
-              >
+              <Section title={t("urls")} description={t("urlsHint")} count={onboarding.urls.length}>
                 <ul className="flex flex-col gap-2">
                   {onboarding.urls.map((u) => (
                     <li key={u.url} className="flex flex-col gap-0.5">
@@ -247,22 +236,14 @@ export function ImportedOnboarding({ id, imported }: { id: string; imported: Imp
           </section>
 
           <Section
-            title="Points d'attention"
-            description="Ce qui ralentit un nouvel arrivant, avec la ligne d'où ça vient."
+            title={t("findings")}
+            description={t("findingsHint")}
             count={onboarding.findings.length}
           >
-            <Findings
-              findings={onboarding.findings}
-              base={base}
-              emptyText="Le README couvre l'essentiel d'un démarrage."
-            />
+            <Findings findings={onboarding.findings} base={base} emptyText={t("noFinding")} />
           </Section>
 
-          <LimitsNote>
-            Lu dans le README et les fichiers de build, jamais exécuté : Cairn ne sait pas si une
-            commande fonctionne aujourd'hui. Les durées et les accès à demander ne figurent pas dans
-            un dépôt, ils ne sont donc pas affichés.
-          </LimitsNote>
+          <LimitsNote>{t("limits")}</LimitsNote>
         </>
       )}
     </>

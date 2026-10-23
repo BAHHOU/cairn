@@ -1,4 +1,5 @@
 import { Lock } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -51,13 +52,8 @@ export function KpiCard({
 }
 
 /** Shown instead of data the current role may not see. The data itself is never sent. */
-export function LockedCard({
-  title,
-  reason = "Masqué pour votre rôle",
-}: {
-  title: string;
-  reason?: string;
-}) {
+export function LockedCard({ title, reason }: { title: string; reason?: string }) {
+  const t = useTranslations("access");
   return (
     <Card className="border-dashed bg-muted/30">
       <CardHeader>
@@ -66,22 +62,22 @@ export function LockedCard({
           {title}
         </CardTitle>
       </CardHeader>
-      <CardContent className="text-sm text-muted-foreground">{reason}</CardContent>
+      <CardContent className="text-sm text-muted-foreground">
+        {reason ?? t("hiddenForRole")}
+      </CardContent>
     </Card>
   );
 }
 
-export function Restricted({ title = "Accès restreint" }: { title?: string }) {
+export function Restricted({ title }: { title?: string }) {
+  const t = useTranslations("access");
   return (
     <div className="mx-auto flex max-w-md flex-col items-center gap-3 py-24 text-center">
       <div className="rounded-full bg-muted p-3">
         <Lock className="size-6 text-muted-foreground" aria-hidden />
       </div>
-      <h1 className="text-xl font-semibold">{title}</h1>
-      <p className="text-sm text-muted-foreground">
-        Cette page n'est pas disponible pour votre rôle. La tentative d'accès est consignée dans le
-        journal d'audit.
-      </p>
+      <h1 className="text-xl font-semibold">{title ?? t("restrictedTitle")}</h1>
+      <p className="text-sm text-muted-foreground">{t("restrictedBody")}</p>
     </div>
   );
 }

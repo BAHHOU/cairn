@@ -1,13 +1,14 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { ProjectTabs } from "@/components/guide/bits";
 import { PageHeader } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getFormat } from "@/i18n/format";
 import { getApi } from "@/lib/api";
-import { formatDate } from "@/lib/format";
 import { loadImportedScan } from "@/lib/import/scan";
 
 /**
@@ -22,6 +23,9 @@ const ArchitectureCanvas = dynamic(() =>
 
 export default async function ArchitecturePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const t = await getTranslations("architecture.page");
+  const tn = await getTranslations("projectNav");
+  const fmt = await getFormat();
   const api = await getApi();
   const project = await api.projects.get(id);
   const imported = project ? null : await loadImportedScan(id);
@@ -37,35 +41,34 @@ export default async function ArchitecturePage({ params }: { params: Promise<{ i
   return (
     <>
       <PageHeader
-        title={`Architecture — ${name}`}
+        title={t("title", { name })}
         description={
-          architecture ? (
-            <>
-              {architecture.nodes.length} nœuds · {architecture.edges.length} liens ·{" "}
-              {architecture.repos.length - 1} dépôts · extrait le{" "}
-              {formatDate(architecture.generatedAt)}
-            </>
-          ) : (
-            "Aucun graphe n'a encore été extrait pour ce projet."
-          )
+          architecture
+            ? t("summary", {
+                nodes: architecture.nodes.length,
+                edges: architecture.edges.length,
+                repos: architecture.repos.length - 1,
+                date: fmt.date(architecture.generatedAt),
+              })
+            : t("none")
         }
         actions={
           <div className="flex flex-wrap gap-4 text-sm">
             <Link href={`/projects/${id}/code-map`} className="underline underline-offset-4">
-              Carte du code
+              {tn("codeMap")}
             </Link>
             {demoLinks ? (
               <>
                 <Link href={`/projects/${id}/delivery`} className="underline underline-offset-4">
-                  De dev à production
+                  {tn("delivery")}
                 </Link>
                 <Link href={`/projects/${id}/onboarding`} className="underline underline-offset-4">
-                  Démarrage local
+                  {tn("onboarding")}
                 </Link>
               </>
             ) : null}
             <Link href={`/projects/${id}`} className="underline underline-offset-4">
-              Fiche projet
+              {tn("project")}
             </Link>
           </div>
         }
@@ -73,40 +76,35 @@ export default async function ArchitecturePage({ params }: { params: Promise<{ i
       {imported ? <ProjectTabs id={id} active="architecture" /> : null}
 
       {architecture ? (
-        <Suspense
-          fallback={<p className="text-muted-foreground text-sm">Chargement du diagramme…</p>}
-        >
+        <Suspense fallback={<p className="text-muted-foreground text-sm">{t("loading")}</p>}>
           <ArchitectureCanvas architecture={architecture} />
         </Suspense>
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>Pas encore de graphe</CardTitle>
-            <CardDescription>
-              Un diagramme inventé serait pire que pas de diagramme du tout : il serait cru.
-            </CardDescription>
+            <CardTitle>{t("emptyTitle")}</CardTitle>
+            <CardDescription>{t("emptyHint")}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3 text-sm">
-            <p className="text-muted-foreground">
-              L'extraction s'appuie sur les fichiers de construction, la configuration et les
-              manifestes de déploiement. Elle n'a pas encore été lancée sur {name}.
-            </p>
+            <p className="text-muted-foreground">{t("emptyBody", { name })}</p>
             <div className="flex flex-wrap gap-2">
-              {tech.map((t) => (
-                <Badge key={t} variant="outline">
-                  {t}
+              {tech.map((item) => (
+                <Badge key={item} variant="outline">
+                  {item}
                 </Badge>
               ))}
             </div>
             <p className="text-muted-foreground">
-              Exemple disponible :{" "}
-              <Link
-                href="/projects/qis-dist-cms/architecture"
-                className="underline underline-offset-4"
-              >
-                qis-dist-cms
-              </Link>
-              .
+              {tn.rich("exampleAvailable", {
+                link: (chunks) => (
+                  <Link
+                    href="/projects/qis-dist-cms/architecture"
+                    className="underline underline-offset-4"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              })}
             </p>
           </CardContent>
         </Card>

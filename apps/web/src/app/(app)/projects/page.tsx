@@ -1,7 +1,8 @@
 import { listImportViews } from "@cairn/db";
-import { can, MATURITY_NAMES } from "@cairn/shared";
+import { can } from "@cairn/shared";
 import { FolderInput } from "lucide-react";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { GateBadge } from "@/components/badges";
 import { ImportsTable } from "@/components/import/imports-table";
 import { PageHeader, ProgressBar } from "@/components/page";
@@ -16,8 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getFormat } from "@/i18n/format";
 import { getApi } from "@/lib/api";
-import { formatDate, scoreTone, TONE_TEXT } from "@/lib/format";
+import { scoreTone, TONE_TEXT } from "@/lib/format";
 import { getDb, isImportConfigured, viewerMayImport } from "@/lib/import/runtime";
 import { getViewer } from "@/lib/session";
 import { cn } from "@/lib/utils";
@@ -25,6 +27,9 @@ import { cn } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
+  const t = await getTranslations("projects.list");
+  const td = await getTranslations("domain");
+  const fmt = await getFormat();
   const viewer = await getViewer();
   const projects = await (await getApi()).projects.list();
   const sorted = [...projects].sort((a, b) => a.score - b.score);
@@ -41,12 +46,12 @@ export default async function ProjectsPage() {
   return (
     <>
       <PageHeader
-        title="Projets"
-        description={`${projects.length} projets · tri par score croissant`}
+        title={t("title")}
+        description={t("description", { count: projects.length })}
         actions={
           viewerMayImport(viewer) ? (
             <Link href="/projects/import" className={buttonVariants({ size: "sm" })}>
-              <FolderInput aria-hidden /> Importer un dépôt
+              <FolderInput aria-hidden /> {t("import")}
             </Link>
           ) : null
         }
@@ -54,8 +59,8 @@ export default async function ProjectsPage() {
       {imports.length > 0 ? (
         <section className="flex flex-col gap-2">
           <h2 className="flex items-center gap-2 text-sm font-semibold">
-            Dépôts importés
-            <Badge variant="success">Données réelles</Badge>
+            {t("imported")}
+            <Badge variant="success">{t("realData")}</Badge>
           </h2>
           <Card className="gap-0 py-0">
             <ImportsTable imports={imports} />
@@ -66,16 +71,16 @@ export default async function ProjectsPage() {
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              <TableHead>Projet</TableHead>
+              <TableHead>{t("project")}</TableHead>
               {viewer.role === "admin" || viewer.role === "superadmin" ? (
-                <TableHead>Équipe</TableHead>
+                <TableHead>{t("team")}</TableHead>
               ) : null}
-              <TableHead>Technologies</TableHead>
-              <TableHead className="w-44">Score IA</TableHead>
-              <TableHead>Maturité</TableHead>
-              <TableHead>Porte</TableHead>
-              <TableHead className="text-right">Problèmes</TableHead>
-              <TableHead>Dernier scan</TableHead>
+              <TableHead>{t("tech")}</TableHead>
+              <TableHead className="w-44">{t("score")}</TableHead>
+              <TableHead>{t("maturity")}</TableHead>
+              <TableHead>{t("gate")}</TableHead>
+              <TableHead className="text-right">{t("issues")}</TableHead>
+              <TableHead>{t("lastScan")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -92,9 +97,9 @@ export default async function ProjectsPage() {
                 ) : null}
                 <TableCell>
                   <div className="flex flex-wrap gap-1">
-                    {p.tech.map((t) => (
-                      <Badge key={t} variant="outline">
-                        {t}
+                    {p.tech.map((tech) => (
+                      <Badge key={tech} variant="outline">
+                        {tech}
                       </Badge>
                     ))}
                   </div>
@@ -113,14 +118,14 @@ export default async function ProjectsPage() {
                   </div>
                 </TableCell>
                 <TableCell className="whitespace-nowrap text-sm">
-                  {p.maturity} · {MATURITY_NAMES[p.maturity]}
+                  {p.maturity} · {td(`maturity.${p.maturity}`)}
                 </TableCell>
                 <TableCell>
                   <GateBadge status={p.gate} />
                 </TableCell>
                 <TableCell className="text-right tabular-nums">{p.openIssues}</TableCell>
                 <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
-                  {formatDate(p.lastScan)}
+                  {fmt.date(p.lastScan)}
                 </TableCell>
               </TableRow>
             ))}

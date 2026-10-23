@@ -7,13 +7,14 @@ import {
 import { ChevronRight, GitCommitHorizontal, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { SeverityBadge } from "@/components/badges";
 import { EnvironmentCard, Source, StageRow } from "@/components/delivery/board";
 import { ImportedDelivery } from "@/components/guide/delivery-view";
 import { PageHeader } from "@/components/page";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getFormat } from "@/i18n/format";
 import { getApi } from "@/lib/api";
-import { formatDate } from "@/lib/format";
 import { loadImportedScan } from "@/lib/import/scan";
 
 /**
@@ -37,6 +38,9 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
     return <ImportedDelivery id={id} imported={imported} />;
   }
 
+  const t = await getTranslations("delivery.page");
+  const tn = await getTranslations("projectNav");
+  const fmt = await getFormat();
   const pipeline = await api.projects.delivery(id);
   const architecture = await api.projects.architecture(id);
   const nodeLabels = labelsOf(architecture);
@@ -48,19 +52,19 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
   return (
     <>
       <PageHeader
-        title={`CI/CD — ${project.name}`}
+        title={t("title", { name: project.name })}
         description={
-          pipeline && board && last ? (
-            <>
-              {pipeline.provider} · {pipeline.stages.length} étapes · {pipeline.environments.length}{" "}
-              environnements · du commit à {last.env.label} : {formatMinutes(last.leadTimeMin)} de
-              machine
-              {last.waitMin ? <> et {formatMinutes(last.waitMin)} d'attente</> : null} · extrait le{" "}
-              {formatDate(pipeline.generatedAt)}
-            </>
-          ) : (
-            "Aucune chaîne CI/CD n'a encore été extraite pour ce projet."
-          )
+          pipeline && board && last
+            ? t(last.waitMin ? "summaryWithWait" : "summary", {
+                provider: pipeline.provider,
+                stages: pipeline.stages.length,
+                environments: pipeline.environments.length,
+                env: last.env.label,
+                machine: formatMinutes(last.leadTimeMin),
+                wait: formatMinutes(last.waitMin),
+                date: fmt.date(pipeline.generatedAt),
+              })
+            : t("none")
         }
         actions={
           <div className="flex flex-wrap gap-4 text-sm">
@@ -68,16 +72,16 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
               href={`/projects/${project.id}/architecture`}
               className="underline underline-offset-4"
             >
-              Vue architecture
+              {tn("architecture")}
             </Link>
             <Link
               href={`/projects/${project.id}/onboarding`}
               className="underline underline-offset-4"
             >
-              Démarrage local
+              {tn("onboarding")}
             </Link>
             <Link href={`/projects/${project.id}`} className="underline underline-offset-4">
-              Fiche projet
+              {tn("project")}
             </Link>
           </div>
         }
@@ -89,15 +93,15 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
           <section className="flex flex-col gap-3 overflow-hidden rounded-xl border bg-card">
             <header className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b bg-muted/30 px-4 py-3">
               <GitCommitHorizontal className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-              <span className="font-medium text-sm">Commit</span>
+              <span className="font-medium text-sm">{t("commit")}</span>
               <span className="font-mono text-muted-foreground text-xs">{pipeline.commit}</span>
               <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-              <h3 className="font-semibold text-sm">Intégration continue</h3>
+              <h3 className="font-semibold text-sm">{t("ci")}</h3>
               <span className="text-muted-foreground text-xs tabular-nums">
                 {formatMinutes(board.ciMinutes)}
               </span>
               <p className="basis-full text-muted-foreground text-xs sm:basis-auto sm:border-border sm:border-l sm:pl-3">
-                Commun à tous les environnements. Ce qui échoue ici n'atteint aucun serveur.
+                {t("ciHint")}
               </p>
             </header>
 
@@ -129,18 +133,12 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
           <section className="grid gap-4 lg:grid-cols-3">
             <Card className="lg:col-span-2">
               <CardHeader>
-                <CardTitle>Ce que la chaîne ne protège pas</CardTitle>
-                <CardDescription>
-                  Déduit de la configuration elle-même. Chaque constat indique le fichier à ouvrir
-                  pour le contredire.
-                </CardDescription>
+                <CardTitle>{t("risks")}</CardTitle>
+                <CardDescription>{t("risksHint")}</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {risks.length === 0 ? (
-                  <p className="text-muted-foreground text-sm">
-                    Aucune des règles connues ne se déclenche sur cette chaîne. Cela ne veut pas
-                    dire qu'elle est sûre : seulement que nous n'avons rien à lui reprocher.
-                  </p>
+                  <p className="text-muted-foreground text-sm">{t("noRisk")}</p>
                 ) : (
                   risks.map((risk) => (
                     <article key={risk.id} className="flex flex-col gap-1.5">
@@ -160,22 +158,23 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <RotateCcw className="size-4" aria-hidden />
-                  Retour arrière
+                  {t("rollback")}
                 </CardTitle>
                 <CardDescription>
                   {pipeline.rollback.testedAt
-                    ? `Dernière répétition le ${formatDate(pipeline.rollback.testedAt)}`
-                    : "Jamais répété"}
+                    ? t("rollbackTested", { date: fmt.date(pipeline.rollback.testedAt) })
+                    : t("rollbackNever")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-3 text-sm">
                 <p className="text-muted-foreground">{pipeline.rollback.how}</p>
                 <p>
-                  Annoncé à{" "}
-                  <span className="font-semibold tabular-nums">
-                    {formatMinutes(pipeline.rollback.durationMin)}
-                  </span>
-                  .
+                  {t.rich("rollbackDuration", {
+                    duration: formatMinutes(pipeline.rollback.durationMin),
+                    strong: (chunks) => (
+                      <span className="font-semibold tabular-nums">{chunks}</span>
+                    ),
+                  })}
                 </p>
                 <Source sources={pipeline.rollback.sources} />
               </CardContent>
@@ -185,18 +184,20 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>Pas encore de chaîne CI/CD</CardTitle>
-            <CardDescription>
-              Elle se lit dans les fichiers de pipeline et les manifestes de déploiement, pas dans
-              un tableau tenu à la main.
-            </CardDescription>
+            <CardTitle>{t("emptyTitle")}</CardTitle>
+            <CardDescription>{t("emptyHint")}</CardDescription>
           </CardHeader>
           <CardContent className="text-muted-foreground text-sm">
-            Exemple disponible :{" "}
-            <Link href="/projects/qis-dist-cms/delivery" className="underline underline-offset-4">
-              qis-dist-cms
-            </Link>
-            .
+            {tn.rich("exampleAvailable", {
+              link: (chunks) => (
+                <Link
+                  href="/projects/qis-dist-cms/delivery"
+                  className="underline underline-offset-4"
+                >
+                  {chunks}
+                </Link>
+              ),
+            })}
           </CardContent>
         </Card>
       )}

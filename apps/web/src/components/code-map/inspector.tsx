@@ -1,12 +1,8 @@
 "use client";
 
-import {
-  CODE_CONFIDENCE_LABEL,
-  CODE_EDGE_KIND_LABEL,
-  CODE_NODE_KIND_LABEL,
-  type CodeExplanation,
-} from "@cairn/shared";
+import type { CodeExplanation } from "@cairn/shared";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -32,6 +28,8 @@ export function Explanation({
   onPathTo: () => void;
   onClose: () => void;
 }) {
+  const t = useTranslations("codeMap.inspector");
+  const td = useTranslations("domain");
   const { node, connections, communityLabel, degree, rationale } = explanation;
   const outgoing = connections.filter((c) => c.direction === "out");
   const incoming = connections.filter((c) => c.direction === "in");
@@ -46,14 +44,14 @@ export function Explanation({
             onClick={onClose}
             className="shrink-0 text-muted-foreground text-xs hover:text-foreground"
           >
-            fermer
+            {t("close")}
           </button>
         </div>
         <div className="flex flex-wrap gap-1">
-          <Badge variant="outline">{CODE_NODE_KIND_LABEL[node.kind]}</Badge>
+          <Badge variant="outline">{td(`codeNodeKind.${node.kind}`)}</Badge>
           {node.language ? <Badge variant="secondary">{node.language}</Badge> : null}
           <Badge variant="info">{communityLabel}</Badge>
-          <Badge variant="outline">{degree} liens</Badge>
+          <Badge variant="outline">{t("links", { count: degree })}</Badge>
         </div>
         {node.path ? (
           <p className="break-all font-mono text-[11px] text-muted-foreground">
@@ -61,16 +59,14 @@ export function Explanation({
             {node.line ? `:${node.line}` : ""}
           </p>
         ) : (
-          <p className="text-[11px] text-muted-foreground">
-            Dépendance externe : aucun fichier dans ce dépôt.
-          </p>
+          <p className="text-[11px] text-muted-foreground">{t("external")}</p>
         )}
         <div className="flex gap-2">
           <Button size="sm" variant="outline" onClick={onPathFrom}>
-            Chemin depuis ici
+            {t("pathFrom")}
           </Button>
           <Button size="sm" variant="outline" onClick={onPathTo}>
-            …jusqu'ici
+            {t("pathTo")}
           </Button>
         </div>
         {node.archNodeId ? (
@@ -78,14 +74,14 @@ export function Explanation({
             href={`/projects/${projectId}/architecture?vue=flux&noeud=${encodeURIComponent(node.archNodeId)}`}
             className="text-xs underline underline-offset-4"
           >
-            Voir ce composant dans l'architecture
+            {t("seeInArchitecture")}
           </Link>
         ) : null}
       </header>
 
       {rationale.length > 0 ? (
         <section className="flex flex-col gap-1 rounded-md border bg-muted/40 p-2">
-          <h3 className="font-semibold text-xs uppercase tracking-wider">Pourquoi</h3>
+          <h3 className="font-semibold text-xs uppercase tracking-wider">{t("why")}</h3>
           {rationale.map((r) => (
             <button
               key={r.id}
@@ -100,13 +96,13 @@ export function Explanation({
       ) : null}
 
       <ConnectionList
-        title={`Sortant (${outgoing.length})`}
+        title={t("outgoing", { count: outgoing.length })}
         connections={outgoing}
         arrow="→"
         onSelect={onSelect}
       />
       <ConnectionList
-        title={`Entrant (${incoming.length})`}
+        title={t("incoming", { count: incoming.length })}
         connections={incoming}
         arrow="←"
         onSelect={onSelect}
@@ -126,6 +122,7 @@ function ConnectionList({
   arrow: string;
   onSelect: (id: string) => void;
 }) {
+  const td = useTranslations("domain");
   if (!connections.length) return null;
   return (
     <section className="flex flex-col gap-1">
@@ -141,7 +138,7 @@ function ConnectionList({
               <span className="shrink-0 text-muted-foreground">{arrow}</span>
               <span className="min-w-0 flex-1 truncate">{c.otherLabel}</span>
               <span className="shrink-0 text-[10px] text-muted-foreground">
-                {CODE_EDGE_KIND_LABEL[c.kind]}
+                {td(`codeEdgeKind.${c.kind}`)}
               </span>
               <span
                 className={
@@ -150,7 +147,7 @@ function ConnectionList({
                     : "shrink-0 text-[10px] text-muted-foreground"
                 }
               >
-                {CODE_CONFIDENCE_LABEL[c.confidence]}
+                {td(`codeConfidence.${c.confidence}`)}
               </span>
             </button>
             {c.note ? (

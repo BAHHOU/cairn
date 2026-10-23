@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  type DeliveryView,
-  PIPELINE_FLAG_LABEL,
-  PIPELINE_JOB_ROLE_LABEL,
-  PIPELINE_TRIGGER_LABEL,
-  type PipelineJobRole,
-  type PipelineJobView,
-} from "@cairn/shared";
+import type { DeliveryView, PipelineJobRole, PipelineJobView } from "@cairn/shared";
 import {
   AlertTriangle,
   ChevronRight,
@@ -22,6 +15,7 @@ import {
   Rocket,
   ShieldAlert,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { type ReactNode, useMemo, useState } from "react";
 import { SourceRef } from "@/components/guide/bits";
 import { Badge } from "@/components/ui/badge";
@@ -66,6 +60,7 @@ function JobCard({
   selected: boolean;
   onSelect: () => void;
 }) {
+  const t = useTranslations();
   return (
     <button
       type="button"
@@ -84,17 +79,17 @@ function JobCard({
             {job.name.replace(/[_-]/g, "$&\u200b")}
           </span>
           <span className="text-[11px] text-muted-foreground">
-            {PIPELINE_JOB_ROLE_LABEL[job.role]}
+            {t(`domain.pipelineJobRole.${job.role}`)}
           </span>
         </span>
       </span>
       <span className="flex flex-wrap gap-1">
         <Badge variant="outline" className="text-[11px]">
-          {PIPELINE_TRIGGER_LABEL[job.trigger]}
+          {t(`domain.pipelineTrigger.${job.trigger}`)}
         </Badge>
         {!job.blocking ? (
           <Badge variant="warning" className="text-[11px]">
-            N'arrête rien
+            {t("pipeline.nonBlocking")}
           </Badge>
         ) : null}
         {job.flags.length > 0 ? (
@@ -143,6 +138,8 @@ export function JobDetail({
   base: SourceBase | null;
   bare?: boolean;
 }) {
+  const t = useTranslations();
+  const tp = useTranslations("pipeline");
   return (
     <section
       aria-live="polite"
@@ -155,17 +152,22 @@ export function JobDetail({
             <div className="flex min-w-0 flex-col">
               <h3 className="font-mono font-semibold text-base">{job.name}</h3>
               <span className="text-muted-foreground text-xs">
-                {PIPELINE_JOB_ROLE_LABEL[job.role]} · étape « {job.stage} »
+                {tp("roleAndStage", {
+                  role: t(`domain.pipelineJobRole.${job.role}`),
+                  stage: job.stage,
+                })}
               </span>
             </div>
           </>
         )}
         <div className={cn("flex flex-wrap gap-1.5", !bare && "ml-auto")}>
-          <Badge variant="outline">{PIPELINE_TRIGGER_LABEL[job.trigger]}</Badge>
+          <Badge variant="outline">{t(`domain.pipelineTrigger.${job.trigger}`)}</Badge>
           <Badge variant={job.blocking ? "success" : "warning"}>
-            {job.blocking ? "Un échec arrête la chaîne" : "Un échec est toléré"}
+            {job.blocking ? tp("failureStops") : tp("failureTolerated")}
           </Badge>
-          {job.retry ? <Badge variant="secondary">{job.retry} reprise(s) auto</Badge> : null}
+          {job.retry ? (
+            <Badge variant="secondary">{tp("retries", { count: job.retry })}</Badge>
+          ) : null}
         </div>
       </header>
 
@@ -174,14 +176,14 @@ export function JobDetail({
           {job.flags.map((f) => (
             <li key={f} className="flex items-center gap-2">
               <AlertTriangle className="size-4 shrink-0 text-warning" aria-hidden />
-              {PIPELINE_FLAG_LABEL[f]}
+              {t(`domain.pipelineFlag.${f}`)}
             </li>
           ))}
         </ul>
       ) : null}
 
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        <Fact title="Quand il s'exécute">
+        <Fact title={tp("when")}>
           {job.conditions.length > 0 ? (
             <ul className="flex flex-col gap-1">
               {job.conditions.map((c) => (
@@ -189,24 +191,20 @@ export function JobDetail({
               ))}
             </ul>
           ) : (
-            <None>À chaque pipeline, sans condition</None>
+            <None>{tp("always")}</None>
           )}
         </Fact>
-        <Fact title="Dépend de">
-          {job.needs.length > 0 ? (
-            <Chips items={job.needs} />
-          ) : (
-            <None>L'étape précédente, dans l'ordre</None>
-          )}
+        <Fact title={tp("needs")}>
+          {job.needs.length > 0 ? <Chips items={job.needs} /> : <None>{tp("previousStage")}</None>}
         </Fact>
-        <Fact title="Environnement d'exécution">
+        <Fact title={tp("runtime")}>
           {job.image ? (
             <span className="font-mono text-xs">
               {job.image.name}
               {job.image.version ? `:${job.image.version}` : ""}
             </span>
           ) : (
-            <None>Image par défaut du runner</None>
+            <None>{tp("defaultImage")}</None>
           )}
           {job.tools.length > 0 ? (
             <div className="mt-1.5">
@@ -214,13 +212,12 @@ export function JobDetail({
             </div>
           ) : null}
         </Fact>
-        <Fact title="Produit">
+        <Fact title={tp("produces")}>
           {job.artifacts.length > 0 || job.pushes.length > 0 || job.reportsTests ? (
             <ul className="flex flex-col gap-1">
               {job.pushes.map((p) => (
                 <li key={p.image} className="font-mono text-xs">
-                  Image {p.image}
-                  {p.tag ? `:${p.tag}` : ""}
+                  {tp("image", { image: p.tag ? `${p.image}:${p.tag}` : p.image })}
                 </li>
               ))}
               {job.artifacts.map((a) => (
@@ -228,20 +225,20 @@ export function JobDetail({
                   {a}
                 </li>
               ))}
-              {job.reportsTests ? <li>Rapport de tests (JUnit)</li> : null}
+              {job.reportsTests ? <li>{tp("testReport")}</li> : null}
             </ul>
           ) : (
-            <None>Rien de conservé</None>
+            <None>{tp("nothingKept")}</None>
           )}
         </Fact>
-        <Fact title="Variables lues">
+        <Fact title={tp("variables")}>
           {job.variables.length > 0 ? (
             <Chips items={job.variables} />
           ) : (
-            <None>Aucune nommée dans le job</None>
+            <None>{tp("noVariable")}</None>
           )}
         </Fact>
-        <Fact title="Dans le dépôt">
+        <Fact title={tp("inRepo")}>
           <SourceRef source={{ path, ...(job.line ? { line: job.line } : {}) }} base={base} />
         </Fact>
       </div>
@@ -254,6 +251,8 @@ export function JobDetail({
  * and the point where the repository stops describing what happens. Click a job for the detail.
  */
 export function PipelineFlow({ delivery, base }: { delivery: DeliveryView; base: SourceBase }) {
+  const t = useTranslations();
+  const tp = useTranslations("pipeline");
   const jobs = useMemo(() => delivery.stages.flatMap((s) => s.jobs), [delivery]);
   const [selected, setSelected] = useState<string | null>(null);
   const job = jobs.find((j) => j.name === selected) ?? null;
@@ -266,11 +265,9 @@ export function PipelineFlow({ delivery, base }: { delivery: DeliveryView; base:
           <span className="grid size-8 place-items-center rounded-lg bg-primary/15 text-primary">
             <GitCommitHorizontal className="size-4" aria-hidden />
           </span>
-          <span className="font-medium">Un commit est poussé</span>
+          <span className="font-medium">{tp("commitPushed")}</span>
           <span className="text-muted-foreground text-xs">
-            {delivery.mergeRequestPipelines === false
-              ? "Les merge requests ne lancent aucun pipeline."
-              : "Le pipeline démarre selon les règles de chaque job."}
+            {delivery.mergeRequestPipelines === false ? tp("noMrPipeline") : tp("rulesPerJob")}
           </span>
         </p>
         <div className="overflow-x-auto pb-1">
@@ -297,16 +294,14 @@ export function PipelineFlow({ delivery, base }: { delivery: DeliveryView; base:
             <Rocket className="size-4" aria-hidden />
           </span>
           <span className="font-medium text-sm">
-            {delivery.deploysToEnvironment ? "Déploiement" : "La chaîne s'arrête ici"}
+            {delivery.deploysToEnvironment ? tp("deploy") : tp("stopsHere")}
           </span>
           <span className="text-muted-foreground text-xs">
-            {delivery.deploysToEnvironment
-              ? "Une étape atteint un environnement."
-              : "Le dépôt ne décrit aucun déploiement vers un environnement : il se fait ailleurs."}
+            {delivery.deploysToEnvironment ? tp("reachesEnv") : tp("noDeployDescribed")}
           </span>
           {envNames.length > 0 ? (
             <span className="ml-auto flex items-center gap-2">
-              <span className="text-muted-foreground text-xs">Configurations dans le dépôt</span>
+              <span className="text-muted-foreground text-xs">{tp("envConfigs")}</span>
               <Chips items={envNames} mono={false} />
             </span>
           ) : null}
@@ -321,7 +316,12 @@ export function PipelineFlow({ delivery, base }: { delivery: DeliveryView; base:
         wide
         title={<span className="font-mono">{job?.name}</span>}
         description={
-          job ? `${PIPELINE_JOB_ROLE_LABEL[job.role]} · étape « ${job.stage} »` : undefined
+          job
+            ? tp("roleAndStage", {
+                role: t(`domain.pipelineJobRole.${job.role}`),
+                stage: job.stage,
+              })
+            : undefined
         }
         icon={job ? <RoleIcon role={job.role} className="size-9" /> : null}
       >
@@ -329,8 +329,10 @@ export function PipelineFlow({ delivery, base }: { delivery: DeliveryView; base:
       </Modal>
       {delivery.includes.length > 0 ? (
         <p className="text-muted-foreground text-xs">
-          Le pipeline inclut d'autres fichiers, non lus ici :{" "}
-          <span className="font-mono">{delivery.includes.join(", ")}</span>
+          {tp.rich("includes", {
+            files: delivery.includes.join(", "),
+            mono: (chunks) => <span className="font-mono">{chunks}</span>,
+          })}
         </p>
       ) : null}
     </div>
@@ -350,6 +352,7 @@ function FlowStage({
   selected: string | null;
   onSelect: (name: string) => void;
 }) {
+  const tp = useTranslations("pipeline");
   return (
     <>
       {index > 1 ? <Connector /> : null}
@@ -360,7 +363,7 @@ function FlowStage({
           </span>
           <h3 className="font-semibold text-sm">{name}</h3>
           <span className="text-muted-foreground text-xs">
-            {jobs.length} job{jobs.length > 1 ? "s" : ""}
+            {tp("jobCount", { count: jobs.length })}
           </span>
         </div>
         <ul className="flex flex-col gap-2">

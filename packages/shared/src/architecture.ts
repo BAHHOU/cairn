@@ -11,20 +11,6 @@ import type { Severity } from "./domain";
 export const ARCH_VIEWS = ["contexte", "conteneurs", "flux", "impact"] as const;
 export type ArchView = (typeof ARCH_VIEWS)[number];
 
-export const ARCH_VIEW_LABEL: Record<ArchView, string> = {
-  contexte: "Contexte",
-  conteneurs: "Conteneurs",
-  flux: "Flux de données",
-  impact: "Impact",
-};
-
-export const ARCH_VIEW_HINT: Record<ArchView, string> = {
-  contexte: "Le système vu de l'extérieur : acteurs et systèmes tiers (C4 niveau 1)",
-  conteneurs: "Les unités déployables et ce qui les relie (C4 niveau 2)",
-  flux: "Uniquement les liens qui transportent de la donnée, avec la nature du message",
-  impact: "Choisissez un nœud : le rayon d'impact est mis en évidence par nombre de sauts",
-};
-
 export const ARCH_LAYERS = [
   "experience",
   "application",
@@ -47,30 +33,12 @@ export const ARCH_NODE_KINDS = [
 ] as const;
 export type ArchNodeKind = (typeof ARCH_NODE_KINDS)[number];
 
-export const ARCH_NODE_KIND_LABEL: Record<ArchNodeKind, string> = {
-  system: "Système",
-  service: "Service",
-  component: "Composant",
-  datastore: "Stockage",
-  queue: "File",
-  external: "Système externe",
-  actor: "Acteur",
-  pipeline: "Chaîne CI",
-  deployment: "Déploiement",
-};
-
 /**
  * How we know this. `extracted` comes from a file we parsed, `inferred` from a heuristic,
  * `declared` from a human. The legend only means something if the mix is honest.
  */
 export const ARCH_PROVENANCES = ["extracted", "inferred", "declared"] as const;
 export type ArchProvenance = (typeof ARCH_PROVENANCES)[number];
-
-export const ARCH_PROVENANCE_LABEL: Record<ArchProvenance, string> = {
-  extracted: "Extrait",
-  inferred: "Déduit",
-  declared: "Déclaré",
-};
 
 /** The exact place in the repository a node or an edge was derived from. */
 export interface ArchSource {
@@ -117,15 +85,6 @@ export const ARCH_PAYLOADS = [
   "artifact",
 ] as const;
 export type ArchPayload = (typeof ARCH_PAYLOADS)[number];
-
-export const ARCH_PAYLOAD_LABEL: Record<ArchPayload, string> = {
-  "mt-message": "Message MT",
-  "rest-json": "REST JSON",
-  sql: "SQL",
-  event: "Événement",
-  config: "Configuration",
-  artifact: "Artefact",
-};
 
 /** Edges that actually move business data. The flow view is exactly this set. */
 export const DATA_EDGE_KINDS: readonly ArchEdgeKind[] = ["async", "data", "sync"];

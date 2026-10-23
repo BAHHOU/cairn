@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  type DeliveryView,
-  PIPELINE_JOB_ROLE_LABEL,
-  TOPOLOGY_BASIS_LABEL,
-  TOPOLOGY_LANE_HINT,
-  TOPOLOGY_LANE_LABEL,
-  type TopologyBasis,
-  type TopologyNode,
-  type TopologyView,
-} from "@cairn/shared";
+import type { DeliveryView, TopologyBasis, TopologyNode, TopologyView } from "@cairn/shared";
 import {
   Background,
   BackgroundVariant,
@@ -28,6 +19,7 @@ import {
 import "@xyflow/react/dist/style.css";
 import { AlertTriangle, Maximize2, Minimize2 } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useEffect, useMemo, useState } from "react";
 import { SourceRef } from "@/components/guide/bits";
@@ -162,6 +154,9 @@ function NodeDetail({
   base: SourceBase | null;
   onSelect: (id: string) => void;
 }) {
+  const t = useTranslations("deliveryMap");
+  const tp = useTranslations("pipeline");
+  const td = useTranslations("domain");
   const byId = new Map(view.nodes.map((n) => [n.id, n]));
   const incoming = view.edges.filter((e) => e.to === node.id);
   const outgoing = view.edges.filter((e) => e.from === node.id);
@@ -203,18 +198,20 @@ function NodeDetail({
             href={`/projects/${id}/architecture?vue=flux&noeud=${encodeURIComponent(node.archNodeId)}`}
             className="text-xs underline underline-offset-4 hover:text-primary"
           >
-            Voir dans l'architecture
+            {t("seeInArchitecture")}
           </Link>
         ) : null}
       </div>
       {incoming.length + outgoing.length > 0 ? (
         <div className="grid gap-3 text-xs sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <span className="text-muted-foreground uppercase tracking-wide">Reçoit de</span>
+            <span className="text-muted-foreground uppercase tracking-wide">
+              {t("receivesFrom")}
+            </span>
             {links(incoming, "from")}
           </div>
           <div className="flex flex-col gap-1.5">
-            <span className="text-muted-foreground uppercase tracking-wide">Envoie vers</span>
+            <span className="text-muted-foreground uppercase tracking-wide">{t("sendsTo")}</span>
             {links(outgoing, "to")}
           </div>
         </div>
@@ -224,7 +221,10 @@ function NodeDetail({
           <p className="flex flex-wrap items-baseline gap-2">
             <span className="font-medium font-mono text-sm">{job.name}</span>
             <span className="text-muted-foreground text-xs">
-              {PIPELINE_JOB_ROLE_LABEL[job.role]} · étape « {job.stage} »
+              {tp("roleAndStage", {
+                role: td(`pipelineJobRole.${job.role}`),
+                stage: job.stage,
+              })}
             </span>
           </p>
           <JobDetail job={job} path={delivery.path} base={base} bare />
@@ -237,6 +237,7 @@ function NodeDetail({
 /* ---------------------------------- the map ---------------------------------- */
 
 function Legend() {
+  const td = useTranslations("domain");
   return (
     <ul className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-muted-foreground text-xs">
       {(["found", "inferred", "missing"] as const).map((basis) => (
@@ -254,7 +255,7 @@ function Legend() {
               strokeOpacity={EDGE_OPACITY[basis]}
             />
           </svg>
-          {TOPOLOGY_BASIS_LABEL[basis]}
+          {td(`topologyBasis.${basis}`)}
         </li>
       ))}
     </ul>
@@ -272,6 +273,8 @@ function TopologyCanvas({
   id: string;
   base: SourceBase | null;
 }) {
+  const t = useTranslations("deliveryMap");
+  const td = useTranslations("domain");
   const layout = useMemo(() => layoutTopology(view), [view]);
   const { fitView } = useReactFlow();
   const { resolvedTheme } = useTheme();
@@ -298,7 +301,10 @@ function TopologyCanvas({
           type: "lane",
           position: { x: lane.x, y: PAD },
           style: { width: lane.width, height: layout.height - PAD * 2 },
-          data: { label: TOPOLOGY_LANE_LABEL[lane.lane], hint: TOPOLOGY_LANE_HINT[lane.lane] },
+          data: {
+            label: td(`topologyLane.${lane.lane}`),
+            hint: td(`topologyLaneHint.${lane.lane}`),
+          },
           draggable: false,
           selectable: false,
           focusable: false,
@@ -317,7 +323,7 @@ function TopologyCanvas({
         }),
       ),
     ],
-    [layout, related],
+    [layout, related, td],
   );
 
   const edges = useMemo<Edge[]>(
@@ -413,7 +419,7 @@ function TopologyCanvas({
               ) : (
                 <Maximize2 className="size-3.5" aria-hidden />
               )}
-              {full ? "Réduire (Échap)" : "Plein écran"}
+              {full ? t("exitFullscreen") : t("fullscreen")}
             </button>
           </Panel>
         </ReactFlow>
@@ -421,10 +427,7 @@ function TopologyCanvas({
 
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Legend />
-        <span className="text-muted-foreground text-xs">
-          Glisser pour déplacer · Ctrl + molette ou boutons pour zoomer · cliquer un nœud pour son
-          détail
-        </span>
+        <span className="text-muted-foreground text-xs">{t("help")}</span>
       </div>
 
       {view.gaps.length > 0 ? (
@@ -449,7 +452,7 @@ function TopologyCanvas({
           open ? (
             <span className="inline-flex items-center gap-1.5">
               <span className={cn("size-2 rounded-full", BASIS_DOT[open.basis])} aria-hidden />
-              {TOPOLOGY_BASIS_LABEL[open.basis]}
+              {td(`topologyBasis.${open.basis}`)}
             </span>
           ) : undefined
         }

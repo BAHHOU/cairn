@@ -1,5 +1,6 @@
 import type { SetupAccess, SetupPitfall, SetupPrereq, SetupStep } from "@cairn/shared";
 import { CalendarClock, CircleAlert, Timer } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { CommandBlock } from "./command-block";
 
@@ -25,6 +26,7 @@ function Source({ sources }: { sources: SetupStep["sources"] }) {
  * whether a warning they do not understand is fatal.
  */
 export function StepCard({ step, index }: { step: SetupStep; index: number }) {
+  const t = useTranslations("onboarding.steps");
   return (
     <li className="flex gap-3">
       <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border bg-card font-medium text-xs tabular-nums">
@@ -36,9 +38,9 @@ export function StepCard({ step, index }: { step: SetupStep; index: number }) {
           <h4 className="font-medium text-sm">{step.title}</h4>
           <span className="flex items-center gap-1 text-muted-foreground text-xs tabular-nums">
             <Timer className="size-3" aria-hidden />
-            {step.durationMin} min
+            {t("minutes", { count: step.durationMin })}
           </span>
-          {step.optional ? <Badge variant="secondary">Facultatif</Badge> : null}
+          {step.optional ? <Badge variant="secondary">{t("optional")}</Badge> : null}
         </div>
 
         <p className="text-muted-foreground text-sm">{step.explanation}</p>
@@ -46,7 +48,7 @@ export function StepCard({ step, index }: { step: SetupStep; index: number }) {
         {step.command ? <CommandBlock command={step.command} shell={step.shell} /> : null}
 
         <p className="text-sm">
-          <span className="text-muted-foreground">Vous devez voir : </span>
+          <span className="text-muted-foreground">{t("expect")} </span>
           {step.expect}
         </p>
 
@@ -57,12 +59,13 @@ export function StepCard({ step, index }: { step: SetupStep; index: number }) {
 }
 
 export function PrereqRow({ prereq }: { prereq: SetupPrereq }) {
+  const t = useTranslations("onboarding.steps");
   return (
     <li className="flex flex-col gap-1.5 border-border/60 border-b py-3 last:border-0">
       <div className="flex flex-wrap items-baseline gap-2">
         <span className="font-medium text-sm">{prereq.label}</span>
         <span className="font-mono text-xs">{prereq.version}</span>
-        {prereq.required ? null : <Badge variant="secondary">Facultatif</Badge>}
+        {prereq.required ? null : <Badge variant="secondary">{t("optional")}</Badge>}
       </div>
       <CommandBlock command={prereq.check} />
       {prereq.install ? <p className="text-muted-foreground text-xs">{prereq.install}</p> : null}
@@ -79,19 +82,21 @@ export function PrereqRow({ prereq }: { prereq: SetupPrereq }) {
  * also the part that decides whether the first week is one day of work or five.
  */
 export function AccessRow({ access }: { access: SetupAccess }) {
+  const t = useTranslations("onboarding.steps");
+  const td = useTranslations("domain.severity");
   return (
     <li className="flex flex-col gap-1 border-border/60 border-b py-3 last:border-0">
       <div className="flex flex-wrap items-center gap-2">
         <span className="font-medium text-sm">{access.label}</span>
         <Badge variant={access.blocking ? "warning" : "secondary"}>
           <CalendarClock className="size-3" aria-hidden />
-          {access.leadTimeDays} j
+          {t("days", { count: access.leadTimeDays })}
         </Badge>
-        {access.blocking ? <Badge variant="destructive">Bloquant</Badge> : null}
+        {access.blocking ? <Badge variant="destructive">{td("blocker")}</Badge> : null}
       </div>
       <p className="text-muted-foreground text-sm">{access.why}</p>
       <p className="text-xs">
-        <span className="text-muted-foreground">À demander à : </span>
+        <span className="text-muted-foreground">{t("askWho")} </span>
         {access.askWho}
       </p>
     </li>

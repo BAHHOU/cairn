@@ -13,6 +13,7 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { blastRadiusAction } from "@/app/actions";
 import { cn } from "@/lib/utils";
@@ -22,6 +23,7 @@ import { copyMermaid, copyShareLink, downloadMermaid } from "./export";
 import { Inspector } from "./inspector";
 import { autoLayout } from "./layout";
 import { ArchNodeCard } from "./nodes/arch-node";
+import type { MermaidText } from "./to-mermaid";
 import { DiagramToolbar } from "./toolbar";
 import type { ArchFlowNode, ArchNodeData } from "./types";
 import { useGraphState } from "./use-graph-state";
@@ -30,6 +32,12 @@ import { isDataEdge, neighboursOf, projectGraph, provenanceMix } from "./views";
 const NODE_TYPES = { arch: ArchNodeCard };
 
 function Canvas({ architecture }: { architecture: ProjectArchitecture }) {
+  const t = useTranslations("diagram.canvas");
+  const td = useTranslations("domain");
+  const mermaidText: MermaidText = {
+    header: (title) => t("mermaidHeader", { title }),
+    payload: (payload) => td(`archPayload.${payload}`),
+  };
   const { state, update } = useGraphState();
   const { fitView } = useReactFlow();
   const [hovered, setHovered] = useState<string | null>(null);
@@ -143,9 +151,10 @@ function Canvas({ architecture }: { architecture: ProjectArchitecture }) {
         highlighted,
         showLabel: labelAll || highlighted || e.violating,
         animated: state.view === "flux" && isDataEdge(e),
+        ...(e.payload ? { payloadLabel: td(`archPayload.${e.payload}`) } : {}),
       });
     });
-  }, [graph.edges, highlight, impactHops, radius, state.view]);
+  }, [graph.edges, highlight, impactHops, radius, state.view, td]);
 
   // A new projection deserves a new framing, otherwise the camera stays on empty space.
   // In the impact view we frame the blast radius rather than the whole graph: the
@@ -249,18 +258,14 @@ function Canvas({ architecture }: { architecture: ProjectArchitecture }) {
         notice={notice}
         fullscreen={fullscreen}
         onToggleFullscreen={toggleFullscreen}
-        onCopyLink={async () =>
-          flash((await copyShareLink()) ? "Lien copié." : "Copie refusée par le navigateur.")
-        }
+        onCopyLink={async () => flash((await copyShareLink()) ? t("linkCopied") : t("copyRefused"))}
         onCopyMermaid={async () =>
           flash(
-            (await copyMermaid(graph, title))
-              ? "Mermaid copié."
-              : "Copie refusée par le navigateur.",
+            (await copyMermaid(graph, title, mermaidText)) ? t("mermaidCopied") : t("copyRefused"),
           )
         }
         onDownloadMermaid={() =>
-          downloadMermaid(graph, title, `${architecture.projectId}-${state.view}.mmd`)
+          downloadMermaid(graph, title, `${architecture.projectId}-${state.view}.mmd`, mermaidText)
         }
       />
 
@@ -298,17 +303,19 @@ function Canvas({ architecture }: { architecture: ProjectArchitecture }) {
           </ReactFlow>
 
           <div className="pointer-events-none absolute top-3 left-3 rounded-md border bg-background/90 px-2.5 py-1.5 text-[11px] leading-relaxed shadow-sm">
-            <div className="font-medium">Provenance des nœuds affichés</div>
+            <div className="font-medium">{t("provenanceTitle")}</div>
             <div className="flex gap-3 text-muted-foreground">
               <span className="flex items-center gap-1">
-                <span className="size-1.5 rounded-full bg-primary" /> extrait {mix.extracted}
+                <span className="size-1.5 rounded-full bg-primary" />{" "}
+                {t("extracted", { count: mix.extracted })}
               </span>
               <span className="flex items-center gap-1">
-                <span className="size-1.5 rounded-full bg-warning" /> déduit {mix.inferred}
+                <span className="size-1.5 rounded-full bg-warning" />{" "}
+                {t("inferred", { count: mix.inferred })}
               </span>
               <span className="flex items-center gap-1">
-                <span className="size-1.5 rounded-full bg-muted-foreground" /> déclaré{" "}
-                {mix.declared}
+                <span className="size-1.5 rounded-full bg-muted-foreground" />{" "}
+                {t("declared", { count: mix.declared })}
               </span>
             </div>
           </div>
@@ -316,7 +323,7 @@ function Canvas({ architecture }: { architecture: ProjectArchitecture }) {
           {graph.nodes.length === 0 && (
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
               <p className="rounded-md border bg-background px-4 py-2 text-muted-foreground text-sm">
-                Aucun nœud ne correspond aux filtres.
+                {t("noMatch")}
               </p>
             </div>
           )}

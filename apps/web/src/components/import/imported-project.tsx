@@ -1,6 +1,7 @@
 import { type ImportView, isImportActive, type ScanView } from "@cairn/shared";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { ProjectTabs } from "@/components/guide/bits";
 import { AutoRefresh } from "@/components/import/auto-refresh";
@@ -11,7 +12,7 @@ import { PageHeader } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatDate, formatNumber } from "@/lib/format";
+import { useFormat } from "@/i18n/format";
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -23,6 +24,7 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 }
 
 function ViewLink({ href, label, summary }: { href: string; label: string; summary: string }) {
+  const t = useTranslations("projects.imported");
   return (
     <li>
       <Link
@@ -33,7 +35,7 @@ function ViewLink({ href, label, summary }: { href: string; label: string; summa
           <span className="font-medium">{label}</span>
           <span className="text-muted-foreground text-xs">{summary}</span>
         </span>
-        <Badge>Ouvrir</Badge>
+        <Badge>{t("open")}</Badge>
       </Link>
     </li>
   );
@@ -52,6 +54,8 @@ export function ImportedProject({
   scan: ScanView | null;
   canRescan?: boolean;
 }) {
+  const t = useTranslations("projects.imported");
+  const fmt = useFormat();
   const latest = runs[0];
   if (!latest) return null;
   const analysed = runs.find((r) => r.status === "done");
@@ -80,9 +84,9 @@ export function ImportedProject({
               {repo.branch}
             </Badge>
             <ImportStatusBadge status={latest.status} />
-            {facts?.technologies.map((t) => (
-              <Badge key={t} variant="outline">
-                {t}
+            {facts?.technologies.map((tech) => (
+              <Badge key={tech} variant="outline">
+                {tech}
               </Badge>
             ))}
           </span>
@@ -96,15 +100,15 @@ export function ImportedProject({
                 rel="noopener noreferrer"
                 className={buttonVariants({ variant: "outline", size: "sm" })}
               >
-                <ExternalLink aria-hidden /> Ouvrir sur{" "}
-                {repo.provider === "github" ? "GitHub" : "GitLab"}
+                <ExternalLink aria-hidden />{" "}
+                {t("openOn", { provider: repo.provider === "github" ? "GitHub" : "GitLab" })}
               </a>
             ) : null}
             <Link
               href="/projects/import"
               className={buttonVariants({ variant: "outline", size: "sm" })}
             >
-              Nouvel import
+              {t("newImport")}
             </Link>
             {canRescan ? <RescanButton repositoryId={repo.id} disabled={active} /> : null}
           </>
@@ -115,46 +119,44 @@ export function ImportedProject({
       <section className="grid items-start gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Dernière analyse</CardTitle>
-            <CardDescription>
-              Faits mesurés sur le code cloné. Aucun contenu de fichier n'est conservé.
-            </CardDescription>
+            <CardTitle>{t("lastScan")}</CardTitle>
+            <CardDescription>{t("lastScanHint")}</CardDescription>
           </CardHeader>
           <CardContent>
             {analysed && facts ? (
               <dl>
-                <Row label="Branche">
+                <Row label={t("branch")}>
                   <span className="font-mono text-xs">{repo.branch}</span>
                 </Row>
-                <Row label="Commit analysé">
+                <Row label={t("commit")}>
                   <span className="font-mono text-xs">
                     {analysed.commitSha?.slice(0, 10) ?? "—"}
                   </span>
                 </Row>
-                <Row label="Fichiers">{formatNumber(facts.fileCount)}</Row>
-                <Row label="Technologies">
+                <Row label={t("files")}>{fmt.number(facts.fileCount)}</Row>
+                <Row label={t("technologies")}>
                   {facts.technologies.length ? (
                     <span className="flex flex-wrap justify-end gap-1">
-                      {facts.technologies.map((t) => (
-                        <Badge key={t} variant="outline">
-                          {t}
+                      {facts.technologies.map((tech) => (
+                        <Badge key={tech} variant="outline">
+                          {tech}
                         </Badge>
                       ))}
                     </span>
                   ) : (
-                    <span className="text-muted-foreground">Aucune détectée</span>
+                    <span className="text-muted-foreground">{t("noTechnology")}</span>
                   )}
                 </Row>
-                <Row label="Durée">{seconds === null ? "—" : `${seconds} s`}</Row>
-                <Row label="Analysé le">
-                  {analysed.finishedAt ? formatDate(analysed.finishedAt) : "—"}
+                <Row label={t("duration")}>
+                  {seconds === null ? "—" : t("seconds", { seconds })}
+                </Row>
+                <Row label={t("analysedAt")}>
+                  {analysed.finishedAt ? fmt.date(analysed.finishedAt) : "—"}
                 </Row>
               </dl>
             ) : (
               <p className="text-sm text-muted-foreground">
-                {active
-                  ? "Import en cours : les résultats apparaîtront ici automatiquement."
-                  : "Aucun import n'a abouti pour ce dépôt."}
+                {active ? t("running") : t("noSuccess")}
               </p>
             )}
           </CardContent>
@@ -162,11 +164,8 @@ export function ImportedProject({
 
         <Card>
           <CardHeader>
-            <CardTitle>Vues du projet</CardTitle>
-            <CardDescription>
-              Construites depuis le code lu, sans donnée fictive. Chaque lien de l'architecture et
-              de la carte indique s'il a été extrait ou seulement déduit.
-            </CardDescription>
+            <CardTitle>{t("views")}</CardTitle>
+            <CardDescription>{t("viewsHint")}</CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="flex flex-col gap-2">
@@ -178,15 +177,16 @@ export function ImportedProject({
                       className="flex items-center justify-between gap-3 rounded-lg border p-3 text-sm transition-colors hover:bg-accent/50"
                     >
                       <span className="flex flex-col">
-                        <span className="font-medium">Architecture</span>
+                        <span className="font-medium">{t("architecture")}</span>
                         <span className="text-muted-foreground text-xs">
-                          {formatNumber(scan.report.counts.archNodes)} nœuds ·{" "}
-                          {formatNumber(scan.report.counts.archEdges)} liens ·{" "}
-                          {formatNumber(scan.report.counts.archViolations)} violation
-                          {scan.report.counts.archViolations > 1 ? "s" : ""}
+                          {t("architectureSummary", {
+                            nodes: scan.report.counts.archNodes,
+                            edges: scan.report.counts.archEdges,
+                            violations: scan.report.counts.archViolations,
+                          })}
                         </span>
                       </span>
-                      <Badge>Ouvrir</Badge>
+                      <Badge>{t("open")}</Badge>
                     </Link>
                   </li>
                   <li>
@@ -195,47 +195,58 @@ export function ImportedProject({
                       className="flex items-center justify-between gap-3 rounded-lg border p-3 text-sm transition-colors hover:bg-accent/50"
                     >
                       <span className="flex flex-col">
-                        <span className="font-medium">Carte du code</span>
+                        <span className="font-medium">{t("codeMap")}</span>
                         <span className="text-muted-foreground text-xs">
-                          {formatNumber(scan.report.counts.codeNodes)} symboles ·{" "}
-                          {formatNumber(scan.report.counts.codeEdges)} liens
+                          {t("codeMapSummary", {
+                            nodes: scan.report.counts.codeNodes,
+                            edges: scan.report.counts.codeEdges,
+                          })}
                         </span>
                       </span>
-                      <Badge>Ouvrir</Badge>
+                      <Badge>{t("open")}</Badge>
                     </Link>
                   </li>
                   <ViewLink
                     href={`/projects/${repo.id}/delivery`}
-                    label="CI/CD"
+                    label={t("delivery")}
                     summary={
                       scan.delivery
-                        ? `${scan.delivery.stages.length} étapes · ${scan.delivery.counts.jobs} jobs · ${scan.delivery.findings.length} point(s) d'attention`
-                        : "Du commit à la production (CI/CD)"
+                        ? t("deliverySummary", {
+                            stages: scan.delivery.stages.length,
+                            jobs: scan.delivery.counts.jobs,
+                            findings: scan.delivery.findings.length,
+                          })
+                        : t("deliveryEmpty")
                     }
                   />
                   <ViewLink
                     href={`/projects/${repo.id}/onboarding`}
-                    label="Démarrage"
+                    label={t("onboarding")}
                     summary={
                       scan.onboarding
-                        ? `${scan.onboarding.tools.length} outils · ${scan.onboarding.steps.length} étapes`
-                        : "Installation locale pour un nouveau développeur"
+                        ? t("onboardingSummary", {
+                            tools: scan.onboarding.tools.length,
+                            steps: scan.onboarding.steps.length,
+                          })
+                        : t("onboardingEmpty")
                     }
                   />
                   <ViewLink
                     href={`/projects/${repo.id}/docs`}
-                    label="Documentation"
+                    label={t("docs")}
                     summary={
                       scan.docs
-                        ? `${scan.docs.stats.files} documents · ${scan.docs.drift.length} contradiction(s)`
-                        : "Ce qui est écrit et ce qui manque"
+                        ? t("docsSummary", {
+                            files: scan.docs.stats.files,
+                            drift: scan.docs.drift.length,
+                          })
+                        : t("docsEmpty")
                     }
                   />
                 </>
               ) : (
                 <li className="rounded-lg border border-dashed p-3 text-muted-foreground text-sm">
-                  Architecture, carte du code, CI/CD, démarrage et documentation : disponibles après
-                  la première analyse réussie.
+                  {t("viewsPending")}
                 </li>
               )}
             </ul>
@@ -247,7 +258,7 @@ export function ImportedProject({
 
       <Card className="gap-0 py-0">
         <CardHeader className="py-5">
-          <CardTitle>Historique des imports ({runs.length})</CardTitle>
+          <CardTitle>{t("history", { count: runs.length })}</CardTitle>
         </CardHeader>
         <ul className="divide-y border-t">
           {runs.map((run) => (
@@ -257,13 +268,13 @@ export function ImportedProject({
                 {(run.commitSha ?? run.requestedSha)?.slice(0, 10) ?? "—"}
               </span>
               <span className="text-xs text-muted-foreground">
-                {run.requestedBy} · {formatDate(run.createdAt)}
+                {run.requestedBy} · {fmt.date(run.createdAt)}
               </span>
               <Link
                 href={`/projects/import/${run.id}`}
                 className="ml-auto text-xs underline underline-offset-4 hover:text-primary"
               >
-                Détail de l'exécution
+                {t("runDetail")}
               </Link>
             </li>
           ))}

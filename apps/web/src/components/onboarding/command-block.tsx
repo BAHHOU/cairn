@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Copy } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 
 /**
@@ -13,6 +14,7 @@ import { useCallback, useState } from "react";
  * them would hand over a command that silently does the wrong thing.
  */
 export function CommandBlock({ command, shell }: { command: string; shell?: string }) {
+  const t = useTranslations("command");
   const [copied, setCopied] = useState(false);
 
   const copy = useCallback(() => {
@@ -45,7 +47,7 @@ export function CommandBlock({ command, shell }: { command: string; shell?: stri
       <button
         type="button"
         onClick={copy}
-        aria-label={copied ? "Commande copiée" : "Copier la commande"}
+        aria-label={copied ? t("copied") : t("copy")}
         className="absolute top-2 right-2 rounded-md border bg-background p-1.5 text-muted-foreground hover:text-foreground"
       >
         {copied ? (
