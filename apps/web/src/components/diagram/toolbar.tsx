@@ -3,7 +3,9 @@
 import { ARCH_LAYERS, ARCH_VIEWS, type ArchLayer, type ArchView } from "@cairn/shared";
 import { Download, Link2, Maximize2, Minimize2, Search, Share2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useId } from "react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import type { GraphState } from "./use-graph-state";
 
@@ -35,6 +37,7 @@ export function DiagramToolbar({
   notice,
 }: Props) {
   const t = useTranslations("diagram.toolbar");
+  const crossRepoId = useId();
   const td = useTranslations("domain");
   const toggleLayer = (layer: ArchLayer) => {
     const next = state.layers.includes(layer)
@@ -122,15 +125,16 @@ export function DiagramToolbar({
           );
         })}
 
-        <label className="ml-2 flex items-center gap-1.5 text-muted-foreground">
-          <input
-            type="checkbox"
+        <div className="ml-2 flex items-center gap-1.5 text-muted-foreground">
+          <Checkbox
+            id={crossRepoId}
             checked={state.crossRepoOnly}
-            onChange={(e) => update({ crossRepoOnly: e.target.checked })}
-            className="size-3.5 accent-[var(--primary)]"
+            onCheckedChange={(checked) => update({ crossRepoOnly: checked === true })}
           />
-          {t("crossRepoOnly")}
-        </label>
+          <label htmlFor={crossRepoId} className="cursor-pointer">
+            {t("crossRepoOnly")}
+          </label>
+        </div>
 
         <span className="ml-auto text-muted-foreground">
           {t("counts", { nodes: nodeCount, edges: edgeCount })}

@@ -3,7 +3,6 @@ import {
   deliveryBoard,
   deliveryRisks,
   filledPhases,
-  formatMinutes,
   leadTimeTo,
   setupEffort,
   stepsOfPhase,
@@ -11,6 +10,7 @@ import {
 import { describe, expect, it } from "vitest";
 import { QIS_DELIVERY } from "../../lib/api/delivery-data";
 import { QIS_ONBOARDING } from "../../lib/api/onboarding-data";
+import { createFormat } from "../../lib/format";
 
 const pipeline = QIS_DELIVERY;
 const onboarding = QIS_ONBOARDING;
@@ -119,17 +119,31 @@ describe("delivery risks", () => {
   });
 });
 
-describe("formatMinutes", () => {
-  it("keeps minutes below an hour", () => {
-    expect(formatMinutes(45)).toBe("45 min");
+describe("minutes, in the viewer's language", () => {
+  // Intl uses (narrow) no-break spaces where typography wants them: compare the words only.
+  const plain = (s: string) => s.replace(/\s/g, " ");
+  const fr = { minutes: (n: number) => plain(createFormat("fr").minutes(n)) };
+  const en = { minutes: (n: number) => plain(createFormat("en").minutes(n)) };
+
+  it("keeps minutes under an hour", () => {
+    expect(fr.minutes(45)).toBe("45 min");
+    expect(en.minutes(45)).toBe("45 mins");
   });
 
-  it("drops the minutes when there are none", () => {
-    expect(formatMinutes(120)).toBe("2 h");
+  it("switches to hours past the first one", () => {
+    expect(fr.minutes(120)).toBe("2 h");
+    expect(en.minutes(120)).toBe("2 hrs");
+    expect(en.minutes(125)).toBe("2 hrs 5 mins");
+    expect(fr.minutes(125)).toBe("2 h 5 min");
   });
+});
 
-  it("pads so that hours line up in a column", () => {
-    expect(formatMinutes(125)).toBe("2 h 05");
+describe("delivery risk messages", () => {
+  it("carry keys and raw values, never a finished sentence", () => {
+    for (const risk of deliveryRisks(pipeline)) {
+      expect(risk.title.key).toBe(`domain.deliveryRisk.${risk.kind}.title`);
+      expect(risk.detail.key).toBe(`domain.deliveryRisk.${risk.kind}.detail`);
+    }
   });
 });
 

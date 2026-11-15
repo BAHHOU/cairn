@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createEgressFetch, EgressBlockedError, createLlmClient, LlmDisabledError } from "./client";
+import { createEgressFetch, createLlmClient, EgressBlockedError, LlmDisabledError } from "./client";
 import { loadLlmConfig } from "./config";
 import { maskSensitive } from "./firewall";
 

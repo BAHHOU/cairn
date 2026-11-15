@@ -1,12 +1,6 @@
 import { BookOpen, Bot, CheckCircle2, CircleDashed, FileText, Layers } from "lucide-react";
 import { useTranslations } from "next-intl";
-import {
-  GuideUnavailable,
-  LimitsNote,
-  ProjectTabs,
-  Section,
-  SourceRef,
-} from "@/components/guide/bits";
+import { GuideUnavailable, LimitsNote, Section, SourceRef } from "@/components/guide/bits";
 import { Findings } from "@/components/guide/findings";
 import { KpiCard, PageHeader } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +9,7 @@ import type { ImportedScan } from "@/lib/import/scan";
 import { cn } from "@/lib/utils";
 
 /** The documentation page of a repository imported from Git: what exists, what is missing, what lies. */
-export function ImportedDocs({ id, imported }: { id: string; imported: ImportedScan }) {
+export function ImportedDocs({ imported }: { imported: ImportedScan }) {
   const t = useTranslations("docs");
   const td = useTranslations("domain");
   const fmt = useFormat();
@@ -25,7 +19,6 @@ export function ImportedDocs({ id, imported }: { id: string; imported: ImportedS
   return (
     <>
       <PageHeader title={t("title", { name: imported.name })} description={t("description")} />
-      <ProjectTabs id={id} active="docs" />
 
       {!imported.scan || !docs ? (
         <GuideUnavailable title={t("unavailableTitle")}>{t("unavailableBody")}</GuideUnavailable>

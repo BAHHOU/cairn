@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
-import { ProjectTabs } from "@/components/guide/bits";
 import { PageHeader } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -73,7 +72,6 @@ export default async function ArchitecturePage({ params }: { params: Promise<{ i
           </div>
         }
       />
-      {imported ? <ProjectTabs id={id} active="architecture" /> : null}
 
       {architecture ? (
         <Suspense fallback={<p className="text-muted-foreground text-sm">{t("loading")}</p>}>

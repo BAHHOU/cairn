@@ -40,6 +40,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
           <ImportedProject
             runs={runs}
             scan={imported?.scan ?? null}
+            source={imported?.source ?? null}
+            aiIgnoreFiles={imported?.aiIgnoreFiles ?? null}
             canRescan={viewerMayImport(viewer)}
           />
         );
@@ -49,6 +51,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   }
   const t = await getTranslations("projects.detail");
   const td = await getTranslations("domain");
+  const tc = await getTranslations("charts");
   const fmt = await getFormat();
   const issues = await api.issues.list({ projectId: id });
   const next = Math.min(project.maturity + 1, 5);
@@ -112,7 +115,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
             <ScoreRing score={project.score} size={96} stroke={9} />
             <div className="flex flex-col gap-2">
               <span className="text-xs text-muted-foreground">{t("trend")}</span>
-              <Sparkline values={project.trend} className="h-8 w-28 text-primary" />
+              <Sparkline
+                label={tc("sixMonthTrend")}
+                values={project.trend}
+                className="h-8 w-28 text-primary"
+              />
             </div>
           </CardContent>
         </Card>

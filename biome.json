@@ -14,7 +14,8 @@
       "!**/dist",
       "!**/next-env.d.ts",
       "!**/prisma/migrations",
-      "!**/brand-icons.ts"
+      "!**/brand-icons.ts",
+      "!**/tracker-icons.ts"
     ]
   },
   "formatter": {

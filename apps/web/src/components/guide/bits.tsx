@@ -1,6 +1,5 @@
 import type { GuideSource } from "@cairn/shared";
 import { FileCode2, Info } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -61,51 +60,6 @@ export function Inline({ text }: { text: string }) {
         ),
       )}
     </>
-  );
-}
-
-/** Labels: `projectNav.tab.<key>`. */
-const TABS = [
-  { key: "overview", path: "" },
-  { key: "architecture", path: "/architecture" },
-  { key: "code-map", path: "/code-map" },
-  { key: "delivery", path: "/delivery" },
-  { key: "onboarding", path: "/onboarding" },
-  { key: "docs", path: "/docs" },
-] as const;
-
-export type ProjectTab = (typeof TABS)[number]["key"];
-
-/**
- * The views of an imported repository, one click apart.
- *
- * The rule under the tabs is on the list, not on the scrolling `nav`: the active tab's underline
- * overlaps it by one pixel, and on the `nav` that pixel is overflow, which made a tiny vertical
- * scrollbar appear at the right-hand end.
- */
-export function ProjectTabs({ id, active }: { id: string; active: ProjectTab }) {
-  const t = useTranslations("projectNav");
-  return (
-    <nav aria-label={t("tabsLabel")} className="-mt-2 overflow-x-auto overflow-y-hidden">
-      <ul className="flex min-w-max gap-1 border-b">
-        {TABS.map((tab) => (
-          <li key={tab.key}>
-            <Link
-              href={`/projects/${id}${tab.path}`}
-              aria-current={tab.key === active ? "page" : undefined}
-              className={cn(
-                "-mb-px inline-block border-b-2 px-3 py-2 text-sm transition-colors",
-                tab.key === active
-                  ? "border-primary font-medium text-foreground"
-                  : "border-transparent text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {t(`tab.${tab.key}`)}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
   );
 }
 

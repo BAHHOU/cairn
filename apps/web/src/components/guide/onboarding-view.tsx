@@ -1,13 +1,7 @@
 import { GUIDE_PHASES, type GuideStep, type GuideTool } from "@cairn/shared";
 import { CircleAlert, KeyRound, ListChecks, Wrench } from "lucide-react";
 import { useTranslations } from "next-intl";
-import {
-  GuideUnavailable,
-  LimitsNote,
-  ProjectTabs,
-  Section,
-  SourceRef,
-} from "@/components/guide/bits";
+import { GuideUnavailable, LimitsNote, Section, SourceRef } from "@/components/guide/bits";
 import { Findings } from "@/components/guide/findings";
 import { CommandBlock } from "@/components/onboarding/command-block";
 import { KpiCard, PageHeader } from "@/components/page";
@@ -52,7 +46,7 @@ function StepRow({ step, index, base }: { step: GuideStep; index: number; base: 
 }
 
 /** The local-setup page of a repository imported from Git: its README, read and ordered. */
-export function ImportedOnboarding({ id, imported }: { id: string; imported: ImportedScan }) {
+export function ImportedOnboarding({ imported }: { imported: ImportedScan }) {
   const t = useTranslations("onboarding.imported");
   const td = useTranslations("domain");
   const onboarding = imported.scan?.onboarding ?? null;
@@ -72,7 +66,6 @@ export function ImportedOnboarding({ id, imported }: { id: string; imported: Imp
             : t("description")
         }
       />
-      <ProjectTabs id={id} active="onboarding" />
 
       {!imported.scan || !onboarding ? (
         <GuideUnavailable title={t("unavailableTitle")}>{t("unavailableBody")}</GuideUnavailable>

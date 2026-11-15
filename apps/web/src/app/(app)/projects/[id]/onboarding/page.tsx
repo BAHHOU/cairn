@@ -1,10 +1,4 @@
-import {
-  blockingAccesses,
-  filledPhases,
-  formatMinutes,
-  setupEffort,
-  stepsOfPhase,
-} from "@cairn/shared";
+import { blockingAccesses, filledPhases, setupEffort, stepsOfPhase } from "@cairn/shared";
 import { CalendarClock, Timer } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -32,7 +26,7 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
   if (!project) {
     const imported = await loadImportedScan(id);
     if (!imported) notFound();
-    return <ImportedOnboarding id={id} imported={imported} />;
+    return <ImportedOnboarding imported={imported} />;
   }
 
   const t = await getTranslations("onboarding.page");
@@ -59,7 +53,7 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
         description={
           onboarding && effort
             ? t("summary", {
-                handsOn: formatMinutes(effort.handsOnMin),
+                handsOn: fmt.minutes(effort.handsOnMin),
                 days: effort.waitingDays,
                 maintainer: onboarding.maintainer,
                 date: fmt.date(onboarding.generatedAt),
@@ -99,7 +93,7 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
                 </CardTitle>
                 <CardDescription>
                   {t("askTodayHint", {
-                    handsOn: formatMinutes(effort.handsOnMin),
+                    handsOn: fmt.minutes(effort.handsOnMin),
                     days: effort.waitingDays,
                   })}
                 </CardDescription>
@@ -137,7 +131,7 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
                   {t("install")}
                   <span className="flex items-center gap-1 font-normal text-muted-foreground text-xs tabular-nums">
                     <Timer className="size-3" aria-hidden />
-                    {formatMinutes(effort.handsOnMin)}
+                    {fmt.minutes(effort.handsOnMin)}
                   </span>
                 </CardTitle>
                 <CardDescription>{t("installHint")}</CardDescription>

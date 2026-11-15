@@ -253,6 +253,112 @@
       "domaine": "Domaine",
       "infrastructure": "Infrastructure",
       "externe": "Externe"
+    },
+    "deliveryRisk": {
+      "approval": {
+        "title": "Aucun approbateur nommé pour {env}",
+        "detail": "La bascule demande une validation manuelle, mais aucun rôle n'est désigné dans la configuration. En pratique, c'est la personne disponible qui clique."
+      },
+      "waitDominates": {
+        "title": "L'attente de validation dépasse toute la chaîne technique",
+        "detail": "Il faut {machineMin} de machine pour atteindre {env}, et {waitMin} d'attente devant les portes. Accélérer les tests ne changerait presque rien."
+      },
+      "nonBlocking": {
+        "title": "« {stage} » n'arrête rien",
+        "detail": "L'étape s'exécute et publie son résultat, mais un échec laisse passer la suite de la chaîne. Le rapport existe ; la barrière, non."
+      },
+      "realData": {
+        "title": "{env} porte des données réelles sans barrière de sécurité",
+        "detail": "Aucune étape de sécurité bloquante ne précède ce déploiement : un commit peut atteindre des données de production sans qu'un contrôle ait pu l'arrêter."
+      },
+      "rollbackUntested": {
+        "title": "Le retour arrière n'a jamais été répété",
+        "detail": "La procédure est écrite et annoncée à {durationMin}, mais aucune répétition n'est enregistrée. La première fois sera un incident."
+      },
+      "noVerify": {
+        "title": "Aucune vérification après le déploiement en {env}",
+        "detail": "La chaîne déclare le succès dès que les manifestes sont appliqués. C'est l'exploitation, ou un utilisateur, qui découvrira que l'application ne démarre pas."
+      }
+    },
+    "change": {
+      "verdict": {
+        "pass": "Conforme",
+        "review": "À relire",
+        "blocked": "Bloqué"
+      },
+      "approverRole": {
+        "business": "Métier",
+        "techLead": "Référent technique",
+        "security": "Sécurité"
+      },
+      "finding": {
+        "ticket": {
+          "missing": {
+            "title": "Aucun ticket ne justifie ce changement",
+            "detail": "Ni la branche, ni le titre, ni les commits ne citent un ticket : personne n'a demandé ce qui est livré."
+          },
+          "unavailable": {
+            "title": "Ticket illisible",
+            "detail": "Le ticket est cité mais n'a pas pu être lu dans l'outil de suivi : la conformité ne peut pas être vérifiée."
+          }
+        },
+        "spec": {
+          "notApproved": {
+            "title": "Spécification non validée",
+            "detail": "Le ticket est au statut « {status} » : le métier n'a pas validé ce qui est livré."
+          },
+          "approvedByAuthor": {
+            "title": "Spécification validée par l'auteur du changement",
+            "detail": "La personne qui livre le code a aussi validé la demande : il n'y a pas eu de deuxième regard."
+          },
+          "rewrittenByAuthor": {
+            "title": "Spécification réécrite par l'auteur après validation",
+            "detail": "L'auteur du changement a modifié le ticket {count, plural, one {une fois} other {# fois}} après sa validation. Le code est comparé au texte validé, pas au texte modifié."
+          },
+          "changedAfterApproval": {
+            "title": "Spécification modifiée après validation",
+            "detail": "Le ticket a changé {count, plural, one {une fois} other {# fois}} depuis sa validation, sans nouvelle validation."
+          }
+        },
+        "zone": {
+          "notInSpec": {
+            "title": "Zone sensible absente de la spécification",
+            "detail": "Le changement touche une zone critique dont la spécification validée ne parle pas."
+          }
+        },
+        "approval": {
+          "missing": {
+            "title": "Validation {role, select, business {du métier} techLead {du référent technique} security {de la sécurité} other {requise}} manquante",
+            "detail": "Cette zone critique exige une validation {role, select, business {du métier} techLead {du référent technique} security {de la sécurité} other {requise}} ; aucune personne ayant ce rôle n'a approuvé, l'auteur exclu."
+          },
+          "self": {
+            "title": "L'auteur a approuvé son propre changement",
+            "detail": "Son approbation n'est pas comptée."
+          }
+        },
+        "change": {
+          "amountNotInSpec": {
+            "title": "Montant {to, number} absent de la spécification validée",
+            "detail": "Le code fixe une valeur que la spécification validée ne mentionne pas."
+          },
+          "amount": {
+            "title": "Montant {to, number} conforme à la spécification",
+            "detail": "La nouvelle valeur figure dans la spécification validée."
+          },
+          "authorization": {
+            "title": "Droits d'accès modifiés",
+            "detail": "Rôles, permissions ou autorisations : {added, plural, one {# ligne ajoutée} other {# lignes ajoutées}}, {removed, plural, one {# retirée} other {# retirées}}."
+          },
+          "validationRemoved": {
+            "title": "Contrôles supprimés",
+            "detail": "{count, plural, one {Un contrôle (exception, validation, assertion) disparaît} other {# contrôles (exceptions, validations, assertions) disparaissent}} sans être remplacé."
+          },
+          "hardcodedAccount": {
+            "title": "Compte bancaire écrit en dur ({account})",
+            "detail": "Un IBAN valide apparaît dans le code : un bénéficiaire ne devrait jamais être fixé dans le code."
+          }
+        }
+      }
     }
   }
 }

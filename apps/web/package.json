@@ -15,6 +15,7 @@
     "@cairn/git": "workspace:*",
     "@cairn/llm": "workspace:*",
     "@cairn/shared": "workspace:*",
+    "@cairn/tracker": "workspace:*",
     "@dagrejs/dagre": "^3.1.1",
     "@hookform/resolvers": "^6.0.0",
     "@t3-oss/env-nextjs": "^0.13.11",

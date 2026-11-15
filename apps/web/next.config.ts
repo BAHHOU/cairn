@@ -12,7 +12,14 @@ try {
 const nextConfig: NextConfig = {
   output: "standalone",
   outputFileTracingRoot: path.join(import.meta.dirname, "../.."),
-  transpilePackages: ["@cairn/shared", "@cairn/llm", "@cairn/db", "@cairn/git", "@cairn/scanner"],
+  transpilePackages: [
+    "@cairn/shared",
+    "@cairn/llm",
+    "@cairn/db",
+    "@cairn/git",
+    "@cairn/scanner",
+    "@cairn/tracker",
+  ],
   serverExternalPackages: ["pg", "pg-boss"],
   poweredByHeader: false,
   turbopack: {

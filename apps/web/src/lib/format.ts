@@ -21,6 +21,8 @@ export function createFormat(locale: Locale) {
     timeZone: "UTC",
   });
   const month = new Intl.DateTimeFormat(tag, { month: "short", timeZone: "UTC" });
+  const hours = new Intl.NumberFormat(tag, { style: "unit", unit: "hour", unitDisplay: "short" });
+  const mins = new Intl.NumberFormat(tag, { style: "unit", unit: "minute", unitDisplay: "short" });
   const oneDecimal = new Intl.NumberFormat(tag, {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
@@ -56,6 +58,13 @@ export function createFormat(locale: Locale) {
     bytes: (n: number) =>
       n >= 1_048_576 ? mb.format(n / 1_048_576) : kb.format(Math.round(n / 1024)),
     seconds: (ms: number) => oneDecimal.format(ms / 1000),
+    /** A duration in minutes, in hours past the first hour: nobody plans a day in minutes. */
+    minutes(total: number): string {
+      if (total < 60) return mins.format(total);
+      const h = Math.floor(total / 60);
+      const m = total % 60;
+      return m === 0 ? hours.format(h) : `${hours.format(h)} ${mins.format(m)}`;
+    },
     /** Short month name, 0 = January. */
     month: (index: number) => month.format(Date.UTC(2000, index, 1)),
   };

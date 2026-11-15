@@ -1,9 +1,4 @@
-import {
-  deliveryBoard,
-  deliveryRisks,
-  formatMinutes,
-  type ProjectArchitecture,
-} from "@cairn/shared";
+import { deliveryBoard, deliveryRisks, type ProjectArchitecture } from "@cairn/shared";
 import { ChevronRight, GitCommitHorizontal, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -14,6 +9,7 @@ import { ImportedDelivery } from "@/components/guide/delivery-view";
 import { PageHeader } from "@/components/page";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getFormat } from "@/i18n/format";
+import { getMsg } from "@/i18n/msg";
 import { getApi } from "@/lib/api";
 import { loadImportedScan } from "@/lib/import/scan";
 
@@ -41,6 +37,7 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
   const t = await getTranslations("delivery.page");
   const tn = await getTranslations("projectNav");
   const fmt = await getFormat();
+  const render = await getMsg();
   const pipeline = await api.projects.delivery(id);
   const architecture = await api.projects.architecture(id);
   const nodeLabels = labelsOf(architecture);
@@ -60,8 +57,8 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
                 stages: pipeline.stages.length,
                 environments: pipeline.environments.length,
                 env: last.env.label,
-                machine: formatMinutes(last.leadTimeMin),
-                wait: formatMinutes(last.waitMin),
+                machine: fmt.minutes(last.leadTimeMin),
+                wait: fmt.minutes(last.waitMin),
                 date: fmt.date(pipeline.generatedAt),
               })
             : t("none")
@@ -98,7 +95,7 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
               <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
               <h3 className="font-semibold text-sm">{t("ci")}</h3>
               <span className="text-muted-foreground text-xs tabular-nums">
-                {formatMinutes(board.ciMinutes)}
+                {fmt.minutes(board.ciMinutes)}
               </span>
               <p className="basis-full text-muted-foreground text-xs sm:basis-auto sm:border-border sm:border-l sm:pl-3">
                 {t("ciHint")}
@@ -144,9 +141,9 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
                     <article key={risk.id} className="flex flex-col gap-1.5">
                       <div className="flex flex-wrap items-center gap-2">
                         <SeverityBadge severity={risk.severity} />
-                        <h4 className="font-medium text-sm">{risk.title}</h4>
+                        <h4 className="font-medium text-sm">{render(risk.title)}</h4>
                       </div>
-                      <p className="text-muted-foreground text-sm">{risk.detail}</p>
+                      <p className="text-muted-foreground text-sm">{render(risk.detail)}</p>
                       <Source sources={risk.sources} />
                     </article>
                   ))
@@ -170,7 +167,7 @@ export default async function DeliveryPage({ params }: { params: Promise<{ id: s
                 <p className="text-muted-foreground">{pipeline.rollback.how}</p>
                 <p>
                   {t.rich("rollbackDuration", {
-                    duration: formatMinutes(pipeline.rollback.durationMin),
+                    duration: fmt.minutes(pipeline.rollback.durationMin),
                     strong: (chunks) => (
                       <span className="font-semibold tabular-nums">{chunks}</span>
                     ),

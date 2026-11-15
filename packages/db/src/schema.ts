@@ -1,13 +1,16 @@
 import {
+  type ChangePolicy,
   type CodeGraph,
   type DeliveryView,
   type DocsView,
   IMPORT_STATUSES,
   type ImportFacts,
   type OnboardingView,
+  type PersonView,
   type ProjectArchitecture,
   type ScanFileRecord,
   type ScanReport,
+  type TrackerKind,
 } from "@cairn/shared";
 import {
   index,
@@ -171,3 +174,32 @@ export const auditEvents = pgTable(
   },
   (t) => [index("audit_created").on(t.createdAt)],
 );
+
+/**
+ * Change control for the organisation: one row ("default"). The policy and the people are
+ * validated by @cairn/shared before every save.
+ */
+export const changeControlSettings = pgTable("change_control_settings", {
+  id: text("id").primaryKey(),
+  policy: jsonb("policy").$type<ChangePolicy>(),
+  people: jsonb("people").$type<PersonView[]>(),
+  updatedBy: text("updated_by"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/**
+ * A connection to a project-management tool. Several can coexist (Jira for one team, Trello for
+ * another). `settings` holds what is not secret; the secret is encrypted like repository tokens,
+ * bound to the connection id, and never leaves the server.
+ */
+export const trackerConnections = pgTable("tracker_connection", {
+  id: id(),
+  kind: text("kind").$type<TrackerKind>().notNull(),
+  /** A name people recognise: "Jira Paiements", "Trello perso". */
+  label: text("label").notNull(),
+  settings: jsonb("settings").$type<Record<string, unknown>>().notNull(),
+  secretEnc: text("secret_enc").notNull(),
+  createdBy: text("created_by").notNull(),
+  createdAt: createdAt(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});

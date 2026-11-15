@@ -19,6 +19,7 @@ export const dynamic = "force-dynamic";
 export default async function OverviewPage() {
   const t = await getTranslations("dashboard");
   const td = await getTranslations("domain");
+  const tc = await getTranslations("charts");
   const fmt = await getFormat();
   const viewer = await getViewer();
   const api = await getApi();
@@ -68,7 +69,11 @@ export default async function OverviewPage() {
           visual={
             <div className="flex flex-col items-end gap-1">
               <ScoreRing score={o.avgScore} size={56} stroke={6} />
-              <Sparkline values={o.scoreTrend} className="h-5 w-16 text-primary" />
+              <Sparkline
+                label={tc("sixMonthTrend")}
+                values={o.scoreTrend}
+                className="h-5 w-16 text-primary"
+              />
             </div>
           }
         />

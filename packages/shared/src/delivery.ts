@@ -1,5 +1,6 @@
 import type { ArchProvenance, ArchSource } from "./architecture";
 import type { Severity } from "./domain";
+import { type Msg, msg } from "./i18n";
 
 /**
  * The delivery chain: what happens to a commit between a developer's machine and
@@ -154,11 +155,30 @@ export function leadTimeTo(pipeline: DeliveryPipeline, envId: string): number | 
   return deliveryBoard(pipeline).lanes.find((l) => l.env.id === envId)?.leadTimeMin ?? null;
 }
 
+/** Kinds of delivery risk. Sentences: `domain.deliveryRisk.<kind>.title` and `.detail`. */
+export const DELIVERY_RISK_KINDS = [
+  "approval",
+  "waitDominates",
+  "nonBlocking",
+  "realData",
+  "rollbackUntested",
+  "noVerify",
+] as const;
+export type DeliveryRiskKind = (typeof DELIVERY_RISK_KINDS)[number];
+
+/** Params whose name ends in `Min` are durations in minutes, formatted in the viewer's language. */
+const risk = (kind: DeliveryRiskKind, params?: Msg["params"]) => ({
+  kind,
+  title: msg(`domain.deliveryRisk.${kind}.title`, params),
+  detail: msg(`domain.deliveryRisk.${kind}.detail`, params),
+});
+
 export interface DeliveryRisk {
   id: string;
+  kind: DeliveryRiskKind;
   severity: Severity;
-  title: string;
-  detail: string;
+  title: Msg;
+  detail: Msg;
   /** Where to go and look. A finding without a location is an opinion. */
   sources: ArchSource[];
 }
@@ -183,9 +203,7 @@ export function deliveryRisks(pipeline: DeliveryPipeline): DeliveryRisk[] {
       risks.push({
         id: `risk-approval-${env.id}`,
         severity: "major",
-        title: `Aucun approbateur nommé pour ${env.label}`,
-        detail:
-          "La bascule demande une validation manuelle, mais aucun rôle n'est désigné dans la configuration. En pratique, c'est la personne disponible qui clique.",
+        ...risk("approval", { env: env.label }),
         sources: env.sources,
       });
     }
@@ -198,8 +216,11 @@ export function deliveryRisks(pipeline: DeliveryPipeline): DeliveryRisk[] {
     risks.push({
       id: "risk-wait-dominates",
       severity: "major",
-      title: "L'attente de validation dépasse toute la chaîne technique",
-      detail: `Il faut ${formatMinutes(last.leadTimeMin)} de machine pour atteindre ${last.env.label}, et ${formatMinutes(last.waitMin)} d'attente devant les portes. Accélérer les tests ne changerait presque rien.`,
+      ...risk("waitDominates", {
+        env: last.env.label,
+        machineMin: last.leadTimeMin,
+        waitMin: last.waitMin,
+      }),
       sources: last.env.sources,
     });
   }
@@ -210,9 +231,7 @@ export function deliveryRisks(pipeline: DeliveryPipeline): DeliveryRisk[] {
       risks.push({
         id: `risk-nonblocking-${stage.id}`,
         severity: stage.kind === "security" ? "critical" : "major",
-        title: `« ${stage.label} » n'arrête rien`,
-        detail:
-          "L'étape s'exécute et publie son résultat, mais un échec laisse passer la suite de la chaîne. Le rapport existe ; la barrière, non.",
+        ...risk("nonBlocking", { stage: stage.label }),
         sources: stage.sources,
       });
     }
@@ -232,9 +251,7 @@ export function deliveryRisks(pipeline: DeliveryPipeline): DeliveryRisk[] {
       risks.push({
         id: `risk-data-${env.id}`,
         severity: "critical",
-        title: `${env.label} porte des données réelles sans barrière de sécurité`,
-        detail:
-          "Aucune étape de sécurité bloquante ne précède ce déploiement : un commit peut atteindre des données de production sans qu'un contrôle ait pu l'arrêter.",
+        ...risk("realData", { env: env.label }),
         sources: env.sources,
       });
     }
@@ -245,8 +262,7 @@ export function deliveryRisks(pipeline: DeliveryPipeline): DeliveryRisk[] {
     risks.push({
       id: "risk-rollback-untested",
       severity: "major",
-      title: "Le retour arrière n'a jamais été répété",
-      detail: `La procédure est écrite et annoncée à ${pipeline.rollback.durationMin} minutes, mais aucune répétition n'est enregistrée. La première fois sera un incident.`,
+      ...risk("rollbackUntested", { durationMin: pipeline.rollback.durationMin }),
       sources: pipeline.rollback.sources,
     });
   }
@@ -260,9 +276,7 @@ export function deliveryRisks(pipeline: DeliveryPipeline): DeliveryRisk[] {
       risks.push({
         id: `risk-verify-${env.id}`,
         severity: "minor",
-        title: `Aucune vérification après le déploiement en ${env.label}`,
-        detail:
-          "La chaîne déclare le succès dès que les manifestes sont appliqués. C'est l'exploitation, ou un utilisateur, qui découvrira que l'application ne démarre pas.",
+        ...risk("noVerify", { env: env.label }),
         sources: env.sources,
       });
     }
@@ -270,12 +284,4 @@ export function deliveryRisks(pipeline: DeliveryPipeline): DeliveryRisk[] {
 
   const rank: Record<Severity, number> = { blocker: 0, critical: 1, major: 2, minor: 3 };
   return risks.sort((a, b) => rank[a.severity] - rank[b.severity] || a.id.localeCompare(b.id));
-}
-
-/** "2 h 10" rather than "130 min": nobody plans a day in minutes past the first hour. */
-export function formatMinutes(total: number): string {
-  if (total < 60) return `${total} min`;
-  const hours = Math.floor(total / 60);
-  const minutes = total % 60;
-  return minutes === 0 ? `${hours} h` : `${hours} h ${String(minutes).padStart(2, "0")}`;
 }

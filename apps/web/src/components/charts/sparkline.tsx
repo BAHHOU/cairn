@@ -1,4 +1,13 @@
-export function Sparkline({ values, className }: { values: number[]; className?: string }) {
+/** A trend line. `label` names it for screen readers, in the viewer's language. */
+export function Sparkline({
+  values,
+  label,
+  className,
+}: {
+  values: number[];
+  label: string;
+  className?: string;
+}) {
   if (values.length < 2) return null;
   const w = 120;
   const h = 32;
@@ -14,7 +23,7 @@ export function Sparkline({ values, className }: { values: number[]; className?:
       viewBox={`0 0 ${w} ${h}`}
       className={className ?? "h-8 w-28 text-primary"}
       role="img"
-      aria-label="Tendance sur six mois"
+      aria-label={label}
     >
       <polyline
         points={pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ")}

@@ -1,13 +1,16 @@
+import { listImportViews } from "@cairn/db";
+import { can } from "@cairn/shared";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { AppShell } from "@/components/app-shell";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CommandPalette, type PaletteEntry } from "@/components/command-palette";
-import { LocaleSwitcher } from "@/components/locale-switcher";
-import { RoleSwitcher } from "@/components/role-switcher";
+import { CreateMenu } from "@/components/create-menu";
 import { SidebarNav } from "@/components/sidebar-nav";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Badge } from "@/components/ui/badge";
+import { UserMenu } from "@/components/user-menu";
 import { getApi } from "@/lib/api";
-import { navFor } from "@/lib/nav";
+import { getDb, isImportConfigured, viewerMayImport } from "@/lib/import/runtime";
+import { navFor, projectNavFor, SETTINGS } from "@/lib/nav";
 import { getViewer, isDemo } from "@/lib/session";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -16,12 +19,26 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const api = await getApi();
   const projects = await api.projects.list();
   const groups = navFor(viewer.role);
+  const settings = SETTINGS.roles.includes(viewer.role) ? SETTINGS : null;
+
+  const projectNames: Record<string, string> = Object.fromEntries(
+    projects.map((p) => [p.id, p.name]),
+  );
+  if (can(viewer.role, "see.allTeams") && isImportConfigured()) {
+    try {
+      for (const run of await listImportViews(getDb(), 50)) {
+        projectNames[run.repository.id] ??= run.repository.name;
+      }
+    } catch {
+      // Names fall back to the id when the database is down.
+    }
+  }
 
   const entries: PaletteEntry[] = [
     ...groups.flatMap((g) =>
       g.items.map((i) => ({
         group: t("palette.groupPages"),
-        label: t(`nav.item.${i.label}`),
+        label: t(`nav.item.${i.key}`),
         href: i.href,
       })),
     ),
@@ -32,53 +49,39 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     })),
   ];
 
-  const initials = viewer.name
-    .split(" ")
-    .map((w) => w[0])
-    .join("");
-
   return (
-    <div className="flex min-h-screen">
-      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col gap-6 border-r bg-card p-3 md:flex">
+    <AppShell
+      brand={
         <Link
           href="/"
-          className="flex items-center gap-2 px-2 py-1.5 outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          className="flex items-center gap-2 rounded-md px-1.5 py-1 outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
         >
-          <span className="grid size-7 place-items-center rounded-md bg-primary text-sm font-bold text-primary-foreground">
-            C
+          <span className="grid size-7 place-items-center rounded-md bg-primary font-bold text-primary-foreground text-sm">
+            {Array.from(t("meta.brand"))[0]}
           </span>
-          <span className="text-base font-semibold tracking-tight">Cairn</span>
+          <span className="hidden font-semibold text-base tracking-tight sm:inline">
+            {t("meta.brand")}
+          </span>
         </Link>
-
-        <SidebarNav groups={groups} />
-
-        <div className="mt-auto flex flex-col gap-3">
-          {isDemo() ? <RoleSwitcher current={viewer.role} /> : null}
-          <div className="flex items-center gap-2 rounded-md border p-2">
-            <span className="grid size-8 place-items-center rounded-full bg-muted text-xs font-medium">
-              {initials}
-            </span>
-            <div className="flex min-w-0 flex-col">
-              <span className="truncate text-sm font-medium">{viewer.name}</span>
-              <span className="truncate text-xs text-muted-foreground">
-                {t(`domain.role.${viewer.role}`)} · {viewer.team}
-              </span>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/80 px-6 backdrop-blur">
-          <CommandPalette entries={entries} />
-          <div className="ml-auto flex items-center gap-2">
-            {isDemo() ? <Badge variant="warning">{t("shell.demoBadge")}</Badge> : null}
-            <LocaleSwitcher />
-            <ThemeToggle />
-          </div>
-        </header>
-        <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-6">{children}</main>
-      </div>
-    </div>
+      }
+      search={<CommandPalette entries={entries} />}
+      actions={
+        <>
+          {viewerMayImport(viewer) ? <CreateMenu /> : null}
+          <UserMenu name={viewer.name} role={viewer.role} team={viewer.team} demo={isDemo()} />
+        </>
+      }
+      breadcrumbs={<Breadcrumbs projectNames={projectNames} />}
+      sidebar={
+        <SidebarNav
+          groups={groups}
+          projectGroups={projectNavFor(viewer.role)}
+          settings={settings}
+          projectNames={projectNames}
+        />
+      }
+    >
+      {children}
+    </AppShell>
   );
 }

@@ -29,6 +29,9 @@ importers:
       '@cairn/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@cairn/tracker':
+        specifier: workspace:*
+        version: link:../../packages/tracker
       '@dagrejs/dagre':
         specifier: ^3.1.1
         version: 3.1.1
@@ -187,6 +190,9 @@ importers:
       pg-boss:
         specifier: 12.38.0
         version: 12.38.0(@opentelemetry/api@1.9.1)
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
     devDependencies:
       '@types/node':
         specifier: ^24
@@ -206,6 +212,9 @@ importers:
 
   packages/git:
     dependencies:
+      '@cairn/shared':
+        specifier: workspace:*
+        version: link:../shared
       zod:
         specifier: 4.6.7
         version: 4.6.7
@@ -275,6 +284,25 @@ importers:
 
   packages/shared:
     dependencies:
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+    devDependencies:
+      '@types/node':
+        specifier: ^24
+        version: 24.19.2
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: 5.0.5
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@24.19.2)(vite@8.3.4(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+
+  packages/tracker:
+    dependencies:
+      '@cairn/shared':
+        specifier: workspace:*
+        version: link:../shared
       zod:
         specifier: 4.6.7
         version: 4.6.7

@@ -30,3 +30,47 @@ describe("mock API visibility rules", () => {
     }
   });
 });
+
+describe("mock change control", () => {
+  it("gives each demo merge request the verdict its story calls for", async () => {
+    const list = await createMockApi(viewer("admin")).changes.list();
+    const verdicts = Object.fromEntries(list.map((c) => [`${c.projectId}!${c.iid}`, c.verdict]));
+    expect(verdicts).toEqual({
+      "qis-dist-cms!128": "blocked",
+      "qis-job!88": "blocked",
+      "titres-settlement!12": "blocked",
+      "treso-api!45": "review",
+      "treso-forecast!19": "review",
+      "qis-dist-cms!131": "pass",
+      "qis-front!203": "pass",
+    });
+    // The most urgent first.
+    expect(list.map((c) => c.verdict)).toEqual([
+      "blocked",
+      "blocked",
+      "blocked",
+      "review",
+      "review",
+      "pass",
+      "pass",
+    ]);
+  });
+
+  it("only shows a developer the merge requests of their team", async () => {
+    const api = createMockApi(viewer("dev"));
+    const list = await api.changes.list();
+    expect(new Set(list.map((c) => c.projectId))).toEqual(
+      new Set(["qis-dist-cms", "qis-job", "qis-front"]),
+    );
+    expect(await api.changes.get("treso-api", 45)).toBeNull();
+  });
+
+  it("reviews the spec rewritten after approval as blocked, against the approved text", async () => {
+    const review = await createMockApi(viewer("admin")).changes.get("qis-dist-cms", 128);
+    const kinds = review?.evaluation.findings.map((f) => f.kind);
+    expect(kinds).toContain("spec.rewrittenByAuthor");
+    expect(kinds).toContain("change.amountNotInSpec");
+    expect(review?.specs.map((s) => s.key)).toEqual(["PAY-42"]);
+    expect(review?.zones.map((z) => z.id)).toEqual(["payments"]);
+  });
+});

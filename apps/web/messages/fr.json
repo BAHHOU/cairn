@@ -1,27 +1,81 @@
 {
   "meta": {
-    "description": "Des projets lisibles, documentés et sûrs pour l'IA, au moindre coût en tokens."
+    "description": "Des projets lisibles, documentés et sûrs pour l'IA, au moindre coût en tokens.",
+    "brand": "Cairn"
   },
   "nav": {
     "label": "Navigation principale",
+    "projectLabel": "Navigation du projet",
+    "soon": "Bientôt",
     "group": {
-      "pilotage": "Pilotage",
-      "repositories": "Dépôts",
-      "optimisation": "Optimisation"
+      "aiReadiness": "Préparation IA",
+      "portfolio": "Portefeuille",
+      "quality": "Qualité & risques",
+      "delivery": "Livraison",
+      "operations": "Exploitation",
+      "insights": "Pilotage",
+      "understand": "Comprendre",
+      "code": "Code",
+      "security": "Sécurité",
+      "governance": "Gouvernance"
     },
     "item": {
-      "overview": "Vue d'ensemble",
+      "home": "Accueil",
+      "aiReadiness": "Score de préparation",
+      "aiContext": "Contexte IA",
+      "aiAgents": "Agents & usage",
+      "tokens": "Budget tokens",
       "projects": "Projets",
       "import": "Importer un dépôt",
+      "teams": "Équipes",
+      "techRadar": "Radar technologique",
       "issues": "Problèmes",
-      "tokens": "Budget tokens"
+      "security": "Sécurité",
+      "dependencies": "Dépendances",
+      "pipelines": "Pipelines",
+      "environments": "Environnements",
+      "releases": "Versions",
+      "infrastructure": "Infrastructure",
+      "monitoring": "Supervision",
+      "incidents": "Incidents",
+      "reports": "Rapports",
+      "executive": "Vue direction",
+      "settings": "Paramètres",
+      "overview": "Vue d'ensemble",
+      "architecture": "Architecture",
+      "codeMap": "Carte du code",
+      "dataModel": "Modèle de données",
+      "docs": "Documentation",
+      "onboarding": "Démarrage",
+      "files": "Fichiers",
+      "quality": "Qualité du code",
+      "delivery": "CI/CD",
+      "compliance": "Conformité",
+      "changeControl": "Contrôle des changements",
+      "traceability": "Traçabilité",
+      "policies": "Zones critiques",
+      "integrations": "Intégrations"
     }
   },
   "shell": {
-    "toggleTheme": "Changer de thème",
     "language": "Langue",
     "viewAs": "Voir en tant que",
-    "demoBadge": "Démo · données fictives"
+    "demoBadge": "Démo · données fictives",
+    "breadcrumb": "Fil d'Ariane",
+    "create": "Créer…",
+    "createIn": "Nouveau",
+    "importRepository": "Importer un dépôt",
+    "userMenu": "Menu utilisateur",
+    "collapseSidebar": "Réduire la barre latérale",
+    "expandSidebar": "Développer la barre latérale",
+    "theme": "Thème",
+    "themeOption": {
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "demoHint": "Les projets d'exemple sont inventés ; les dépôts importés sont réels.",
+    "close": "Fermer"
   },
   "palette": {
     "trigger": "Rechercher un projet, une page…",
@@ -42,7 +96,8 @@
     "back": "Retour à la vue d'ensemble"
   },
   "charts": {
-    "radarLabel": "Radar des cinq axes"
+    "radarLabel": "Radar des cinq axes",
+    "sixMonthTrend": "Tendance sur six mois"
   },
   "issues": {
     "table": {
@@ -161,36 +216,10 @@
       "openIssues": "Problèmes ouverts ({count})"
     },
     "imported": {
-      "open": "Ouvrir",
       "openOn": "Ouvrir sur {provider}",
       "newImport": "Nouvel import",
-      "lastScan": "Dernière analyse",
-      "lastScanHint": "Faits mesurés sur le code cloné. Aucun contenu de fichier n'est conservé.",
-      "branch": "Branche",
-      "commit": "Commit analysé",
-      "files": "Fichiers",
-      "technologies": "Technologies",
-      "noTechnology": "Aucune détectée",
-      "duration": "Durée",
-      "seconds": "{seconds} s",
-      "analysedAt": "Analysé le",
       "running": "Import en cours : les résultats apparaîtront ici automatiquement.",
       "noSuccess": "Aucun import n'a abouti pour ce dépôt.",
-      "views": "Vues du projet",
-      "viewsHint": "Construites depuis le code lu, sans donnée fictive. Chaque lien de l'architecture et de la carte indique s'il a été extrait ou seulement déduit.",
-      "architecture": "Architecture",
-      "architectureSummary": "{nodes, plural, one {# nœud} other {# nœuds}} · {edges, plural, one {# lien} other {# liens}} · {violations, plural, one {# violation} other {# violations}}",
-      "codeMap": "Carte du code",
-      "codeMapSummary": "{nodes, plural, one {# symbole} other {# symboles}} · {edges, plural, one {# lien} other {# liens}}",
-      "delivery": "CI/CD",
-      "deliverySummary": "{stages, plural, one {# étape} other {# étapes}} · {jobs, plural, one {# job} other {# jobs}} · {findings, plural, one {# point d'attention} other {# points d'attention}}",
-      "deliveryEmpty": "Du commit à la production (CI/CD)",
-      "onboarding": "Démarrage",
-      "onboardingSummary": "{tools, plural, one {# outil} other {# outils}} · {steps, plural, one {# étape} other {# étapes}}",
-      "onboardingEmpty": "Installation locale pour un nouveau développeur",
-      "docs": "Documentation",
-      "docsSummary": "{files, plural, one {# document} other {# documents}} · {drift, plural, one {# contradiction} other {# contradictions}}",
-      "docsEmpty": "Ce qui est écrit et ce qui manque",
       "viewsPending": "Architecture, carte du code, CI/CD, démarrage et documentation : disponibles après la première analyse réussie.",
       "history": "Historique des imports ({count})",
       "runDetail": "Détail de l'exécution"
@@ -275,7 +304,8 @@
       "teamPlaceholder": "Ex. Paiements",
       "teamHint": "Obligatoire · créée si elle n'existe pas encore.",
       "importBranch": "Importer la branche",
-      "importHint": "Le worker clone uniquement cette branche (historique tronqué au dernier commit), analyse la pile technique, puis supprime la copie de travail."
+      "importHint": "Le worker clone uniquement cette branche (historique tronqué au dernier commit), analyse la pile technique, puis supprime la copie de travail.",
+      "teamSuggestions": "Équipes existantes"
     },
     "page": {
       "title": "Importer un dépôt",
@@ -337,66 +367,9 @@
       "runDetail": "Détail de l'exécution"
     }
   },
-  "scan": {
-    "tokens": "{value} tokens",
-    "files": "Fichiers",
-    "filesHint": "{size} au total, dont {source} fichiers source",
-    "lines": "Lignes de texte",
-    "linesHint": "Hors fichiers binaires, données et générés",
-    "tokensEstimated": "Tokens (estimés)",
-    "tokensEstimatedHint": "Lire tout le dépôt une fois, à 1 token pour 4 octets",
-    "tokensUseful": "Tokens utiles à l'IA",
-    "tokensUsefulHint": "{noise} tokens de bruit ({pct} %) : données et fichiers générés",
-    "byKind": "Par nature de fichier",
-    "byKindHint": "Ce qu'un assistant a intérêt à lire, et ce qu'il devrait ignorer.",
-    "fileCount": "{count, plural, one {# fichier} other {# fichiers}}",
-    "lineCount": "{count, plural, one {# ligne} other {# lignes}}",
-    "byLanguage": "Par langage",
-    "byLanguageHint": "Lignes de texte par langage.",
-    "modules": "Modules",
-    "modulesHint": "Modules Maven, application Angular ou dossier de premier niveau.",
-    "deployable": "déployable",
-    "structureTitle": "Structure détectée",
-    "structureHint": "Comptée dans le code, sans interprétation.",
-    "structure": {
-      "sourceFiles": "Fichiers source",
-      "testFiles": "Fichiers de test",
-      "javaTypes": "Types Java",
-      "controllers": "Contrôleurs REST",
-      "endpoints": "Points d'entrée HTTP",
-      "services": "Services",
-      "repositories": "Repositories",
-      "entities": "Entités JPA",
-      "schedulers": "Planificateurs",
-      "listeners": "Listeners de messages",
-      "angularComponents": "Composants Angular"
-    },
-    "noiseTitle": "Fichiers qui gaspillent des tokens",
-    "noiseHint": "Données et fichiers générés à exclure du contexte d'un assistant (par exemple dans un fichier d'ignorés).",
-    "none": "Aucun.",
-    "largestTitle": "Plus gros fichiers lisibles",
-    "largestHint": "Les plus coûteux à lire en entier.",
-    "secretsTitle": "Secrets possibles ({count})",
-    "secretsHint": "Seuls l'endroit et le nom de la clé sont conservés. La valeur n'est ni stockée ni affichée, et ne doit pas rester dans le dépôt.",
-    "secretKey": "clé {key}",
-    "andMore": "… et {count} autres.",
-    "noSecret": "Aucun secret détecté.",
-    "runIncremental": "Analyse incrémentale depuis {previous} : {reused, number} fichiers inchangés réutilisés, {analysed, number} relus, {removed, number} supprimés.",
-    "runFull": "Analyse complète : {analysed, plural, one {# fichier lu} other {# fichiers lus}}.",
-    "unreadable": "{count, plural, one {# fichier non lu (déclaré).} other {# fichiers non lus (déclarés).}}",
-    "runFinished": "Terminée en {seconds} s le {date}. Aucune IA n'intervient : tout est lu dans le code."
-  },
   "projectNav": {
     "openInRepo": "Ouvrir dans le dépôt",
     "tabsLabel": "Vues du projet",
-    "tab": {
-      "overview": "Vue d'ensemble",
-      "architecture": "Architecture",
-      "code-map": "Carte du code",
-      "delivery": "CI/CD",
-      "onboarding": "Démarrage",
-      "docs": "Documentation"
-    },
     "codeMap": "Carte du code",
     "architecture": "Vue architecture",
     "delivery": "De dev à production",
@@ -754,5 +727,882 @@
   "command": {
     "copied": "Commande copiée",
     "copy": "Copier la commande"
+  },
+  "overview": {
+    "scannedAt": "Analysé le {date} en {seconds} s",
+    "actionsTitle": "Actions",
+    "actionsHint": "Ce qui rapporte le plus, en premier.",
+    "projectMap": {
+      "title": "Explorer le projet",
+      "description": "Explorez le dépôt à partir de la dernière analyse.",
+      "architecture": "Architecture",
+      "architectureDetail": "{count, plural, one {# élément détecté} other {# éléments détectés}}",
+      "code": "Carte du code",
+      "codeDetail": "{count, plural, one {# élément cartographié} other {# éléments cartographiés}}",
+      "delivery": "Livraison",
+      "deliveryDetail": "{count, plural, one {# tâche de pipeline détectée} other {# tâches de pipeline détectées}}",
+      "onboarding": "Démarrage",
+      "onboardingDetail": "{count, plural, one {# étape détectée} other {# étapes détectées}}",
+      "docs": "Documentation",
+      "docsAvailable": "Documentation du dépôt",
+      "unavailable": "Indisponible dans cette analyse"
+    },
+    "verdict": {
+      "label": {
+        "ready": "Prêt pour l'IA",
+        "partial": "À consolider",
+        "notReady": "Pas prêt pour l'IA",
+        "blocked": "Bloqué : secrets dans le dépôt",
+        "unknown": "Pas assez de données"
+      },
+      "message": {
+        "ready": "Un assistant trouve ce qu'il lui faut sans lire de bruit.",
+        "partial": "Utilisable avec un assistant, avec des angles morts : voir les actions plus bas.",
+        "notReady": "Un assistant va explorer à l'aveugle et lire beaucoup de bruit.",
+        "blocked": "{count, plural, one {# secret, clé ou jeton est dans le dépôt} other {# secrets, clés ou jetons sont dans le dépôt}} : à retirer avant d'ouvrir le projet à un assistant.",
+        "unknown": "Cette analyse ne fournit pas assez de signaux pour conclure."
+      },
+      "howComputed": "Moyenne de {axes, plural, one {# axe évalué} other {# axes évalués}} · {passed} contrôles réussis sur {evaluated}, chacun lu dans le code, sans IA.",
+      "seeChecks": "Voir les contrôles"
+    },
+    "kpi": {
+      "label": "Indicateurs clés",
+      "tokens": "Tokens du dépôt",
+      "tokensHint": "{pct} % utiles à un assistant",
+      "wasted": "Tokens gaspillés",
+      "wastedHint": "Données et fichiers générés{binaries, plural, =0 {} one { · # binaire non lisible} other { · # binaires non lisibles}}",
+      "blockers": "Points bloquants",
+      "blockersHint": "Secrets, clés privées ou jetons dans le dépôt",
+      "blockersNone": "Aucun secret, clé ou jeton détecté",
+      "coverage": "Documentation",
+      "coverageHint": "Questions de lecteur couvertes · {steps, plural, =0 {aucune étape de démarrage} one {# étape de démarrage} other {# étapes de démarrage}}",
+      "coverageHintNoOnboarding": "Questions de lecteur couvertes",
+      "coverageUnavailable": "Non disponible : relancez une analyse"
+    },
+    "charts": {
+      "title": "Où partent les tokens",
+      "hint": "Coût estimé pour qu'un assistant lise chaque fichier texte une fois (1 token pour 4 octets).",
+      "useful": "Utile à l'IA",
+      "noise": "Bruit (données, généré)",
+      "usefulShort": "utile",
+      "tokensPct": "{value} · {pct} %",
+      "tokens": "{value} tokens",
+      "noiseTag": "bruit",
+      "empty": "Aucun token à afficher pour cette analyse.",
+      "error": "Ce graphique n'a pas pu s'afficher. Les chiffres restent disponibles dans les autres sections.",
+      "donutTitle": "Utile ou bruit",
+      "donutHint": "Ce qu'un assistant a intérêt à lire, contre ce qu'il devrait ignorer.",
+      "kindTitle": "Par nature de fichier",
+      "kindHint": "Les natures marquées « bruit » sont à exclure du contexte d'un assistant.",
+      "languageTitle": "Par langage (top 10)",
+      "languageHint": "Tokens estimés par langage.",
+      "moduleTitle": "Par module (top 10)",
+      "moduleHint": "Modules Maven, applications Angular ou dossiers de premier niveau.",
+      "otherHint": "{count, plural, one {# autre non affiché} other {# autres non affichés}}",
+      "files": "{count, plural, one {# fichier} other {# fichiers}}"
+    },
+    "largest": {
+      "title": "Fichiers les plus coûteux",
+      "hint": "Les dix plus gros fichiers. Au-delà de {max} tokens, un fichier lisible ne tient pas entier dans un contexte de travail.",
+      "empty": "Aucun fichier à afficher.",
+      "file": "Fichier",
+      "kind": "Nature",
+      "tokens": "Tokens",
+      "size": "Taille",
+      "noise": "bruit",
+      "tooLarge": "Trop gros pour un contexte"
+    },
+    "readiness": {
+      "title": "Préparation à l'IA, axe par axe",
+      "hint": "Chaque axe vaut la part de ses contrôles réussis. Un contrôle sans donnée n'est pas compté. Ouvrez un axe pour voir ses contrôles.",
+      "notAvailable": "Non disponible",
+      "checks": "{passed}/{evaluated} contrôles",
+      "status": {
+        "pass": "Réussi",
+        "fail": "Échoué",
+        "unknown": "Non évalué"
+      },
+      "check": {
+        "doc": {
+          "readme": "README à la racine",
+          "install": "Prérequis et installation décrits",
+          "build": "Commande de build décrite",
+          "run": "Lancement de l'application décrit",
+          "tests": "Lancement des tests décrit",
+          "architecture": "Architecture documentée",
+          "noDrift": "{count, plural, =0 {Aucune contradiction entre la doc et le dépôt} one {# contradiction entre la doc et le dépôt} other {# contradictions entre la doc et le dépôt}}"
+        },
+        "ai": {
+          "instructions": "Instructions pour assistants IA (AGENTS.md, CLAUDE.md, Copilot, Cursor…)",
+          "instructionsShort": "Instructions permanentes de {budget} tokens au plus{tokens, plural, =0 {} other { · # estimés}}",
+          "ignore": "Fichier d'exclusion pour l'IA (.aiignore, .cursorignore…)",
+          "noise": "Bruit sous {max} % des tokens (actuellement {pct} %)",
+          "noHugeFiles": "{count, plural, =0 {Aucun fichier lisible de plus de {max, number} tokens} one {# fichier lisible de plus de {max, number} tokens} other {# fichiers lisibles de plus de {max, number} tokens}}"
+        },
+        "local": {
+          "steps": "{count, plural, =0 {Aucune étape de démarrage dans le README} one {# étape de démarrage dans le README} other {# étapes de démarrage dans le README}}",
+          "tools": "{count, plural, =0 {Aucun outil requis identifié} one {# outil requis identifié} other {# outils requis identifiés}}",
+          "pinned": "Versions d'outils imposées par le dépôt (pipeline, build)",
+          "noMachinePaths": "{count, plural, =0 {Aucun chemin propre à la machine d'un auteur} one {# chemin propre à la machine d'un auteur} other {# chemins propres à la machine d'un auteur}}"
+        },
+        "sec": {
+          "noSecret": "{count, plural, =0 {Aucun secret en clair} one {# secret en clair} other {# secrets en clair}}",
+          "noPrivateKey": "{count, plural, =0 {Aucune clé privée} one {# clé privée} other {# clés privées}}",
+          "noToken": "{count, plural, =0 {Aucun jeton d'accès} one {# jeton d'accès} other {# jetons d'accès}}"
+        }
+      },
+      "unavailable": {
+        "documentation": "Non disponible pour cette analyse.",
+        "aiContext": "Non disponible pour cette analyse.",
+        "localStart": "Non disponible pour cette analyse.",
+        "configuration": "Non disponible : le scan ne lit pas encore si chaque variable de configuration est décrite, ni ses valeurs par défaut.",
+        "security": "Non disponible pour cette analyse."
+      }
+    },
+    "gaps": {
+      "title": "Quoi corriger d'abord",
+      "hint": "Trié par gravité, puis par tokens économisés. Cairn propose, il ne modifie jamais le dépôt.",
+      "empty": "Rien à corriger d'après les contrôles disponibles.",
+      "create": "À créer : {path}",
+      "saved": "≈ {value} tokens",
+      "noTokenFigure": "Pas d'économie chiffrable",
+      "item": {
+        "sec": {
+          "hardcoded-secret": {
+            "title": "{count, plural, one {Retirer le secret en clair} other {Retirer les # secrets en clair}}",
+            "why": "Un assistant qui lit ce fichier peut envoyer la valeur à un modèle. Retirez-la du dépôt et changez-la."
+          },
+          "private-key": {
+            "title": "{count, plural, one {Retirer la clé privée} other {Retirer les # clés privées}}",
+            "why": "Une clé privée versionnée finit dans le contexte d'un assistant et reste dans l'historique Git."
+          },
+          "access-token": {
+            "title": "{count, plural, one {Retirer le jeton d'accès} other {Retirer les # jetons d'accès}}",
+            "why": "Un jeton dans le dépôt donne ses droits à quiconque, ou à quoi que ce soit, lit le fichier."
+          }
+        },
+        "ai": {
+          "ignore": {
+            "title": "Ajouter un fichier d'exclusion pour l'IA",
+            "why": "Sans lui, un assistant peut lire les données et fichiers générés : du coût sans information."
+          },
+          "noise": {
+            "title": "Exclure les données et fichiers générés ({pct} % des tokens)",
+            "why": "Un fichier d'exclusion existe mais le bruit reste important : vérifiez qu'il couvre ces fichiers."
+          },
+          "instructions": {
+            "title": "Ajouter des instructions permanentes (AGENTS.md)",
+            "why": "Sans elles, un assistant explore le dépôt à chaque session pour comprendre comment le construire et le tester."
+          },
+          "instructionsShort": {
+            "title": "Raccourcir les instructions permanentes ({tokens} tokens)",
+            "why": "Elles sont relues à chaque requête : au-delà de {budget} tokens, elles coûtent plus qu'elles ne guident."
+          },
+          "hugeFiles": {
+            "title": "{count, plural, one {Découper le fichier trop gros} other {Découper les # fichiers trop gros}}",
+            "why": "Un fichier qui ne tient pas dans le contexte est lu par morceaux, ou pas du tout."
+          }
+        },
+        "doc": {
+          "readme": {
+            "title": "Ajouter un README à la racine",
+            "why": "C'est le premier fichier qu'un assistant et un nouvel arrivant ouvrent."
+          },
+          "quickStart": {
+            "title": "Documenter le démarrage rapide ({count, plural, one {# section manquante} other {# sections manquantes}})",
+            "why": "Prérequis, build et lancement : sans eux, un assistant devine les commandes et se trompe."
+          },
+          "drift": {
+            "title": "{count, plural, one {Corriger la contradiction de la doc} other {Corriger les # contradictions de la doc}}",
+            "why": "Une documentation fausse est pire qu'absente : l'assistant la croit."
+          },
+          "tests": {
+            "title": "Documenter le lancement des tests",
+            "why": "Un assistant qui ne sait pas tester ne peut pas vérifier ce qu'il modifie."
+          },
+          "architecture": {
+            "title": "Décrire l'architecture",
+            "why": "Les couches et les dépendances interdites évitent qu'un assistant les traverse sans le savoir."
+          }
+        },
+        "local": {
+          "machinePaths": {
+            "title": "{count, plural, one {Remplacer le chemin propre à une machine} other {Remplacer les # chemins propres à une machine}}",
+            "why": "Un chemin écrit pour le poste d'un auteur ne marche que chez lui."
+          },
+          "pinned": {
+            "title": "Fixer les versions des outils",
+            "why": "Sans version imposée, chaque poste et chaque assistant choisit la sienne."
+          }
+        }
+      }
+    },
+    "health": {
+      "title": "Santé de l'analyse",
+      "hint": "Comment cette analyse a été faite. Les fichiers inchangés ne sont pas relus.",
+      "mode": "Mode",
+      "full": "Complète",
+      "incremental": "Incrémentale depuis {commit}",
+      "analysed": "Fichiers analysés",
+      "reused": "Réutilisés (inchangés)",
+      "removed": "Supprimés",
+      "unreadable": "Non lus (déclarés)",
+      "duration": "Durée",
+      "seconds": "{value} s"
+    }
+  },
+  "planned": {
+    "common": {
+      "badge": "Prévu",
+      "whatYouGet": "Ce que vous trouverez ici",
+      "roadmap": "Cette page est dans la feuille de route de Cairn. Sa place dans la navigation est fixée ; les données ne sont pas encore branchées.",
+      "back": "Retour à la vue d'ensemble"
+    },
+    "feature": {
+      "aiReadiness": {
+        "summary": "À quel point chaque projet est prêt à être confié à un agent IA, et ce qui le freine.",
+        "p1": "Un score de préparation par projet, avec son évolution",
+        "p2": "Les manques les plus coûteux, classés par impact",
+        "p3": "Une alerte quand un projet repasse sous son objectif"
+      },
+      "aiContext": {
+        "summary": "Les fichiers qui briefent une IA sur un projet — instructions, listes d'exclusion, conventions — et leur fiabilité.",
+        "p1": "Quels projets ont un AGENTS.md, CLAUDE.md ou équivalent, et leur fraîcheur",
+        "p2": "Les fichiers d'exclusion qui tiennent les builds et secrets hors du contexte",
+        "p3": "Les écarts entre les instructions et le code qu'elles décrivent"
+      },
+      "aiAgents": {
+        "summary": "Quels agents IA travaillent sur vos projets, ce qu'ils coûtent et ce qu'ils livrent.",
+        "p1": "L'activité des agents par projet et par équipe",
+        "p2": "Les dépenses face au budget, et les projets qui gaspillent le plus",
+        "p3": "Les changements IA fusionnés ou abandonnés"
+      },
+      "tokens": {
+        "summary": "Ce que coûte la lecture de ce projet à une IA, et où partent les tokens.",
+        "p1": "Les tokens par dossier et par type de fichier",
+        "p2": "Les fichiers qui coûtent cher et aident peu",
+        "p3": "Le gain attendu de chaque correction"
+      },
+      "teams": {
+        "summary": "Qui possède quoi : les équipes, leurs projets et leur état.",
+        "p1": "Projets et responsables par équipe",
+        "p2": "Préparation et risques agrégés par équipe",
+        "p3": "Les équipes à aider en priorité"
+      },
+      "techRadar": {
+        "summary": "Tous les langages, frameworks et outils de vos projets, et leur statut.",
+        "p1": "Les technologies par adoption, de l'essai au retrait",
+        "p2": "Les projets bloqués sur des versions obsolètes",
+        "p3": "Là où une seule stack pourrait en remplacer trois"
+      },
+      "security": {
+        "summary": "Les failles de sécurité expliquées simplement, avec ce qu'il faut corriger d'abord.",
+        "p1": "Secrets exposés, dépendances vulnérables et configurations risquées",
+        "p2": "Un niveau de risque lisible par tous, pas seulement les experts",
+        "p3": "La correction de chaque problème et qui doit la faire"
+      },
+      "dependencies": {
+        "summary": "Les bibliothèques dont dépend votre code : âge, risques et licences.",
+        "p1": "Les paquets obsolètes et vulnérables",
+        "p2": "Les licences incompatibles avec votre usage",
+        "p3": "Une même bibliothèque en plusieurs versions selon les projets"
+      },
+      "pipelines": {
+        "summary": "Chaque build et chaque test, du commit à l'artefact déployable.",
+        "p1": "Santé et durée des pipelines par projet",
+        "p2": "Les étapes instables ou lentes à corriger",
+        "p3": "Les échecs expliqués sans lire les logs"
+      },
+      "environments": {
+        "summary": "Ce qui tourne où : développement, recette et production, et la version de chacun.",
+        "p1": "La version déployée dans chaque environnement",
+        "p2": "Le retard de la production sur la branche principale",
+        "p3": "Qui a déployé quoi, et quand"
+      },
+      "releases": {
+        "summary": "Ce qui a changé entre deux versions, écrit pour ceux qui les utilisent.",
+        "p1": "Des notes de version tirées du travail fusionné",
+        "p2": "Les changements regroupés par impact, pas par commit",
+        "p3": "Le rythme des versions dans le temps"
+      },
+      "infrastructure": {
+        "summary": "Les serveurs, services cloud et configurations d'un projet, déduits de son code.",
+        "p1": "Les ressources lues dans Docker, Kubernetes et Terraform",
+        "p2": "Comment les éléments se relient, sur un seul schéma",
+        "p3": "Les configurations qui diffèrent entre environnements"
+      },
+      "monitoring": {
+        "summary": "Est-ce disponible, rapide, en bonne santé — une fois le code en production.",
+        "p1": "Disponibilité et temps de réponse par service",
+        "p2": "Les erreurs reliées au code et au changement qui les a causées",
+        "p3": "Les signaux des outils que vous utilisez déjà"
+      },
+      "incidents": {
+        "summary": "Ce qui a mal tourné en production, son impact et les leçons tirées.",
+        "p1": "Les incidents ouverts et passés avec leur impact",
+        "p2": "Une chronologie de l'alerte à la correction",
+        "p3": "Les actions de suivi et leur avancement"
+      },
+      "executive": {
+        "summary": "Tout le portefeuille sur une page, pour ceux qui ne lisent pas le code.",
+        "p1": "Où en est chaque projet, en mots simples",
+        "p2": "Les risques qui demandent une décision",
+        "p3": "Les progrès depuis le mois dernier"
+      },
+      "reports": {
+        "summary": "Des rapports à partager, exporter ou planifier.",
+        "p1": "Rapports de préparation, qualité et livraison par équipe ou projet",
+        "p2": "Export PDF et tableur",
+        "p3": "Rapports envoyés à intervalle régulier"
+      },
+      "settings": {
+        "summary": "Membres, rôles, intégrations et objectifs.",
+        "p1": "Les membres et ce que chaque rôle peut voir",
+        "p2": "Les connexions aux outils Git, CI, cloud et supervision",
+        "p3": "Les objectifs de préparation et les règles d'alerte"
+      },
+      "dataModel": {
+        "summary": "Les données que ce projet stocke et comment elles s'articulent.",
+        "p1": "Tables, entités et relations, lues dans les migrations et modèles",
+        "p2": "Où se trouvent les données personnelles",
+        "p3": "L'évolution du modèle dans le temps"
+      },
+      "files": {
+        "summary": "Parcourez le dépôt avec le contexte de Cairn à côté de chaque fichier.",
+        "p1": "L'arborescence à n'importe quelle branche ou commit",
+        "p2": "Le rôle de chaque dossier, en une ligne",
+        "p3": "Coût et risques signalés sur chaque fichier"
+      },
+      "quality": {
+        "summary": "La maintenabilité du code, et là où ça fait mal.",
+        "p1": "Les zones de complexité et de duplication",
+        "p2": "La couverture de tests là où elle compte",
+        "p3": "L'évolution après chaque changement"
+      },
+      "compliance": {
+        "summary": "Si le projet respecte les règles qui s'imposent à lui.",
+        "p1": "Contrôles de licences, de confidentialité et de sécurité",
+        "p2": "Les preuves rassemblées pour les audits",
+        "p3": "Les écarts, avec un responsable et une échéance"
+      },
+      "changeControl": {
+        "summary": "Chaque merge request comparée à la spécification validée, avant qu'elle n'atteigne la production.",
+        "p1": "Le ticket Jira tel que le métier l'a validé, face au code livré : un montant, un droit ou une zone qui n'y figure pas bloque la fusion",
+        "p2": "Une spécification réécrite après validation, ou validée par l'auteur du code, est signalée et ne vaut plus validation",
+        "p3": "Les validations exigées par zone critique (métier, référent technique, sécurité), l'auteur ne comptant jamais pour lui-même"
+      },
+      "traceability": {
+        "summary": "Du besoin à la production : quel ticket a produit quel code, quels tests le couvrent, où il tourne.",
+        "p1": "Chaque ticket relié à ses merge requests, ses commits et ses déploiements",
+        "p2": "Le code sans ticket et les tickets sans code",
+        "p3": "Un historique inaltérable pour les audits (DORA, PSD2, SOX)"
+      },
+      "policies": {
+        "summary": "Les zones de code qu'aucun changement ne doit toucher sans les bonnes validations.",
+        "p1": "Zones décrites par chemins et par vocabulaire métier (paiements, autorisations, plafonds)",
+        "p2": "Les rôles qui doivent valider chaque zone",
+        "p3": "Des règles communes à toutes les équipes, appliquées à chaque merge request"
+      },
+      "integrations": {
+        "summary": "Les outils que Cairn lit pour relier spécifications, code et validations.",
+        "p1": "Jira (Cloud ou Data Center) : tickets, statuts et historique des modifications",
+        "p2": "GitLab et GitHub : merge requests, diffs et approbations",
+        "p3": "Le résultat renvoyé dans la merge request, comme contrôle bloquant"
+      }
+    }
+  },
+  "health": {
+    "eyebrow": "Santé du projet · ce que l'analyse peut dire",
+    "derivedFromScan": "Déduit de l'analyse du dépôt",
+    "verdict": {
+      "notSafe": {
+        "title": "Pas sûr à partager en l'état",
+        "message": "Des secrets sont écrits dans le code. Toute personne qui lit ce dépôt — y compris un outil d'IA — peut s'en servir. À corriger avant tout le reste."
+      },
+      "atRisk": {
+        "title": "À risque : certaines zones demandent du travail avant de s'y fier",
+        "message": "{risk, plural, one {# zone est à risque} other {# zones sont à risque}}, {watch, plural, =0 {aucune à surveiller} one {# à surveiller} other {# à surveiller}}. Commencez par les cartes rouges ci-dessous."
+      },
+      "watch": {
+        "title": "Utilisable, avec des points à surveiller",
+        "message": "Rien n'est à risque, mais {watch, plural, one {# zone mérite} other {# zones méritent}} de l'attention avant que le projet grandisse."
+      },
+      "healthy": {
+        "title": "En bonne santé sur tout ce que Cairn voit",
+        "message": "{good, plural, one {# zone est} other {# zones sont}} en bon état. Cela ne couvre pas ce que Cairn ne vérifie pas encore — voir la liste ci-dessous."
+      },
+      "unknown": {
+        "title": "Pas encore assez d'éléments",
+        "message": "L'analyse n'a pas vu assez de ce projet pour le juger. Relancez-la, ou vérifiez que le dépôt contient le code, la documentation et le pipeline."
+      }
+    },
+    "light": {
+      "good": "Bon",
+      "watch": "À surveiller",
+      "risk": "À risque",
+      "unknown": "Non vu"
+    },
+    "area": {
+      "security": "Sécurité",
+      "aiReadiness": "Préparation IA",
+      "architecture": "Architecture",
+      "delivery": "Livraison (du code à la production)",
+      "infrastructure": "Infrastructure",
+      "knowledge": "Connaissance & prise en main"
+    },
+    "owner": {
+      "label": "Qui agit : {owner}",
+      "security": "sécurité",
+      "developer": "développeurs",
+      "ops": "DevOps",
+      "lead": "responsable du projet"
+    },
+    "open": "Voir pourquoi",
+    "reason": {
+      "security": {
+        "secrets": "{count, plural, one {# secret est écrit} other {# secrets sont écrits}} dans le code (mots de passe, clés ou jetons).",
+        "noSecrets": "Aucun mot de passe, clé privée ou jeton d'accès trouvé dans le code."
+      },
+      "aiReadiness": {
+        "ready": "Un assistant IA peut travailler sur ce projet avec peu de risque de se tromper. Score {score}/100.",
+        "partial": "Une IA peut aider, mais manquera de contexte par endroits. Score {score}/100.",
+        "notReady": "Une IA devra souvent deviner ici, et ses suppositions deviennent des erreurs. Score {score}/100.",
+        "blocked": "Des secrets dans le code bloquent l'usage de l'IA : ils seraient envoyés à l'outil d'IA.",
+        "unknown": "Trop peu a été lu pour dire si une IA peut bien travailler ici."
+      },
+      "architecture": {
+        "violations": "{count, plural, one {# dépendance enfreint} other {# dépendances enfreignent}} le découpage prévu — le genre de raccourci que prend souvent le code écrit par une IA.",
+        "mapped": "La structure est cartographiée ({count, plural, one {# élément} other {# éléments}}) et aucune règle de découpage n'est enfreinte.",
+        "tooFew": "Seulement {count, plural, one {# élément identifié} other {# éléments identifiés}} : trop peu pour juger la structure.",
+        "notMapped": "La structure n'a pas pu être cartographiée à partir du code."
+      },
+      "delivery": {
+        "noPipeline": "Aucun pipeline automatisé : rien ne vérifie un changement avant sa mise en ligne.",
+        "noTests": "Le pipeline livre les changements sans lancer de tests.",
+        "findings": "Le pipeline a {count, plural, one {# faiblesse sérieuse} other {# faiblesses sérieuses}}.",
+        "noSecurityScan": "Les tests tournent, mais aucune analyse de sécurité ne vérifie les changements avant livraison.",
+        "complete": "Un pipeline automatisé teste et analyse chaque changement ({count, plural, one {# tâche} other {# tâches}}).",
+        "rescan": "Relancez l'analyse pour lire le pipeline de ce projet."
+      },
+      "infrastructure": {
+        "described": "L'infrastructure est décrite dans le code ({count, plural, one {# élément} other {# éléments}}). Cairn ne vérifie pas encore sa sécurité.",
+        "notAsCode": "Le pipeline déploie, mais la cible du déploiement n'est pas décrite dans le dépôt.",
+        "none": "Aucune infrastructure n'est décrite dans ce dépôt.",
+        "rescan": "Relancez l'analyse pour lire l'infrastructure de ce projet."
+      },
+      "knowledge": {
+        "good": "Un nouvel arrivant peut comprendre et lancer le projet grâce à sa documentation. Score {score}/100.",
+        "partial": "La documentation existe mais laisse des trous où un nouvel arrivant butera. Score {score}/100.",
+        "poor": "Un nouvel arrivant dépend de quelqu'un qui connaît déjà le projet. Score {score}/100.",
+        "unknown": "Aucune documentation n'a pu être évaluée."
+      }
+    },
+    "notChecked": {
+      "title": "Pas encore vérifié",
+      "hint": "Cairn n'examine pas encore ces points. Un bilan sain ne dit rien à leur sujet.",
+      "item": {
+        "dependencies": "Dépendances vulnérables ou inventées",
+        "accessControl": "Contrôles de connexion et de permissions",
+        "dataModel": "Données personnelles et modèle de données",
+        "infraSecurity": "Sécurité de la configuration d'infrastructure",
+        "runtime": "Comportement en production"
+      }
+    }
+  },
+  "aiReadiness": {
+    "ladder": {
+      "title": "Ce qu'une IA peut faire en sécurité ici",
+      "summary": "Ce projet est au niveau {level} · {name}. Chaque niveau se débloque par des contrôles nommés, pas par le score : un seul secret dans le code le maintient à 0.",
+      "unlock": "{count, plural, one {# contrôle sépare ce projet du niveau suivant :} other {# contrôles séparent ce projet du niveau suivant :}}",
+      "blocker": {
+        "fail": "À corriger",
+        "unknown": "Non évalué"
+      },
+      "state": {
+        "reached": "Débloqué",
+        "current": "Vous êtes ici",
+        "next": "Niveau suivant",
+        "locked": "Verrouillé"
+      }
+    },
+    "project": {
+      "title": "Préparation IA",
+      "description": "{name} · ce qu'on peut confier à une IA, et ce qui débloque la suite",
+      "demo": {
+        "title": "Disponible sur les dépôts importés",
+        "body": "Cette vue lit les contrôles d'une vraie analyse. Les projets de démonstration n'ont qu'un score ; importez un dépôt pour voir son échelle.",
+        "action": "Retour au projet"
+      },
+      "pending": {
+        "title": "Pas encore d'analyse",
+        "body": "La première analyse de ce dépôt n'est pas terminée. L'échelle apparaît dès qu'elle l'est.",
+        "action": "Voir l'état de l'import"
+      }
+    },
+    "portfolio": {
+      "title": "Préparation IA des projets",
+      "description": "Les projets qu'on peut confier à une IA aujourd'hui, et les corrections qui feraient progresser le plus de projets d'un coup.",
+      "empty": {
+        "title": "Aucun dépôt analysé pour l'instant",
+        "body": "Importez un dépôt : sa préparation, son niveau et ses corrections apparaissent ici dès la fin de la première analyse.",
+        "action": "Importer un dépôt"
+      },
+      "kpi": {
+        "label": "Chiffres du portefeuille",
+        "projects": "Projets analysés",
+        "average": "Préparation moyenne",
+        "averageHint": "Sur 100, sans les projets sans score",
+        "agentReady": "Prêts pour les agents",
+        "agentReadyHint": "Au niveau {level} ou plus : agents sur des tâches courantes",
+        "blocked": "Bloqués par des secrets",
+        "blockedHint": "Rien ne doit être ouvert à une IA avant leur correction",
+        "blockedNone": "Aucun secret trouvé dans les projets"
+      },
+      "levels": {
+        "title": "Projets par niveau",
+        "hint": "Jusqu'où une IA peut aller sur chaque projet, du simple chat (0) aux agents autonomes (5).",
+        "bar": "{label} : {count, plural, =0 {aucun projet} one {# projet} other {# projets}}"
+      },
+      "fixes": {
+        "title": "Les corrections qui aident le plus de projets",
+        "hint": "La même correction, appliquée partout où elle manque. Classées par projets aidés, puis par gravité.",
+        "empty": "Rien à corriger d'après les contrôles disponibles.",
+        "projects": "{count, plural, one {Aide # projet} other {Aide # projets}} sur {total}",
+        "saved": "≈ {value} tokens économisés",
+        "item": {
+          "sec": {
+            "hardcoded-secret": "Retirer les secrets en clair",
+            "private-key": "Retirer les clés privées",
+            "access-token": "Retirer les jetons d'accès"
+          },
+          "ai": {
+            "ignore": "Ajouter un fichier d'exclusion IA",
+            "noise": "Exclure les données et fichiers générés",
+            "instructions": "Ajouter des instructions permanentes (AGENTS.md)",
+            "instructionsShort": "Raccourcir les instructions permanentes",
+            "hugeFiles": "Découper les fichiers trop volumineux"
+          },
+          "doc": {
+            "readme": "Ajouter un README à la racine",
+            "quickStart": "Documenter le démarrage rapide",
+            "drift": "Corriger les contradictions de la documentation",
+            "tests": "Documenter le lancement des tests",
+            "architecture": "Décrire l'architecture"
+          },
+          "local": {
+            "machinePaths": "Remplacer les chemins propres à une machine",
+            "pinned": "Fixer les versions des outils"
+          }
+        }
+      },
+      "table": {
+        "title": "Tous les projets",
+        "hint": "Le niveau le plus bas d'abord. Les cellules des axes sont colorées selon le score, plus foncé est meilleur.",
+        "project": "Projet",
+        "level": "Niveau",
+        "score": "Score",
+        "verdict": "Verdict",
+        "cell": "{axis} · {project}",
+        "notEvaluated": "non évalué"
+      }
+    }
+  },
+  "changeControl": {
+    "title": "Contrôle des changements",
+    "description": "Chaque merge request comparée à la spécification validée et aux validations que sa zone exige, avant la fusion.",
+    "projectDescription": "{name} · les merge requests comparées à la spécification validée",
+    "kpi": {
+      "label": "Chiffres du contrôle",
+      "open": "Merge requests ouvertes",
+      "openHint": "Comparées à leur ticket",
+      "blocked": "À ne pas fusionner",
+      "blockedHint": "Au moins un point bloquant",
+      "blockedNone": "Aucune merge request bloquée",
+      "review": "À relire",
+      "reviewHint": "Rien ne bloque, mais un point sensible",
+      "zones": "Zones critiques touchées",
+      "zonesHint": "Merge requests qui touchent une zone sous validation"
+    },
+    "tabs": {
+      "label": "Filtrer par verdict",
+      "all": "Toutes",
+      "blocked": "Bloquées",
+      "review": "À relire",
+      "pass": "Conformes"
+    },
+    "list": {
+      "label": "Merge requests",
+      "empty": "Aucune merge request dans cette vue.",
+      "meta": "!{iid} · {author} · mise à jour le {date}",
+      "noTicket": "Sans ticket",
+      "findings": "{count, plural, =0 {aucun constat} one {# constat} other {# constats}}",
+      "worst": "dont {count, plural, one {# bloquant} other {# bloquants}}"
+    },
+    "none": {
+      "action": "Connecter les outils",
+      "noAccess": "Demandez à un super administrateur de connecter GitLab et Jira."
+    },
+    "detail": {
+      "title": "!{iid} {title}",
+      "meta": "{author} veut fusionner <branch>{source}</branch> dans <branch>{target}</branch> · mis à jour le {date}",
+      "open": "Ouvrir dans GitLab",
+      "verdict": {
+        "blocked": {
+          "title": "Ne pas fusionner",
+          "body": "{count, plural, one {Un point bloquant} other {# points bloquants}} : la fusion doit attendre leur correction, ou une nouvelle validation."
+        },
+        "review": {
+          "title": "À relire avant de fusionner",
+          "body": "Rien ne bloque, mais {count, plural, one {un point sensible mérite} other {# points sensibles méritent}} une relecture attentive."
+        },
+        "pass": {
+          "title": "Conforme",
+          "body": "Le changement correspond à la spécification validée et a reçu les validations exigées."
+        }
+      },
+      "findings": {
+        "title": "Pourquoi ce verdict",
+        "hint": "Du plus grave au moins grave. Chaque constat cite le ticket, la zone ou la ligne concernée.",
+        "empty": "Aucun constat.",
+        "fromTo": "{from} → {to}",
+        "zone": "Zone : {name}"
+      },
+      "spec": {
+        "title": "Spécification",
+        "hint": "Le texte validé par le métier face au texte actuel. Le code est jugé sur le texte validé.",
+        "approvedBy": "Validée par {name} le {date}",
+        "notApproved": "Jamais validée · statut « {status} »",
+        "unchanged": "Inchangée depuis sa validation",
+        "changed": "Modifiée après validation",
+        "removed": "Retiré depuis la validation",
+        "added": "Ajouté depuis la validation",
+        "current": "Texte actuel",
+        "history": "Historique du ticket",
+        "approval": "{name} valide la spécification",
+        "revision": "{name} modifie le contenu",
+        "isAuthor": "auteur de la merge request",
+        "unavailable": "Le ticket {key} n'a pas pu être lu dans l'outil de suivi.",
+        "none": "Aucun ticket n'est cité par la branche, le titre ou les commits.",
+        "open": "Ouvrir dans {tool}",
+        "inexact": "{tool} ne garde pas les anciennes versions : le texte validé n'est plus connu. Le code n'est donc jamais jugé conforme sur la foi de ce texte modifié."
+      },
+      "approvals": {
+        "title": "Validations exigées",
+        "hint": "Par zone critique touchée. L'approbation de l'auteur ne compte jamais.",
+        "zone": "Zone",
+        "role": "Rôle exigé",
+        "by": "Validé par",
+        "missing": "Manquante",
+        "none": "Ce changement ne touche aucune zone critique : la relecture habituelle suffit.",
+        "approvers": "Approbations reçues",
+        "noApprovers": "Personne n'a approuvé cette merge request.",
+        "author": "auteur · ne compte pas"
+      },
+      "files": {
+        "title": "Fichiers modifiés",
+        "hint": "Lignes retirées et ajoutées. Un repère signale la ligne d'un constat.",
+        "count": "{count, plural, one {# fichier} other {# fichiers}}",
+        "zone": "Zone : {name}",
+        "stats": "+{added} −{removed}",
+        "finding": "Constat sur cette ligne"
+      },
+      "notFound": "Cette merge request n'existe pas ou n'est pas visible pour votre rôle."
+    },
+    "live": {
+      "description": "Les merge requests ouvertes, lues dans GitLab et comparées aux tickets Jira validés.",
+      "unavailable": "Merge requests indisponibles",
+      "reason": {
+        "unsupported": "Le contrôle des changements lit pour l'instant les merge requests GitLab ; les pull requests GitHub arrivent ensuite.",
+        "hostNotAllowed": "L'hôte de ce dépôt n'est plus autorisé dans la configuration (GIT_HOSTS).",
+        "unauthorized": "GitLab refuse le jeton de ce dépôt. Il faut un jeton avec le droit read_api.",
+        "unreachable": "GitLab ne répond pas. Réessayez dans un instant.",
+        "providerError": "GitLab a renvoyé une réponse inattendue."
+      },
+      "noTracker": "Seules les issues GitLab de ce dépôt sont lues. Connectez Jira, Trello, Notion, Linear ou GitHub pour vérifier les tickets qui y vivent."
+    }
+  },
+  "integrations": {
+    "title": "Intégrations",
+    "description": "Les outils de gestion de projet où vivent vos spécifications : Cairn les lit pour vérifier que chaque merge request livre ce qui a été validé. Toujours en lecture seule.",
+    "noDatabase": "Les intégrations demandent la base de données de Cairn (DATABASE_URL).",
+    "connected": {
+      "title": "Outils connectés",
+      "hint": "Les tickets cités par une merge request sont cherchés dans chacun de ces outils.",
+      "by": "Ajouté par {who} le {date}",
+      "test": "Tester",
+      "remove": "Déconnecter",
+      "confirmRemove": "Déconnecter « {name} » ? Les tickets qui y vivent ne seront plus vérifiés."
+    },
+    "repository": {
+      "title": "Issues des dépôts importés",
+      "body": "Lues sans configuration, avec le jeton de chaque dépôt : #12 dans une merge request renvoie à l'issue 12.",
+      "always": "Toujours actif"
+    },
+    "catalog": {
+      "title": "Ajouter un outil",
+      "hint": "Gratuits ou payants, en ligne ou chez vous. Chaque outil affiche ce qu'il permet de prouver : tous ne gardent pas l'historique d'un ticket.",
+      "connect": "Connecter",
+      "soon": "Bientôt",
+      "free": "Gratuit",
+      "openSource": "Open source"
+    },
+    "evidence": {
+      "fullHistory": {
+        "label": "Historique complet",
+        "hint": "Le texte validé est reconstitué exactement : une modification après validation est visible mot à mot."
+      },
+      "editors": {
+        "label": "Qui et quand",
+        "hint": "On sait qui a modifié le ticket après sa validation, pas ce qu'il disait avant : le texte modifié ne vaut plus preuve."
+      },
+      "lastEdit": {
+        "label": "Dernière modification",
+        "hint": "Seule la dernière modification est connue. Ajoutez une date de validation aux pages pour un contrôle fiable."
+      }
+    },
+    "approval": {
+      "workflow": "Validé par un statut du workflow",
+      "label": "Validé par une étiquette",
+      "list": "Validé par une colonne du tableau",
+      "property": "Validé par une propriété de la page"
+    },
+    "dialog": {
+      "title": "Connecter {name}",
+      "description": "Lecture seule. Cairn teste la connexion avant de l'enregistrer ; le secret est chiffré et jamais réaffiché.",
+      "label": "Nom de la connexion",
+      "submit": "Tester et connecter",
+      "cancel": "Annuler",
+      "help": {
+        "jira": "Cloud : id.atlassian.com → Sécurité → Jetons d'API. Data Center : votre profil → Jetons d'accès personnels. Un compte en lecture seule suffit.",
+        "github": "GitHub → Settings → Developer settings → Fine-grained token, avec l'accès en lecture aux Issues des dépôts concernés.",
+        "gitlab": "Pour les issues d'un autre projet que le dépôt importé : jeton personnel ou de projet avec le droit read_api.",
+        "linear": "Linear → Settings → Security & access → Personal API keys.",
+        "trello": "trello.com/power-ups/admin : la clé d'API de votre Power-Up, puis un jeton généré depuis cette page.",
+        "notion": "notion.so/my-integrations : créez une intégration interne avec « Lire le contenu », puis partagez-lui vos pages de spécifications."
+      }
+    },
+    "field": {
+      "optional": "facultatif",
+      "edition": {
+        "label": "Édition",
+        "bearer": "Data Center (sur site)",
+        "basic": "Cloud"
+      },
+      "baseUrl": {
+        "label": "Adresse"
+      },
+      "user": {
+        "label": "E-mail du compte"
+      },
+      "token": {
+        "label": "Jeton",
+        "hint": "Chiffré avant stockage (AES-256-GCM), jamais réaffiché."
+      },
+      "apiUrl": {
+        "label": "Adresse de l'API",
+        "hint": "https://api.github.com, ou https://votre-serveur/api/v3 pour GitHub Enterprise."
+      },
+      "defaultRepo": {
+        "label": "Dépôt par défaut",
+        "hint": "Le dépôt désigné par un simple #12."
+      },
+      "project": {
+        "label": "Projet",
+        "hint": "Le projet désigné par un simple #12."
+      },
+      "projects": {
+        "label": "Projets reconnus",
+        "hint": "Clés séparées par des virgules. Vide : toutes les clés."
+      },
+      "apiKey": {
+        "label": "Clé d'API"
+      },
+      "teams": {
+        "label": "Équipes reconnues",
+        "hint": "Clés d'équipe séparées par des virgules, ex. ENG. Vide : toutes."
+      },
+      "key": {
+        "label": "Clé d'API (Power-Up)"
+      },
+      "criteriaId": {
+        "label": "Champ des critères d'acceptation",
+        "hint": "Un champ personnalisé, s'ils n'y sont pas dans la description."
+      },
+      "criteriaName": {
+        "label": "Nom de ce champ dans l'historique"
+      },
+      "statusProperty": {
+        "label": "Propriété de statut",
+        "hint": "Validée quand elle vaut un des statuts de la politique."
+      },
+      "approvedAtProperty": {
+        "label": "Propriété « date de validation »",
+        "hint": "Recommandé : sans elle, toute modification compte comme postérieure à la validation."
+      },
+      "approverProperty": {
+        "label": "Propriété « validé par »"
+      }
+    },
+    "result": {
+      "connected": "Connecté en tant que {who}.",
+      "tested": "La connexion fonctionne ({who}).",
+      "removed": "Connexion supprimée.",
+      "forbidden": "Réservé au super administrateur.",
+      "invalid": "Vérifiez les champs : adresse en https, clés au bon format.",
+      "noDatabase": "La base de données n'est pas configurée.",
+      "unauthorized": "L'outil refuse ces identifiants.",
+      "not_found": "Cette adresse ne répond pas comme l'API attendue.",
+      "rate_limited": "L'outil limite les appels : réessayez dans un instant.",
+      "unreachable": "L'outil est injoignable depuis le serveur de Cairn.",
+      "timeout": "L'outil n'a pas répondu à temps.",
+      "provider_error": "L'outil a renvoyé une réponse inattendue."
+    }
+  },
+  "policies": {
+    "title": "Zones critiques",
+    "description": "Le code qu'aucun changement ne doit toucher sans les bonnes validations, et qui les donne. Appliqué à chaque merge request.",
+    "probe": {
+      "label": "Essayer un chemin",
+      "match": "Ce fichier est dans : {zones}",
+      "none": "Ce fichier n'est dans aucune zone critique."
+    },
+    "zones": {
+      "title": "Zones",
+      "hint": "Une zone se reconnaît à ses dossiers ; son vocabulaire sert à vérifier qu'une spécification en parle bien.",
+      "empty": "Aucune zone : toutes les merge requests suivent la relecture habituelle.",
+      "name": "Nom",
+      "requires": "Validations exigées",
+      "paths": "Dossiers et fichiers",
+      "pathsHint": "Un motif par ligne : ** couvre plusieurs dossiers, * un seul. Exemple : **/payment/**",
+      "keywords": "Vocabulaire métier",
+      "keywordsHint": "Séparés par des virgules : virement, plafond, payment…",
+      "remove": "Supprimer la zone",
+      "add": "Ajouter une zone",
+      "template": "Partir du modèle bancaire",
+      "templateHint": "Paiements, droits d'accès et règlement-livraison, à adapter."
+    },
+    "tickets": {
+      "title": "Tickets",
+      "hint": "Ce qui fait qu'une spécification est validée, et quels tickets Cairn reconnaît.",
+      "statuses": "Statuts qui valent validation",
+      "projects": "Projets Jira reconnus (vide : tous)"
+    },
+    "people": {
+      "title": "Personnes et rôles",
+      "hint": "Qui peut valider quoi. L'identifiant est le nom d'utilisateur GitLab et Jira (ou l'identifiant de compte Jira Cloud).",
+      "id": "Identifiant",
+      "name": "Nom",
+      "remove": "Retirer cette personne",
+      "add": "Ajouter une personne"
+    },
+    "save": "Enregistrer la politique",
+    "readOnly": "Lecture seule : seuls les administrateurs modifient la politique.",
+    "result": {
+      "saved": "Politique enregistrée et appliquée aux prochaines merge requests.",
+      "forbidden": "Votre rôle ne permet pas de modifier la politique.",
+      "invalid": "Chaque zone a besoin d'un nom, d'au moins un dossier et d'une validation exigée.",
+      "duplicate": "Deux zones ou deux personnes ont le même identifiant.",
+      "noDatabase": "La base de données n'est pas configurée."
+    }
   }
 }

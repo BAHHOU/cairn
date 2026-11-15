@@ -59,7 +59,8 @@ const gitlabBranch = z.object({
   protected: z.boolean().optional(),
 });
 
-function apiBase(remote: RemoteRepo): string {
+/** REST root of the forge: `/api/v4` on GitLab, `api.github.com` or `/api/v3` on GitHub. */
+export function apiBase(remote: RemoteRepo): string {
   if (remote.provider === "github") {
     return remote.host === "github.com"
       ? "https://api.github.com"
@@ -80,7 +81,8 @@ function headers(remote: RemoteRepo, token: string | undefined): Record<string, 
   return base;
 }
 
-async function getJson(
+/** One authenticated GET with the forge's error codes; shared by every forge call. */
+export async function getJson(
   url: string,
   remote: RemoteRepo,
   token: string | undefined,
@@ -164,7 +166,7 @@ function toBranch(remote: RemoteRepo, raw: unknown, defaultBranch: string | unde
   };
 }
 
-function parseOrThrow<T>(fn: () => T, remote: RemoteRepo): T {
+export function parseOrThrow<T>(fn: () => T, remote: RemoteRepo): T {
   try {
     return fn();
   } catch {

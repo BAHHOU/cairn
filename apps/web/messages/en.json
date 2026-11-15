@@ -1,27 +1,81 @@
 {
   "meta": {
-    "description": "Projects that are readable, documented and safe for AI, at the lowest token cost."
+    "description": "Projects that are readable, documented and safe for AI, at the lowest token cost.",
+    "brand": "Cairn"
   },
   "nav": {
     "label": "Main navigation",
+    "projectLabel": "Project navigation",
+    "soon": "Soon",
     "group": {
-      "pilotage": "Steering",
-      "repositories": "Repositories",
-      "optimisation": "Optimization"
+      "aiReadiness": "AI readiness",
+      "portfolio": "Portfolio",
+      "quality": "Quality & risk",
+      "delivery": "Delivery",
+      "operations": "Operations",
+      "insights": "Insights",
+      "understand": "Understand",
+      "code": "Code",
+      "security": "Security",
+      "governance": "Governance"
     },
     "item": {
-      "overview": "Overview",
+      "home": "Home",
+      "aiReadiness": "Readiness score",
+      "aiContext": "AI context",
+      "aiAgents": "Agents & usage",
+      "tokens": "Token budget",
       "projects": "Projects",
       "import": "Import a repository",
+      "teams": "Teams",
+      "techRadar": "Tech radar",
       "issues": "Issues",
-      "tokens": "Token budget"
+      "security": "Security",
+      "dependencies": "Dependencies",
+      "pipelines": "Pipelines",
+      "environments": "Environments",
+      "releases": "Releases",
+      "infrastructure": "Infrastructure",
+      "monitoring": "Monitoring",
+      "incidents": "Incidents",
+      "reports": "Reports",
+      "executive": "Executive view",
+      "settings": "Settings",
+      "overview": "Overview",
+      "architecture": "Architecture",
+      "codeMap": "Code map",
+      "dataModel": "Data model",
+      "docs": "Documentation",
+      "onboarding": "Getting started",
+      "files": "Files",
+      "quality": "Code quality",
+      "delivery": "CI/CD",
+      "compliance": "Compliance",
+      "changeControl": "Change control",
+      "traceability": "Traceability",
+      "policies": "Critical zones",
+      "integrations": "Integrations"
     }
   },
   "shell": {
-    "toggleTheme": "Toggle theme",
     "language": "Language",
     "viewAs": "View as",
-    "demoBadge": "Demo · fictitious data"
+    "demoBadge": "Demo · fictitious data",
+    "breadcrumb": "Breadcrumb",
+    "create": "Create new…",
+    "createIn": "New",
+    "importRepository": "Import a repository",
+    "userMenu": "User menu",
+    "collapseSidebar": "Collapse sidebar",
+    "expandSidebar": "Expand sidebar",
+    "theme": "Theme",
+    "themeOption": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "demoHint": "Sample projects are made up; imported repositories are real.",
+    "close": "Close"
   },
   "palette": {
     "trigger": "Search for a project, a page…",
@@ -42,7 +96,8 @@
     "back": "Back to the overview"
   },
   "charts": {
-    "radarLabel": "Radar of the five axes"
+    "radarLabel": "Radar of the five axes",
+    "sixMonthTrend": "Six-month trend"
   },
   "issues": {
     "table": {
@@ -161,36 +216,10 @@
       "openIssues": "Open issues ({count})"
     },
     "imported": {
-      "open": "Open",
       "openOn": "Open on {provider}",
       "newImport": "New import",
-      "lastScan": "Last scan",
-      "lastScanHint": "Facts measured on the cloned code. No file content is kept.",
-      "branch": "Branch",
-      "commit": "Analysed commit",
-      "files": "Files",
-      "technologies": "Technologies",
-      "noTechnology": "None detected",
-      "duration": "Duration",
-      "seconds": "{seconds} s",
-      "analysedAt": "Analysed on",
       "running": "Import running: the results will appear here automatically.",
       "noSuccess": "No import succeeded for this repository.",
-      "views": "Project views",
-      "viewsHint": "Built from the code that was read, with no fictitious data. Every link of the architecture and of the map says whether it was extracted or only inferred.",
-      "architecture": "Architecture",
-      "architectureSummary": "{nodes, plural, one {# node} other {# nodes}} · {edges, plural, one {# link} other {# links}} · {violations, plural, one {# violation} other {# violations}}",
-      "codeMap": "Code map",
-      "codeMapSummary": "{nodes, plural, one {# symbol} other {# symbols}} · {edges, plural, one {# link} other {# links}}",
-      "delivery": "CI/CD",
-      "deliverySummary": "{stages, plural, one {# stage} other {# stages}} · {jobs, plural, one {# job} other {# jobs}} · {findings, plural, one {# point of attention} other {# points of attention}}",
-      "deliveryEmpty": "From commit to production (CI/CD)",
-      "onboarding": "Getting started",
-      "onboardingSummary": "{tools, plural, one {# tool} other {# tools}} · {steps, plural, one {# step} other {# steps}}",
-      "onboardingEmpty": "Local setup for a new developer",
-      "docs": "Documentation",
-      "docsSummary": "{files, plural, one {# document} other {# documents}} · {drift, plural, one {# contradiction} other {# contradictions}}",
-      "docsEmpty": "What is written and what is missing",
       "viewsPending": "Architecture, code map, CI/CD, getting started and documentation: available after the first successful scan.",
       "history": "Import history ({count})",
       "runDetail": "Run details"
@@ -275,7 +304,8 @@
       "teamPlaceholder": "E.g. Payments",
       "teamHint": "Required · created if it does not exist yet.",
       "importBranch": "Import the branch",
-      "importHint": "The worker clones only this branch (history truncated to the last commit), analyses the technical stack, then deletes the working copy."
+      "importHint": "The worker clones only this branch (history truncated to the last commit), analyses the technical stack, then deletes the working copy.",
+      "teamSuggestions": "Existing teams"
     },
     "page": {
       "title": "Import a repository",
@@ -337,66 +367,9 @@
       "runDetail": "Run details"
     }
   },
-  "scan": {
-    "tokens": "{value} tokens",
-    "files": "Files",
-    "filesHint": "{size} in total, including {source} source files",
-    "lines": "Lines of text",
-    "linesHint": "Excluding binary, data and generated files",
-    "tokensEstimated": "Tokens (estimated)",
-    "tokensEstimatedHint": "Reading the whole repository once, at 1 token per 4 bytes",
-    "tokensUseful": "Tokens useful to AI",
-    "tokensUsefulHint": "{noise} noise tokens ({pct} %): data and generated files",
-    "byKind": "By file kind",
-    "byKindHint": "What an assistant should read, and what it should ignore.",
-    "fileCount": "{count, plural, one {# file} other {# files}}",
-    "lineCount": "{count, plural, one {# line} other {# lines}}",
-    "byLanguage": "By language",
-    "byLanguageHint": "Lines of text per language.",
-    "modules": "Modules",
-    "modulesHint": "Maven modules, Angular application or top-level folder.",
-    "deployable": "deployable",
-    "structureTitle": "Detected structure",
-    "structureHint": "Counted in the code, without interpretation.",
-    "structure": {
-      "sourceFiles": "Source files",
-      "testFiles": "Test files",
-      "javaTypes": "Java types",
-      "controllers": "REST controllers",
-      "endpoints": "HTTP entry points",
-      "services": "Services",
-      "repositories": "Repositories",
-      "entities": "JPA entities",
-      "schedulers": "Schedulers",
-      "listeners": "Message listeners",
-      "angularComponents": "Angular components"
-    },
-    "noiseTitle": "Files that waste tokens",
-    "noiseHint": "Data and generated files to keep out of an assistant's context (for example in an ignore file).",
-    "none": "None.",
-    "largestTitle": "Largest readable files",
-    "largestHint": "The most expensive to read in full.",
-    "secretsTitle": "Possible secrets ({count})",
-    "secretsHint": "Only the location and the key name are kept. The value is neither stored nor shown, and must not stay in the repository.",
-    "secretKey": "key {key}",
-    "andMore": "… and {count} more.",
-    "noSecret": "No secret detected.",
-    "runIncremental": "Incremental scan since {previous}: {reused, number} unchanged files reused, {analysed, number} read again, {removed, number} removed.",
-    "runFull": "Full scan: {analysed, plural, one {# file read} other {# files read}}.",
-    "unreadable": "{count, plural, one {# file not read (declared).} other {# files not read (declared).}}",
-    "runFinished": "Finished in {seconds} s on {date}. No AI involved: everything is read from the code."
-  },
   "projectNav": {
     "openInRepo": "Open in the repository",
     "tabsLabel": "Project views",
-    "tab": {
-      "overview": "Overview",
-      "architecture": "Architecture",
-      "code-map": "Code map",
-      "delivery": "CI/CD",
-      "onboarding": "Getting started",
-      "docs": "Documentation"
-    },
     "codeMap": "Code map",
     "architecture": "Architecture view",
     "delivery": "From dev to production",
@@ -754,5 +727,882 @@
   "command": {
     "copied": "Command copied",
     "copy": "Copy the command"
+  },
+  "overview": {
+    "scannedAt": "Scanned on {date} in {seconds} s",
+    "actionsTitle": "Actions",
+    "actionsHint": "What pays off most, first.",
+    "projectMap": {
+      "title": "Explore the project",
+      "description": "Explore the repository through the latest scan.",
+      "architecture": "Architecture",
+      "architectureDetail": "{count, plural, one {# detected element} other {# detected elements}}",
+      "code": "Code map",
+      "codeDetail": "{count, plural, one {# mapped element} other {# mapped elements}}",
+      "delivery": "Delivery",
+      "deliveryDetail": "{count, plural, one {# detected pipeline job} other {# detected pipeline jobs}}",
+      "onboarding": "Onboarding",
+      "onboardingDetail": "{count, plural, one {# detected step} other {# detected steps}}",
+      "docs": "Documentation",
+      "docsAvailable": "Repository documentation",
+      "unavailable": "Not available in this scan"
+    },
+    "verdict": {
+      "label": {
+        "ready": "Ready for AI",
+        "partial": "Needs work",
+        "notReady": "Not ready for AI",
+        "blocked": "Blocked: secrets in the repository",
+        "unknown": "Not enough data"
+      },
+      "message": {
+        "ready": "An assistant finds what it needs without reading noise.",
+        "partial": "Usable with an assistant, with blind spots: see the actions below.",
+        "notReady": "An assistant will explore blindly and read a lot of noise.",
+        "blocked": "{count, plural, one {# secret, key or token is in the repository} other {# secrets, keys or tokens are in the repository}}: remove them before opening the project to an assistant.",
+        "unknown": "This scan does not give enough signals to conclude."
+      },
+      "howComputed": "Mean of {axes, plural, one {# evaluated axis} other {# evaluated axes}} · {passed} of {evaluated} checks passed, each read from the code, without AI.",
+      "seeChecks": "See the checks"
+    },
+    "kpi": {
+      "label": "Key indicators",
+      "tokens": "Repository tokens",
+      "tokensHint": "{pct} % useful to an assistant",
+      "wasted": "Wasted tokens",
+      "wastedHint": "Data and generated files{binaries, plural, =0 {} one { · # unreadable binary} other { · # unreadable binaries}}",
+      "blockers": "Blocking findings",
+      "blockersHint": "Secrets, private keys or tokens in the repository",
+      "blockersNone": "No secret, key or token detected",
+      "coverage": "Documentation",
+      "coverageHint": "Reader questions covered · {steps, plural, =0 {no getting-started step} one {# getting-started step} other {# getting-started steps}}",
+      "coverageHintNoOnboarding": "Reader questions covered",
+      "coverageUnavailable": "Not available: run a new scan"
+    },
+    "charts": {
+      "title": "Where the tokens go",
+      "hint": "Estimated cost for an assistant to read every text file once (1 token per 4 bytes).",
+      "useful": "Useful to AI",
+      "noise": "Noise (data, generated)",
+      "usefulShort": "useful",
+      "tokensPct": "{value} · {pct} %",
+      "tokens": "{value} tokens",
+      "noiseTag": "noise",
+      "empty": "No tokens to show for this scan.",
+      "error": "This chart could not be displayed. The figures remain available in the other sections.",
+      "donutTitle": "Useful or noise",
+      "donutHint": "What an assistant should read, against what it should ignore.",
+      "kindTitle": "By file kind",
+      "kindHint": "Kinds tagged “noise” should be kept out of an assistant's context.",
+      "languageTitle": "By language (top 10)",
+      "languageHint": "Estimated tokens per language.",
+      "moduleTitle": "By module (top 10)",
+      "moduleHint": "Maven modules, Angular applications or top-level folders.",
+      "otherHint": "{count, plural, one {# other not shown} other {# others not shown}}",
+      "files": "{count, plural, one {# file} other {# files}}"
+    },
+    "largest": {
+      "title": "Most expensive files",
+      "hint": "The ten largest files. Above {max} tokens, a readable file does not fit whole in a working context.",
+      "empty": "No file to show.",
+      "file": "File",
+      "kind": "Kind",
+      "tokens": "Tokens",
+      "size": "Size",
+      "noise": "noise",
+      "tooLarge": "Too large for a context"
+    },
+    "readiness": {
+      "title": "AI readiness, axis by axis",
+      "hint": "Each axis is the share of its checks that pass. A check without data is not counted. Open an axis to see its checks.",
+      "notAvailable": "Not available",
+      "checks": "{passed}/{evaluated} checks",
+      "status": {
+        "pass": "Passed",
+        "fail": "Failed",
+        "unknown": "Not evaluated"
+      },
+      "check": {
+        "doc": {
+          "readme": "README at the root",
+          "install": "Prerequisites and setup described",
+          "build": "Build command described",
+          "run": "How to start the application described",
+          "tests": "How to run the tests described",
+          "architecture": "Architecture documented",
+          "noDrift": "{count, plural, =0 {No contradiction between the docs and the repository} one {# contradiction between the docs and the repository} other {# contradictions between the docs and the repository}}"
+        },
+        "ai": {
+          "instructions": "Instructions for AI assistants (AGENTS.md, CLAUDE.md, Copilot, Cursor…)",
+          "instructionsShort": "Permanent instructions of at most {budget} tokens{tokens, plural, =0 {} other { · # estimated}}",
+          "ignore": "AI ignore file (.aiignore, .cursorignore…)",
+          "noise": "Noise under {max} % of tokens (currently {pct} %)",
+          "noHugeFiles": "{count, plural, =0 {No readable file above {max, number} tokens} one {# readable file above {max, number} tokens} other {# readable files above {max, number} tokens}}"
+        },
+        "local": {
+          "steps": "{count, plural, =0 {No getting-started step in the README} one {# getting-started step in the README} other {# getting-started steps in the README}}",
+          "tools": "{count, plural, =0 {No required tool identified} one {# required tool identified} other {# required tools identified}}",
+          "pinned": "Tool versions required by the repository (pipeline, build)",
+          "noMachinePaths": "{count, plural, =0 {No path tied to an author's machine} one {# path tied to an author's machine} other {# paths tied to an author's machine}}"
+        },
+        "sec": {
+          "noSecret": "{count, plural, =0 {No clear-text secret} one {# clear-text secret} other {# clear-text secrets}}",
+          "noPrivateKey": "{count, plural, =0 {No private key} one {# private key} other {# private keys}}",
+          "noToken": "{count, plural, =0 {No access token} one {# access token} other {# access tokens}}"
+        }
+      },
+      "unavailable": {
+        "documentation": "Not available for this scan.",
+        "aiContext": "Not available for this scan.",
+        "localStart": "Not available for this scan.",
+        "configuration": "Not available: the scan does not yet read whether each configuration variable is described, nor its default value.",
+        "security": "Not available for this scan."
+      }
+    },
+    "gaps": {
+      "title": "What to fix first",
+      "hint": "Sorted by severity, then by tokens saved. Cairn proposes, it never changes the repository.",
+      "empty": "Nothing to fix according to the available checks.",
+      "create": "To create: {path}",
+      "saved": "≈ {value} tokens",
+      "noTokenFigure": "No measurable saving",
+      "item": {
+        "sec": {
+          "hardcoded-secret": {
+            "title": "{count, plural, one {Remove the clear-text secret} other {Remove the # clear-text secrets}}",
+            "why": "An assistant that reads this file can send the value to a model. Remove it from the repository and rotate it."
+          },
+          "private-key": {
+            "title": "{count, plural, one {Remove the private key} other {Remove the # private keys}}",
+            "why": "A committed private key ends up in an assistant's context and stays in the Git history."
+          },
+          "access-token": {
+            "title": "{count, plural, one {Remove the access token} other {Remove the # access tokens}}",
+            "why": "A token in the repository grants its rights to anyone, or anything, that reads the file."
+          }
+        },
+        "ai": {
+          "ignore": {
+            "title": "Add an AI ignore file",
+            "why": "Without it, an assistant may read data and generated files: cost without information."
+          },
+          "noise": {
+            "title": "Exclude data and generated files ({pct} % of tokens)",
+            "why": "An ignore file exists but the noise is still large: check that it covers these files."
+          },
+          "instructions": {
+            "title": "Add permanent instructions (AGENTS.md)",
+            "why": "Without them, an assistant explores the repository at every session to learn how to build and test it."
+          },
+          "instructionsShort": {
+            "title": "Shorten the permanent instructions ({tokens} tokens)",
+            "why": "They are read again on every request: above {budget} tokens, they cost more than they guide."
+          },
+          "hugeFiles": {
+            "title": "{count, plural, one {Split the oversized file} other {Split the # oversized files}}",
+            "why": "A file that does not fit in the context is read in pieces, or not at all."
+          }
+        },
+        "doc": {
+          "readme": {
+            "title": "Add a README at the root",
+            "why": "It is the first file an assistant and a newcomer open."
+          },
+          "quickStart": {
+            "title": "Document the quick start ({count, plural, one {# missing section} other {# missing sections}})",
+            "why": "Prerequisites, build and start: without them, an assistant guesses the commands and gets them wrong."
+          },
+          "drift": {
+            "title": "{count, plural, one {Fix the documentation contradiction} other {Fix the # documentation contradictions}}",
+            "why": "Wrong documentation is worse than none: the assistant believes it."
+          },
+          "tests": {
+            "title": "Document how to run the tests",
+            "why": "An assistant that cannot test cannot check what it changes."
+          },
+          "architecture": {
+            "title": "Describe the architecture",
+            "why": "Layers and forbidden dependencies keep an assistant from crossing them unknowingly."
+          }
+        },
+        "local": {
+          "machinePaths": {
+            "title": "{count, plural, one {Replace the machine-specific path} other {Replace the # machine-specific paths}}",
+            "why": "A path written for an author's workstation only works there."
+          },
+          "pinned": {
+            "title": "Pin the tool versions",
+            "why": "Without a required version, every workstation and every assistant picks its own."
+          }
+        }
+      }
+    },
+    "health": {
+      "title": "Scan health",
+      "hint": "How this scan was made. Unchanged files are not read again.",
+      "mode": "Mode",
+      "full": "Full",
+      "incremental": "Incremental since {commit}",
+      "analysed": "Files analysed",
+      "reused": "Reused (unchanged)",
+      "removed": "Removed",
+      "unreadable": "Not read (declared)",
+      "duration": "Duration",
+      "seconds": "{value} s"
+    }
+  },
+  "planned": {
+    "common": {
+      "badge": "Planned",
+      "whatYouGet": "What you will find here",
+      "roadmap": "This page is on Cairn's roadmap. Its place in the navigation is set; the data behind it is not wired yet.",
+      "back": "Back to the overview"
+    },
+    "feature": {
+      "aiReadiness": {
+        "summary": "How ready each project is to be worked on by an AI agent, and what holds it back.",
+        "p1": "A readiness score per project, with its trend over time",
+        "p2": "The gaps that cost the most, ranked by impact",
+        "p3": "Alerts when a project falls back below its target"
+      },
+      "aiContext": {
+        "summary": "The files that brief an AI on a project — instructions, ignore lists, conventions — and whether they hold up.",
+        "p1": "Which projects have AGENTS.md, CLAUDE.md or similar, and how fresh they are",
+        "p2": "Ignore files that keep build output and secrets out of the AI's context",
+        "p3": "Drift between the instructions and the code they describe"
+      },
+      "aiAgents": {
+        "summary": "Which AI agents work on your projects, what they cost and what they deliver.",
+        "p1": "Agent activity per project and per team",
+        "p2": "Spend against budget, with the projects that waste the most",
+        "p3": "Merged versus abandoned AI changes"
+      },
+      "tokens": {
+        "summary": "What reading this project costs an AI, and where the tokens go.",
+        "p1": "Tokens per folder and per file type",
+        "p2": "Files that cost a lot and help little",
+        "p3": "Savings you would get from each fix"
+      },
+      "teams": {
+        "summary": "Who owns what: teams, their projects and how they are doing.",
+        "p1": "Projects and owners per team",
+        "p2": "Readiness and risk rolled up per team",
+        "p3": "Teams that need help first"
+      },
+      "techRadar": {
+        "summary": "Every language, framework and tool in use across your projects, and where each stands.",
+        "p1": "Technologies by adoption, from trial to retire",
+        "p2": "Projects stuck on outdated versions",
+        "p3": "Where one stack could replace three"
+      },
+      "security": {
+        "summary": "Security findings explained in plain words, with what to fix first.",
+        "p1": "Exposed secrets, vulnerable dependencies and risky configuration",
+        "p2": "A risk level anyone can read, not only security experts",
+        "p3": "The fix for each finding and who should make it"
+      },
+      "dependencies": {
+        "summary": "The libraries your code relies on: how old, how risky, how licensed.",
+        "p1": "Outdated and vulnerable packages",
+        "p2": "Licences that conflict with your use",
+        "p3": "The same library at different versions across projects"
+      },
+      "pipelines": {
+        "summary": "Every build and test run, from commit to deployable artifact.",
+        "p1": "Pipeline health and duration per project",
+        "p2": "Flaky and slow steps worth fixing",
+        "p3": "Failures explained without reading logs"
+      },
+      "environments": {
+        "summary": "What runs where: development, staging and production, and which version each one has.",
+        "p1": "The version deployed in each environment",
+        "p2": "How far production lags behind the main branch",
+        "p3": "Who deployed what, and when"
+      },
+      "releases": {
+        "summary": "What changed between versions, written for the people who use them.",
+        "p1": "Release notes generated from merged work",
+        "p2": "Changes grouped by impact, not by commit",
+        "p3": "Release cadence over time"
+      },
+      "infrastructure": {
+        "summary": "The servers, cloud services and configuration a project runs on, drawn from its code.",
+        "p1": "Resources read from Docker, Kubernetes and Terraform files",
+        "p2": "How the pieces connect, on one diagram",
+        "p3": "Configuration that differs between environments"
+      },
+      "monitoring": {
+        "summary": "Is it up, is it fast, is it healthy — once the code is in production.",
+        "p1": "Availability and response time per service",
+        "p2": "Errors linked back to the code and the change that caused them",
+        "p3": "Signals from the tools you already use"
+      },
+      "incidents": {
+        "summary": "What went wrong in production, what it affected and what was learned.",
+        "p1": "Open and past incidents with their impact",
+        "p2": "A timeline from alert to fix",
+        "p3": "Follow-up actions and whether they were done"
+      },
+      "executive": {
+        "summary": "The whole portfolio on one page, for people who don't read code.",
+        "p1": "Where each project stands, in plain words",
+        "p2": "The risks that need a decision",
+        "p3": "Progress since last month"
+      },
+      "reports": {
+        "summary": "Reports you can share, export or schedule.",
+        "p1": "Readiness, quality and delivery reports per team or project",
+        "p2": "PDF and spreadsheet export",
+        "p3": "Reports sent on a schedule"
+      },
+      "settings": {
+        "summary": "Members, roles, integrations and targets.",
+        "p1": "Members and what each role may see",
+        "p2": "Connections to Git, CI, cloud and monitoring tools",
+        "p3": "Readiness targets and alert rules"
+      },
+      "dataModel": {
+        "summary": "The data this project stores and how it fits together.",
+        "p1": "Tables, entities and their relations, read from migrations and models",
+        "p2": "Where personal data lives",
+        "p3": "Changes to the model over time"
+      },
+      "files": {
+        "summary": "Browse the repository with Cairn's context beside each file.",
+        "p1": "The file tree at any branch or commit",
+        "p2": "What each folder is for, in one line",
+        "p3": "Cost and risk flags on each file"
+      },
+      "quality": {
+        "summary": "How maintainable the code is, and where it hurts.",
+        "p1": "Complexity and duplication hot spots",
+        "p2": "Test coverage where it matters",
+        "p3": "Trends after each change"
+      },
+      "compliance": {
+        "summary": "Whether the project meets the rules it must follow.",
+        "p1": "Licence, privacy and security policy checks",
+        "p2": "Evidence collected for audits",
+        "p3": "Gaps with an owner and a deadline"
+      },
+      "changeControl": {
+        "summary": "Every merge request compared with the approved specification, before it reaches production.",
+        "p1": "The Jira ticket as the business approved it, side by side with the delivered code: an amount, a permission or a zone it does not mention blocks the merge",
+        "p2": "A specification rewritten after approval, or approved by the author of the code, is flagged and no longer counts as approved",
+        "p3": "The approvals each critical zone requires (business, tech lead, security), the author never counting for themselves"
+      },
+      "traceability": {
+        "summary": "From need to production: which ticket produced which code, which tests cover it, where it runs.",
+        "p1": "Each ticket linked to its merge requests, commits and deployments",
+        "p2": "Code without a ticket and tickets without code",
+        "p3": "A tamper-proof history for audits (DORA, PSD2, SOX)"
+      },
+      "policies": {
+        "summary": "The areas of code no change may touch without the right approvals.",
+        "p1": "Zones described by paths and by business vocabulary (payments, authorisations, limits)",
+        "p2": "The roles that must approve each zone",
+        "p3": "Rules shared by every team, applied to every merge request"
+      },
+      "integrations": {
+        "summary": "The tools Cairn reads to link specifications, code and approvals.",
+        "p1": "Jira (Cloud or Data Center): tickets, statuses and edit history",
+        "p2": "GitLab and GitHub: merge requests, diffs and approvals",
+        "p3": "The result posted back to the merge request, as a blocking check"
+      }
+    }
+  },
+  "health": {
+    "eyebrow": "Project health · what the scan can tell",
+    "derivedFromScan": "Derived from repository scan",
+    "verdict": {
+      "notSafe": {
+        "title": "Not safe to share as it is",
+        "message": "Secrets are written in the code. Anyone who can read this repository — including an AI tool — can use them. Fix this before anything else."
+      },
+      "atRisk": {
+        "title": "At risk: some areas need work before you rely on it",
+        "message": "{risk, plural, one {# area is at risk} other {# areas are at risk}}, {watch, plural, =0 {none to watch} one {# to watch} other {# to watch}}. Start with the red cards below."
+      },
+      "watch": {
+        "title": "Usable, with points to watch",
+        "message": "Nothing is at risk, but {watch, plural, one {# area deserves} other {# areas deserve}} attention before the project grows."
+      },
+      "healthy": {
+        "title": "Healthy on everything Cairn can see",
+        "message": "{good, plural, one {# area is} other {# areas are}} in good shape. This does not cover what Cairn does not check yet — see the list below."
+      },
+      "unknown": {
+        "title": "Not enough evidence yet",
+        "message": "The scan could not see enough of this project to judge it. Re-scan it, or check that the repository holds its code, documentation and pipeline."
+      }
+    },
+    "light": {
+      "good": "Good",
+      "watch": "Watch",
+      "risk": "At risk",
+      "unknown": "Not seen"
+    },
+    "area": {
+      "security": "Security",
+      "aiReadiness": "AI readiness",
+      "architecture": "Architecture",
+      "delivery": "Delivery (code to production)",
+      "infrastructure": "Infrastructure",
+      "knowledge": "Knowledge & onboarding"
+    },
+    "owner": {
+      "label": "Who acts: {owner}",
+      "security": "security",
+      "developer": "developers",
+      "ops": "DevOps",
+      "lead": "project lead"
+    },
+    "open": "See why",
+    "reason": {
+      "security": {
+        "secrets": "{count, plural, one {# secret is} other {# secrets are}} written in the code (passwords, keys or tokens).",
+        "noSecrets": "No password, private key or access token was found in the code."
+      },
+      "aiReadiness": {
+        "ready": "An AI assistant can work on this project with little risk of going wrong. Score {score}/100.",
+        "partial": "An AI can help, but will miss context in places. Score {score}/100.",
+        "notReady": "An AI will often guess here, and guesses become mistakes. Score {score}/100.",
+        "blocked": "Secrets in the code block AI use: they would be sent to the AI tool.",
+        "unknown": "Not enough was read to tell how well an AI can work here."
+      },
+      "architecture": {
+        "violations": "{count, plural, one {# dependency breaks} other {# dependencies break}} the intended layering — the kind of shortcut AI-written code often takes.",
+        "mapped": "The structure is mapped ({count, plural, one {# part} other {# parts}}) and no layering rule is broken.",
+        "tooFew": "Only {count, plural, one {# part was} other {# parts were}} identified: too little to judge the structure.",
+        "notMapped": "The structure could not be mapped from the code."
+      },
+      "delivery": {
+        "noPipeline": "There is no automated pipeline: nothing checks a change before it ships.",
+        "noTests": "The pipeline ships changes without running tests.",
+        "findings": "The pipeline has {count, plural, one {# serious weakness} other {# serious weaknesses}}.",
+        "noSecurityScan": "Tests run, but no security scan checks changes before they ship.",
+        "complete": "An automated pipeline tests and scans every change ({count, plural, one {# job} other {# jobs}}).",
+        "rescan": "Re-scan this project to read its pipeline."
+      },
+      "infrastructure": {
+        "described": "Infrastructure is described in code ({count, plural, one {# element} other {# elements}}). Cairn does not check its security yet.",
+        "notAsCode": "The pipeline deploys, but where it deploys to is not described in the repository.",
+        "none": "No infrastructure is described in this repository.",
+        "rescan": "Re-scan this project to read its infrastructure."
+      },
+      "knowledge": {
+        "good": "A newcomer can understand and start the project from its documentation. Score {score}/100.",
+        "partial": "Documentation exists but leaves gaps a newcomer will trip on. Score {score}/100.",
+        "poor": "A newcomer depends on someone who already knows the project. Score {score}/100.",
+        "unknown": "No documentation could be evaluated."
+      }
+    },
+    "notChecked": {
+      "title": "Not checked yet",
+      "hint": "Cairn does not look at these today. A healthy brief says nothing about them.",
+      "item": {
+        "dependencies": "Vulnerable or invented dependencies",
+        "accessControl": "Login and permission checks",
+        "dataModel": "Personal data and the data model",
+        "infraSecurity": "Security of the infrastructure configuration",
+        "runtime": "Behaviour in production"
+      }
+    }
+  },
+  "aiReadiness": {
+    "ladder": {
+      "title": "What an AI can safely do here",
+      "summary": "This project is at level {level} · {name}. Each level is unlocked by named checks, not by the score: one committed secret keeps it at 0.",
+      "unlock": "{count, plural, one {# check stands between this project and the next level:} other {# checks stand between this project and the next level:}}",
+      "blocker": {
+        "fail": "To fix",
+        "unknown": "Not evaluated"
+      },
+      "state": {
+        "reached": "Unlocked",
+        "current": "You are here",
+        "next": "Next level",
+        "locked": "Locked"
+      }
+    },
+    "project": {
+      "title": "AI readiness",
+      "description": "{name} · what an AI may be trusted with, and what unlocks more",
+      "demo": {
+        "title": "Available on imported repositories",
+        "body": "This view reads the checks of a real scan. Demo projects only carry a score; import a repository to see its ladder.",
+        "action": "Back to the project"
+      },
+      "pending": {
+        "title": "No scan yet",
+        "body": "The first scan of this repository has not finished. The ladder appears as soon as it has.",
+        "action": "See the import status"
+      }
+    },
+    "portfolio": {
+      "title": "AI readiness across projects",
+      "description": "Which projects an AI can be trusted with today, and the fixes that would move the most projects at once.",
+      "empty": {
+        "title": "No scanned repository yet",
+        "body": "Import a repository: its readiness, its level and its fixes appear here as soon as the first scan finishes.",
+        "action": "Import a repository"
+      },
+      "kpi": {
+        "label": "Portfolio figures",
+        "projects": "Scanned projects",
+        "average": "Average readiness",
+        "averageHint": "Out of 100, projects without a score not counted",
+        "agentReady": "Ready for agents",
+        "agentReadyHint": "At level {level} or above: agents on normal tasks",
+        "blocked": "Blocked by secrets",
+        "blockedHint": "Nothing should be opened to an AI before these are fixed",
+        "blockedNone": "No secret found in any project"
+      },
+      "levels": {
+        "title": "Projects per level",
+        "hint": "How far an AI can go on each project, from chat only (0) to autonomous agents (5).",
+        "bar": "{label}: {count, plural, =0 {no project} one {# project} other {# projects}}"
+      },
+      "fixes": {
+        "title": "Fixes that help the most projects",
+        "hint": "The same fix, applied everywhere it is missing. Ranked by projects helped, then severity.",
+        "empty": "Nothing to fix according to the available checks.",
+        "projects": "{count, plural, one {Helps # project} other {Helps # projects}} out of {total}",
+        "saved": "≈ {value} tokens saved",
+        "item": {
+          "sec": {
+            "hardcoded-secret": "Remove clear-text secrets",
+            "private-key": "Remove private keys",
+            "access-token": "Remove access tokens"
+          },
+          "ai": {
+            "ignore": "Add an AI ignore file",
+            "noise": "Exclude data and generated files",
+            "instructions": "Add permanent instructions (AGENTS.md)",
+            "instructionsShort": "Shorten the permanent instructions",
+            "hugeFiles": "Split oversized files"
+          },
+          "doc": {
+            "readme": "Add a README at the root",
+            "quickStart": "Document the quick start",
+            "drift": "Fix documentation contradictions",
+            "tests": "Document how to run the tests",
+            "architecture": "Describe the architecture"
+          },
+          "local": {
+            "machinePaths": "Replace machine-specific paths",
+            "pinned": "Pin the tool versions"
+          }
+        }
+      },
+      "table": {
+        "title": "Every project",
+        "hint": "Lowest level first. Axis cells are coloured by score, darker is better.",
+        "project": "Project",
+        "level": "Level",
+        "score": "Score",
+        "verdict": "Verdict",
+        "cell": "{axis} · {project}",
+        "notEvaluated": "not evaluated"
+      }
+    }
+  },
+  "changeControl": {
+    "title": "Change control",
+    "description": "Every merge request compared with the approved specification and with the approvals its zone requires, before it is merged.",
+    "projectDescription": "{name} · merge requests compared with the approved specification",
+    "kpi": {
+      "label": "Change control figures",
+      "open": "Open merge requests",
+      "openHint": "Compared with their ticket",
+      "blocked": "Do not merge",
+      "blockedHint": "At least one blocking point",
+      "blockedNone": "No blocked merge request",
+      "review": "To review",
+      "reviewHint": "Nothing blocks, but something is sensitive",
+      "zones": "Critical zones touched",
+      "zonesHint": "Merge requests touching a zone under approval"
+    },
+    "tabs": {
+      "label": "Filter by verdict",
+      "all": "All",
+      "blocked": "Blocked",
+      "review": "To review",
+      "pass": "Compliant"
+    },
+    "list": {
+      "label": "Merge requests",
+      "empty": "No merge request in this view.",
+      "meta": "!{iid} · {author} · updated {date}",
+      "noTicket": "No ticket",
+      "findings": "{count, plural, =0 {no finding} one {# finding} other {# findings}}",
+      "worst": "{count, plural, one {# blocking} other {# blocking}}"
+    },
+    "none": {
+      "action": "Connect the tools",
+      "noAccess": "Ask a super administrator to connect GitLab and Jira."
+    },
+    "detail": {
+      "title": "!{iid} {title}",
+      "meta": "{author} wants to merge <branch>{source}</branch> into <branch>{target}</branch> · updated {date}",
+      "open": "Open in GitLab",
+      "verdict": {
+        "blocked": {
+          "title": "Do not merge",
+          "body": "{count, plural, one {One blocking point} other {# blocking points}}: the merge must wait for a fix, or for a new approval."
+        },
+        "review": {
+          "title": "Review before merging",
+          "body": "Nothing blocks, but {count, plural, one {one sensitive point deserves} other {# sensitive points deserve}} a careful review."
+        },
+        "pass": {
+          "title": "Compliant",
+          "body": "The change matches the approved specification and has the approvals it requires."
+        }
+      },
+      "findings": {
+        "title": "Why this verdict",
+        "hint": "Worst first. Each finding names the ticket, zone or line it is about.",
+        "empty": "No finding.",
+        "fromTo": "{from} → {to}",
+        "zone": "Zone: {name}"
+      },
+      "spec": {
+        "title": "Specification",
+        "hint": "The text the business approved, next to the text today. The code is judged against the approved text.",
+        "approvedBy": "Approved by {name} on {date}",
+        "notApproved": "Never approved · status “{status}”",
+        "unchanged": "Unchanged since approval",
+        "changed": "Changed after approval",
+        "removed": "Removed since approval",
+        "added": "Added since approval",
+        "current": "Current text",
+        "history": "Ticket history",
+        "approval": "{name} approves the specification",
+        "revision": "{name} edits the content",
+        "isAuthor": "author of the merge request",
+        "unavailable": "Ticket {key} could not be read from the tracker.",
+        "none": "No ticket is cited by the branch, the title or the commits.",
+        "open": "Open in {tool}",
+        "inexact": "{tool} keeps no old versions: the approved text is no longer known. The code is therefore never judged compliant on the strength of this edited text."
+      },
+      "approvals": {
+        "title": "Required approvals",
+        "hint": "Per critical zone touched. The author's approval never counts.",
+        "zone": "Zone",
+        "role": "Required role",
+        "by": "Approved by",
+        "missing": "Missing",
+        "none": "This change touches no critical zone: the usual review is enough.",
+        "approvers": "Approvals received",
+        "noApprovers": "Nobody approved this merge request.",
+        "author": "author · not counted"
+      },
+      "files": {
+        "title": "Changed files",
+        "hint": "Removed and added lines. A marker flags the line of a finding.",
+        "count": "{count, plural, one {# file} other {# files}}",
+        "zone": "Zone: {name}",
+        "stats": "+{added} −{removed}",
+        "finding": "Finding on this line"
+      },
+      "notFound": "This merge request does not exist or is not visible for your role."
+    },
+    "live": {
+      "description": "Open merge requests, read from GitLab and compared with the approved Jira tickets.",
+      "unavailable": "Merge requests unavailable",
+      "reason": {
+        "unsupported": "Change control reads GitLab merge requests for now; GitHub pull requests come next.",
+        "hostNotAllowed": "This repository's host is no longer allowed in the configuration (GIT_HOSTS).",
+        "unauthorized": "GitLab refuses this repository's token. It needs the read_api scope.",
+        "unreachable": "GitLab does not answer. Try again in a moment.",
+        "providerError": "GitLab sent an unexpected answer."
+      },
+      "noTracker": "Only this repository's GitLab issues are read. Connect Jira, Trello, Notion, Linear or GitHub to check the tickets that live there."
+    }
+  },
+  "integrations": {
+    "title": "Integrations",
+    "description": "The project-management tools your specifications live in: Cairn reads them to check that every merge request delivers what was approved. Always read-only.",
+    "noDatabase": "Integrations need Cairn's database (DATABASE_URL).",
+    "connected": {
+      "title": "Connected tools",
+      "hint": "Tickets cited by a merge request are looked up in each of these tools.",
+      "by": "Added by {who} on {date}",
+      "test": "Test",
+      "remove": "Disconnect",
+      "confirmRemove": "Disconnect “{name}”? Tickets that live there will no longer be checked."
+    },
+    "repository": {
+      "title": "Imported repositories' issues",
+      "body": "Read with no setup, using each repository's token: #12 in a merge request points to issue 12.",
+      "always": "Always on"
+    },
+    "catalog": {
+      "title": "Add a tool",
+      "hint": "Free or paid, online or self-hosted. Each tool shows what it can prove: not all of them keep a ticket's history.",
+      "connect": "Connect",
+      "soon": "Soon",
+      "free": "Free",
+      "openSource": "Open source"
+    },
+    "evidence": {
+      "fullHistory": {
+        "label": "Full history",
+        "hint": "The approved text is rebuilt exactly: an edit after approval shows word for word."
+      },
+      "editors": {
+        "label": "Who and when",
+        "hint": "We know who edited the ticket after approval, not what it said before: the edited text no longer counts as proof."
+      },
+      "lastEdit": {
+        "label": "Last edit only",
+        "hint": "Only the last edit is known. Add an approval date to pages for a reliable check."
+      }
+    },
+    "approval": {
+      "workflow": "Approved through a workflow status",
+      "label": "Approved through a label",
+      "list": "Approved through a board column",
+      "property": "Approved through a page property"
+    },
+    "dialog": {
+      "title": "Connect {name}",
+      "description": "Read-only. Cairn tests the connection before saving it; the secret is encrypted and never shown again.",
+      "label": "Connection name",
+      "submit": "Test and connect",
+      "cancel": "Cancel",
+      "help": {
+        "jira": "Cloud: id.atlassian.com → Security → API tokens. Data Center: your profile → Personal access tokens. A read-only account is enough.",
+        "github": "GitHub → Settings → Developer settings → Fine-grained token, with read access to the Issues of the repositories involved.",
+        "gitlab": "For issues of another project than the imported repository: a personal or project token with the read_api scope.",
+        "linear": "Linear → Settings → Security & access → Personal API keys.",
+        "trello": "trello.com/power-ups/admin: your Power-Up's API key, then a token generated from that page.",
+        "notion": "notion.so/my-integrations: create an internal integration with “Read content”, then share your specification pages with it."
+      }
+    },
+    "field": {
+      "optional": "optional",
+      "edition": {
+        "label": "Edition",
+        "bearer": "Data Center (self-hosted)",
+        "basic": "Cloud"
+      },
+      "baseUrl": {
+        "label": "Address"
+      },
+      "user": {
+        "label": "Account e-mail"
+      },
+      "token": {
+        "label": "Token",
+        "hint": "Encrypted before storage (AES-256-GCM), never shown again."
+      },
+      "apiUrl": {
+        "label": "API address",
+        "hint": "https://api.github.com, or https://your-server/api/v3 for GitHub Enterprise."
+      },
+      "defaultRepo": {
+        "label": "Default repository",
+        "hint": "The repository a plain #12 refers to."
+      },
+      "project": {
+        "label": "Project",
+        "hint": "The project a plain #12 refers to."
+      },
+      "projects": {
+        "label": "Recognised projects",
+        "hint": "Comma-separated keys. Empty: every key."
+      },
+      "apiKey": {
+        "label": "API key"
+      },
+      "teams": {
+        "label": "Recognised teams",
+        "hint": "Comma-separated team keys, e.g. ENG. Empty: all."
+      },
+      "key": {
+        "label": "API key (Power-Up)"
+      },
+      "criteriaId": {
+        "label": "Acceptance criteria field",
+        "hint": "A custom field, if they are not in the description."
+      },
+      "criteriaName": {
+        "label": "Name of that field in the history"
+      },
+      "statusProperty": {
+        "label": "Status property",
+        "hint": "Approved when it holds one of the policy's statuses."
+      },
+      "approvedAtProperty": {
+        "label": "“Approved on” property",
+        "hint": "Recommended: without it, any edit counts as made after approval."
+      },
+      "approverProperty": {
+        "label": "“Approved by” property"
+      }
+    },
+    "result": {
+      "connected": "Connected as {who}.",
+      "tested": "The connection works ({who}).",
+      "removed": "Connection removed.",
+      "forbidden": "Reserved to the super administrator.",
+      "invalid": "Check the fields: https address, keys in the right format.",
+      "noDatabase": "The database is not configured.",
+      "unauthorized": "The tool refuses these credentials.",
+      "not_found": "This address does not answer like the expected API.",
+      "rate_limited": "The tool is limiting calls: try again in a moment.",
+      "unreachable": "The tool cannot be reached from Cairn's server.",
+      "timeout": "The tool did not answer in time.",
+      "provider_error": "The tool sent an unexpected answer."
+    }
+  },
+  "policies": {
+    "title": "Critical zones",
+    "description": "The code no change may touch without the right approvals, and who gives them. Applied to every merge request.",
+    "probe": {
+      "label": "Try a path",
+      "match": "This file is in: {zones}",
+      "none": "This file is in no critical zone."
+    },
+    "zones": {
+      "title": "Zones",
+      "hint": "A zone is recognised by its folders; its vocabulary checks that a specification really covers it.",
+      "empty": "No zone: every merge request follows the usual review.",
+      "name": "Name",
+      "requires": "Required approvals",
+      "paths": "Folders and files",
+      "pathsHint": "One pattern per line: ** spans folders, * stays within one. Example: **/payment/**",
+      "keywords": "Business vocabulary",
+      "keywordsHint": "Comma-separated: transfer, limit, payment…",
+      "remove": "Remove the zone",
+      "add": "Add a zone",
+      "template": "Start from the banking template",
+      "templateHint": "Payments, access rights and settlement, to adapt."
+    },
+    "tickets": {
+      "title": "Tickets",
+      "hint": "What makes a specification approved, and which tickets Cairn recognises.",
+      "statuses": "Statuses that count as approval",
+      "projects": "Recognised Jira projects (empty: all)"
+    },
+    "people": {
+      "title": "People and roles",
+      "hint": "Who may approve what. The id is the GitLab and Jira username (or the Jira Cloud account id).",
+      "id": "Id",
+      "name": "Name",
+      "remove": "Remove this person",
+      "add": "Add a person"
+    },
+    "save": "Save the policy",
+    "readOnly": "Read-only: only administrators change the policy.",
+    "result": {
+      "saved": "Policy saved and applied to the next merge requests.",
+      "forbidden": "Your role cannot change the policy.",
+      "invalid": "Each zone needs a name, at least one folder and one required approval.",
+      "duplicate": "Two zones or two people share the same id.",
+      "noDatabase": "The database is not configured."
+    }
   }
 }

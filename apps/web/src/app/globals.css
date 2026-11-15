@@ -25,6 +25,16 @@
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.527 0.154 150.069);
   --radius: 0.5rem;
+  /* Categorical chart slots, in this fixed order (validated for colour-blind separation on the card
+     surface). A kind keeps its slot whatever is shown: colour follows the entity, never its rank. */
+  --viz-1: #2a78d6;
+  --viz-2: #eb6834;
+  --viz-3: #1baf7a;
+  --viz-4: #eda100;
+  --viz-5: #e87ba4;
+  --viz-6: #008300;
+  --viz-7: #6250d6;
+  --viz-8: #e34948;
 }
 
 .dark {
@@ -48,6 +58,14 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.627 0.17 149.214);
+  --viz-1: #3987e5;
+  --viz-2: #d95926;
+  --viz-3: #199e70;
+  --viz-4: #c98500;
+  --viz-5: #d55181;
+  --viz-6: #008300;
+  --viz-7: #9085e9;
+  --viz-8: #e66767;
 }
 
 @theme inline {
@@ -92,4 +110,18 @@
       transition-duration: 0.01ms !important;
     }
   }
+}
+
+/* Folded sidebar: icons only, centred. Labels carry `.sb-label`. */
+[data-collapsed="true"] .sb-label,
+[data-collapsed="true"] .sb-group-header {
+  display: none;
+}
+[data-collapsed="true"] .sb-group-items {
+  display: flex;
+  padding-left: 0;
+}
+[data-collapsed="true"] a,
+[data-collapsed="true"] button {
+  justify-content: center;
 }

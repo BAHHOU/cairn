@@ -198,12 +198,8 @@
           "name": "repository_team_id_team_id_fk",
           "tableFrom": "repository",
           "tableTo": "team",
-          "columnsFrom": [
-            "team_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["team_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -322,12 +318,8 @@
           "name": "repository_import_repository_id_repository_id_fk",
           "tableFrom": "repository_import",
           "tableTo": "repository",
-          "columnsFrom": [
-            "repository_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["repository_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -459,12 +451,8 @@
           "name": "repository_scan_repository_id_repository_id_fk",
           "tableFrom": "repository_scan",
           "tableTo": "repository",
-          "columnsFrom": [
-            "repository_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["repository_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -472,12 +460,8 @@
           "name": "repository_scan_import_id_repository_import_id_fk",
           "tableFrom": "repository_scan",
           "tableTo": "repository_import",
-          "columnsFrom": [
-            "import_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["import_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -576,12 +560,8 @@
           "name": "scan_repository_id_repository_id_fk",
           "tableFrom": "scan",
           "tableTo": "repository",
-          "columnsFrom": [
-            "repository_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["repository_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -623,9 +603,7 @@
         "team_name_unique": {
           "name": "team_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -756,12 +734,8 @@
           "name": "usage_event_team_id_team_id_fk",
           "tableFrom": "usage_event",
           "tableTo": "team",
-          "columnsFrom": [
-            "team_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["team_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -777,22 +751,12 @@
     "public.import_status": {
       "name": "import_status",
       "schema": "public",
-      "values": [
-        "queued",
-        "cloning",
-        "scanning",
-        "done",
-        "failed"
-      ]
+      "values": ["queued", "cloning", "scanning", "done", "failed"]
     },
     "public.provenance": {
       "name": "provenance",
       "schema": "public",
-      "values": [
-        "measured",
-        "declared",
-        "estimated"
-      ]
+      "values": ["measured", "declared", "estimated"]
     }
   },
   "schemas": {},

@@ -2,6 +2,8 @@
 
 import type { CodeNodeKind } from "@cairn/shared";
 import { useTranslations } from "next-intl";
+import { useId } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 
 const FILTERABLE: CodeNodeKind[] = ["class", "function", "table", "config", "doc", "external"];
@@ -28,6 +30,7 @@ export function CodeMapToolbar({
   onToggleFullscreen: () => void;
 }) {
   const t = useTranslations("codeMap.toolbar");
+  const extractedId = useId();
   const td = useTranslations("domain");
   const inferredShare = stats.edges ? Math.round((stats.inferred / stats.edges) * 100) : 0;
 
@@ -63,10 +66,12 @@ export function CodeMapToolbar({
         ) : null}
       </div>
 
-      <label className="flex cursor-pointer items-center gap-1.5 text-xs">
-        <input type="checkbox" checked={extractedOnly} onChange={onToggleExtracted} />
-        {t("extractedOnly")}
-      </label>
+      <div className="flex items-center gap-1.5 text-xs">
+        <Checkbox id={extractedId} checked={extractedOnly} onCheckedChange={onToggleExtracted} />
+        <label htmlFor={extractedId} className="cursor-pointer">
+          {t("extractedOnly")}
+        </label>
+      </div>
 
       <div className="ml-auto flex items-center gap-3">
         <span className="text-[11px] text-muted-foreground tabular-nums">

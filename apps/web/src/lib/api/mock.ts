@@ -1,16 +1,19 @@
 import {
+  byUrgency,
   type CairnApi,
   can,
   computeBlastRadius,
   type Issue,
   type OrgOverview,
   type Project,
+  reviewChange,
   SEVERITIES,
   type Severity,
   type TokenSummary,
   type Viewer,
 } from "@cairn/shared";
 import { ARCHITECTURES } from "./architecture-data";
+import { DEMO_CHANGES, DEMO_PEOPLE, DEMO_POLICY, DEMO_SPECS } from "./change-data";
 import { CODE_GRAPHS } from "./code-graph-data";
 import { DELIVERIES } from "./delivery-data";
 import {
@@ -52,6 +55,18 @@ export function createMockApi(viewer: Viewer): CairnApi {
     const { wastedTokensMonth: _hidden, ...rest } = i;
     return rest;
   };
+
+  /** Merge requests of the projects this viewer may see, each evaluated against the policy. */
+  const reviews = () =>
+    DEMO_CHANGES.filter((c) => scopedIds.has(c.projectId)).map((change) =>
+      reviewChange({
+        change,
+        projectName: projects.find((p) => p.id === change.projectId)?.name ?? change.projectId,
+        policy: DEMO_POLICY,
+        specs: DEMO_SPECS,
+        people: DEMO_PEOPLE,
+      }),
+    );
 
   return {
     async overview(): Promise<OrgOverview> {
@@ -128,6 +143,19 @@ export function createMockApi(viewer: Viewer): CairnApi {
       },
     },
 
+    changes: {
+      async list(filter) {
+        return reviews()
+          .filter((r) => !filter?.projectId || r.summary.projectId === filter.projectId)
+          .map((r) => r.summary)
+          .sort(byUrgency);
+      },
+      async get(projectId, iid) {
+        return (
+          reviews().find((r) => r.change.projectId === projectId && r.change.iid === iid) ?? null
+        );
+      },
+    },
     issues: {
       async list(filter) {
         return scopedIssues

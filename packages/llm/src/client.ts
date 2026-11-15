@@ -70,7 +70,11 @@ export type UsageSink = (event: UsageEvent) => void | Promise<void>;
 
 export interface LlmClient {
   readonly enabled: boolean;
-  generateText(args: { system?: string; prompt: string; ctx: CallContext }): Promise<LlmResult<string>>;
+  generateText(args: {
+    system?: string;
+    prompt: string;
+    ctx: CallContext;
+  }): Promise<LlmResult<string>>;
   generateObject<S extends z.ZodType>(args: {
     system?: string;
     prompt: string;
@@ -102,7 +106,11 @@ export function createLlmClient(config: LlmConfig, onUsage: UsageSink): LlmClien
 
   async function run<T>(
     args: { system?: string; prompt: string; ctx: CallContext },
-    call: (model: ReturnType<typeof provider.chatModel>, system: string | undefined, prompt: string) => Promise<{
+    call: (
+      model: ReturnType<typeof provider.chatModel>,
+      system: string | undefined,
+      prompt: string,
+    ) => Promise<{
       value: T;
       tokensIn: number;
       tokensOut: number;

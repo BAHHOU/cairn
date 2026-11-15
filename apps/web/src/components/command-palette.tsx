@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
+/** Key that opens the search from anywhere, shown in the trigger and handled below. */
+export const SEARCH_SHORTCUT = "/";
+
 export interface PaletteEntry {
   group: string;
   label: string;
@@ -22,6 +25,13 @@ export function CommandPalette({ entries }: { entries: PaletteEntry[] }) {
       if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((o) => !o);
+        return;
+      }
+      const el = e.target as HTMLElement;
+      const typing = el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
+      if (e.key === SEARCH_SHORTCUT && !typing && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        setOpen(true);
       }
     };
     document.addEventListener("keydown", onKey);
@@ -35,11 +45,13 @@ export function CommandPalette({ entries }: { entries: PaletteEntry[] }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex h-9 w-full max-w-sm items-center gap-2 rounded-md border bg-background px-3 text-sm text-muted-foreground outline-none transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/50"
+        className="flex h-8 w-full max-w-md items-center gap-2 rounded-md border bg-background px-3 text-sm text-muted-foreground outline-none transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/50"
       >
         <Search className="size-4" aria-hidden />
         <span className="flex-1 text-left">{t("trigger")}</span>
-        <kbd className="rounded border bg-muted px-1.5 text-[10px] font-medium">Ctrl K</kbd>
+        <kbd className="rounded border bg-muted px-1.5 text-[10px] font-medium">
+          {SEARCH_SHORTCUT}
+        </kbd>
       </button>
 
       <Command.Dialog

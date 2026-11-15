@@ -8,7 +8,7 @@ import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("meta");
-  return { title: "Cairn", description: t("description") };
+  return { title: t("brand"), description: t("description") };
 }
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {

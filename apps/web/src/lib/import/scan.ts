@@ -1,10 +1,13 @@
 import {
+  findScanPaths,
   getLatestScan,
   listImportViewsForRepository,
+  listLatestReadinessScans,
   listLatestScanSummaries,
+  type RepositoryReadinessScan,
   type RepositoryScanSummary,
 } from "@cairn/db";
-import { can, type ScanView } from "@cairn/shared";
+import { AI_IGNORE_PATTERN, can, type ScanView } from "@cairn/shared";
 import { getViewer } from "@/lib/session";
 import { getDb, isImportConfigured } from "./runtime";
 import type { SourceBase } from "./source-link";
@@ -18,6 +21,8 @@ export interface ImportedScan {
   source: SourceBase;
   /** Null while the first scan has not finished (or for an import made before scans existed). */
   scan: ScanView | null;
+  /** AI ignore files in the scanned tree; null when the scan kept no file index to look in. */
+  aiIgnoreFiles: string[] | null;
 }
 
 /**
@@ -35,6 +40,7 @@ export async function loadImportedScan(id: string): Promise<ImportedScan | null>
   ]);
   const latest = runs[0];
   if (!latest) return null;
+  const aiIgnoreFiles = scan ? await findScanPaths(db, scan.id, AI_IGNORE_PATTERN) : null;
   return {
     repositoryId: id,
     name: latest.repository.fullPath,
@@ -44,6 +50,7 @@ export async function loadImportedScan(id: string): Promise<ImportedScan | null>
       provider: latest.repository.provider,
     },
     scan,
+    aiIgnoreFiles,
   };
 }
 
@@ -57,6 +64,21 @@ export async function loadRealScans(): Promise<RepositoryScanSummary[]> {
   if (!can(viewer.role, "see.allTeams")) return [];
   try {
     return await listLatestScanSummaries(getDb());
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Every imported repository with what its readiness is computed from, for the portfolio views.
+ * Same access rule as `loadRealScans`; empty when the database is not configured or down.
+ */
+export async function loadReadinessScans(): Promise<RepositoryReadinessScan[]> {
+  if (!isImportConfigured()) return [];
+  const viewer = await getViewer();
+  if (!can(viewer.role, "see.allTeams")) return [];
+  try {
+    return await listLatestReadinessScans(getDb(), AI_IGNORE_PATTERN);
   } catch {
     return [];
   }

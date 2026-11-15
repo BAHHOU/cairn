@@ -3,12 +3,7 @@
  * Only the category and the count are kept, never the matched value.
  */
 
-export type FirewallCategory =
-  | "private-key"
-  | "jwt"
-  | "api-key"
-  | "iban"
-  | "credential-assignment";
+export type FirewallCategory = "private-key" | "jwt" | "api-key" | "iban" | "credential-assignment";
 
 const RULES: ReadonlyArray<{ category: FirewallCategory; pattern: RegExp }> = [
   {
@@ -18,7 +13,8 @@ const RULES: ReadonlyArray<{ category: FirewallCategory; pattern: RegExp }> = [
   { category: "jwt", pattern: /\beyJ[\w-]{8,}\.[\w-]{8,}\.[\w-]{8,}\b/g },
   {
     category: "api-key",
-    pattern: /\b(?:AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{36,}|sk-[A-Za-z0-9]{20,}|glpat-[\w-]{20,})\b/g,
+    pattern:
+      /\b(?:AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{36,}|sk-[A-Za-z0-9]{20,}|glpat-[\w-]{20,})\b/g,
   },
   { category: "iban", pattern: /\b[A-Z]{2}\d{2}(?: ?[A-Z0-9]{4}){3,7}(?: ?[A-Z0-9]{1,4})?\b/g },
   {

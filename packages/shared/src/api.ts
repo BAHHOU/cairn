@@ -1,4 +1,5 @@
 import type { BlastRadius, ProjectArchitecture } from "./architecture";
+import type { ChangeReview, ChangeSummary } from "./change-control";
 import type { CodeGraph } from "./code-graph";
 import type { DeliveryPipeline } from "./delivery";
 import type { Issue, OrgOverview, Project, Severity, TokenSummary } from "./domain";
@@ -25,6 +26,12 @@ export interface CairnApi {
     delivery(id: string): Promise<DeliveryPipeline | null>;
     /** What a new developer needs to run the project locally. */
     onboarding(id: string): Promise<ProjectOnboarding | null>;
+  };
+  changes: {
+    /** Merge requests with their change-control verdict, the most urgent first. */
+    list(filter?: { projectId?: string }): Promise<ChangeSummary[]>;
+    /** One merge request's review: findings, specs as approved and as edited, approvals. */
+    get(projectId: string, iid: number): Promise<ChangeReview | null>;
   };
   issues: {
     list(filter?: { projectId?: string; severity?: Severity }): Promise<Issue[]>;

@@ -1,5 +1,5 @@
 import type { ScanFileRecord, ScanReport, ScanView } from "@cairn/shared";
-import { and, desc, eq, isNotNull, ne } from "drizzle-orm";
+import { and, desc, eq, isNotNull, ne, sql } from "drizzle-orm";
 import type { Db } from "./index";
 import { repositories, repositoryScans, teams } from "./schema";
 
@@ -73,6 +73,28 @@ export async function getLatestScan(db: Db, repositoryId: string): Promise<ScanV
   return row ? { ...row, createdAt: row.createdAt.toISOString() } : null;
 }
 
+/**
+ * Paths of a scan's file index that match a POSIX regex, read in the database: the index can hold
+ * thousands of records and only a handful of names are wanted. Null when the scan has no index
+ * (only the latest scan of a repository keeps one), so "not checked" stays distinct from "absent".
+ */
+export async function findScanPaths(
+  db: Db,
+  scanId: string,
+  pattern: string,
+): Promise<string[] | null> {
+  const result = await db.execute<{ indexed: boolean; path: string | null }>(sql`
+    select s.file_index is not null as indexed, e->>'path' as path
+    from ${repositoryScans} s
+    left join lateral jsonb_array_elements(coalesce(s.file_index, '[]'::jsonb)) e
+      on (e->>'path') ~ ${pattern}
+    where s.id = ${scanId}
+  `);
+  const rows = result.rows;
+  if (rows.length === 0 || !rows[0]?.indexed) return null;
+  return rows.flatMap((r) => (r.path ? [r.path] : [])).sort();
+}
+
 export interface RepositoryScanSummary {
   repositoryId: string;
   fullPath: string;
@@ -106,6 +128,51 @@ export async function listLatestScanSummaries(db: Db): Promise<RepositoryScanSum
   return rows
     .map((r) => ({ ...r, createdAt: r.createdAt.toISOString() }))
     .sort((a, b) => a.fullPath.localeCompare(b.fullPath));
+}
+
+export interface RepositoryReadinessScan extends RepositoryScanSummary {
+  docs: ScanView["docs"];
+  onboarding: ScanView["onboarding"];
+  delivery: ScanView["delivery"];
+  /** AI ignore files in the scanned tree; null when the scan kept no file index. */
+  aiIgnoreFiles: string[] | null;
+}
+
+/**
+ * The latest scan of every repository with what readiness is computed from, for portfolio views.
+ * The architecture, code map and file index stay in the database; ignore files are looked up there.
+ */
+export async function listLatestReadinessScans(
+  db: Db,
+  aiIgnorePattern: string,
+): Promise<RepositoryReadinessScan[]> {
+  const rows = await db
+    .selectDistinctOn([repositoryScans.repositoryId], {
+      repositoryId: repositoryScans.repositoryId,
+      fullPath: repositories.fullPath,
+      host: repositories.host,
+      branch: repositories.branch,
+      team: teams.name,
+      scanId: repositoryScans.id,
+      commitSha: repositoryScans.commitSha,
+      createdAt: repositoryScans.createdAt,
+      report: repositoryScans.report,
+      docs: repositoryScans.docs,
+      onboarding: repositoryScans.onboarding,
+      delivery: repositoryScans.delivery,
+    })
+    .from(repositoryScans)
+    .innerJoin(repositories, eq(repositories.id, repositoryScans.repositoryId))
+    .innerJoin(teams, eq(teams.id, repositories.teamId))
+    .orderBy(repositoryScans.repositoryId, desc(repositoryScans.createdAt));
+  const withIgnore = await Promise.all(
+    rows.map(async (r) => ({
+      ...r,
+      createdAt: r.createdAt.toISOString(),
+      aiIgnoreFiles: await findScanPaths(db, r.scanId, aiIgnorePattern),
+    })),
+  );
+  return withIgnore.sort((a, b) => a.fullPath.localeCompare(b.fullPath));
 }
 
 /** What the next scan of this repository can reuse: the per-file records of the last one. */

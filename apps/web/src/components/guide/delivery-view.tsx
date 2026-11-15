@@ -2,13 +2,7 @@ import { type DeliveryView, PIPELINE_VARIABLE_KINDS } from "@cairn/shared";
 import { Box, Layers, ShieldAlert, Workflow } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import {
-  GuideUnavailable,
-  LimitsNote,
-  ProjectTabs,
-  Section,
-  SourceRef,
-} from "@/components/guide/bits";
+import { GuideUnavailable, LimitsNote, Section, SourceRef } from "@/components/guide/bits";
 import { DeliveryMap } from "@/components/guide/delivery-map";
 import { Findings } from "@/components/guide/findings";
 import { PipelineFlow } from "@/components/guide/pipeline-flow";
@@ -174,7 +168,6 @@ export function ImportedDelivery({ id, imported }: { id: string; imported: Impor
             : t("description")
         }
       />
-      <ProjectTabs id={id} active="delivery" />
 
       {!imported.scan ? (
         <GuideUnavailable title={t("unavailableTitle")}>{t("unavailableBody")}</GuideUnavailable>

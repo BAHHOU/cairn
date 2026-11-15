@@ -1,6 +1,8 @@
 import type {
   BlastRadius,
   CairnApi,
+  ChangeReview,
+  ChangeSummary,
   CodeGraph,
   DeliveryPipeline,
   Issue,
@@ -45,6 +47,15 @@ export function createHttpApi(baseUrl: string, token?: string): CairnApi {
         get<DeliveryPipeline | null>(`/projects/${encodeURIComponent(id)}/delivery`),
       onboarding: (id) =>
         get<ProjectOnboarding | null>(`/projects/${encodeURIComponent(id)}/onboarding`),
+    },
+    changes: {
+      list: (filter) => {
+        const q = new URLSearchParams();
+        if (filter?.projectId) q.set("projectId", filter.projectId);
+        return get<ChangeSummary[]>(`/changes?${q.toString()}`);
+      },
+      get: (projectId, iid) =>
+        get<ChangeReview | null>(`/projects/${encodeURIComponent(projectId)}/changes/${iid}`),
     },
     issues: {
       list: (filter) => {

@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -27,6 +28,7 @@ export function Modal({
   wide?: boolean;
   children: ReactNode;
 }) {
+  const t = useTranslations("shell");
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
@@ -53,7 +55,7 @@ export function Modal({
             </div>
             <DialogPrimitive.Close
               className="grid size-8 shrink-0 place-items-center rounded-md text-muted-foreground outline-none hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
-              aria-label="Fermer"
+              aria-label={t("close")}
             >
               <X className="size-4" aria-hidden />
             </DialogPrimitive.Close>

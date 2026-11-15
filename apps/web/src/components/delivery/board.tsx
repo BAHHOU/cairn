@@ -1,12 +1,8 @@
-import {
-  type ArchSource,
-  type DeliveryEnvironment,
-  type DeliveryStage,
-  formatMinutes,
-} from "@cairn/shared";
+import type { ArchSource, DeliveryEnvironment, DeliveryStage } from "@cairn/shared";
 import { CircleCheck, CircleDashed, Clock, Hand, Lock, ShieldAlert, Timer } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
+import { useFormat } from "@/i18n/format";
 
 /**
  * The pieces of the delivery board.
@@ -93,6 +89,7 @@ export function StageRow({ stage }: { stage: DeliveryStage }) {
  */
 function GateStrip({ env }: { env: DeliveryEnvironment }) {
   const t = useTranslations("delivery.board");
+  const fmt = useFormat();
   if (!env.approval.required) {
     return (
       <p className="flex min-h-14 items-center gap-2 border-b bg-muted/30 px-4 py-2 text-muted-foreground text-xs">
@@ -114,7 +111,7 @@ function GateStrip({ env }: { env: DeliveryEnvironment }) {
       {wait ? (
         <span className="flex items-center gap-1 pl-5 text-muted-foreground tabular-nums">
           <Clock className="size-3" aria-hidden />
-          {t("observedWait", { duration: formatMinutes(wait) })}
+          {t("observedWait", { duration: fmt.minutes(wait) })}
         </span>
       ) : null}
     </div>
@@ -139,6 +136,7 @@ export function EnvironmentCard({
 }) {
   const t = useTranslations("delivery.board");
   const td = useTranslations("domain");
+  const fmt = useFormat();
   return (
     <section className="flex min-w-0 flex-col overflow-hidden rounded-xl border bg-card">
       <GateStrip env={env} />
@@ -173,7 +171,7 @@ export function EnvironmentCard({
         <dl className="grid grid-cols-2 gap-3 rounded-lg bg-muted/40 px-3 py-2">
           <div className="flex min-w-0 flex-col">
             <dt className="text-[11px] text-muted-foreground">{t("machine")}</dt>
-            <dd className="font-semibold text-sm tabular-nums">{formatMinutes(leadTimeMin)}</dd>
+            <dd className="font-semibold text-sm tabular-nums">{fmt.minutes(leadTimeMin)}</dd>
           </div>
           <div className="flex min-w-0 flex-col">
             <dt className="text-[11px] text-muted-foreground">{t("wait")}</dt>
@@ -184,7 +182,7 @@ export function EnvironmentCard({
                   : "font-semibold text-sm tabular-nums"
               }
             >
-              {waitMin === 0 ? "—" : formatMinutes(waitMin)}
+              {waitMin === 0 ? "—" : fmt.minutes(waitMin)}
             </dd>
           </div>
         </dl>

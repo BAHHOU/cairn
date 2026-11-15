@@ -7,5 +7,5 @@ export default async function DocsPage({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const imported = await loadImportedScan(id);
   if (!imported) notFound();
-  return <ImportedDocs id={id} imported={imported} />;
+  return <ImportedDocs imported={imported} />;
 }

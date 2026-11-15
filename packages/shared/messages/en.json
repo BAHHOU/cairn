@@ -253,6 +253,112 @@
       "domaine": "Domain",
       "infrastructure": "Infrastructure",
       "externe": "External"
+    },
+    "deliveryRisk": {
+      "approval": {
+        "title": "No named approver for {env}",
+        "detail": "Promotion needs a manual approval, but the configuration names no role. In practice, whoever is free clicks."
+      },
+      "waitDominates": {
+        "title": "Waiting for approval takes longer than the whole technical chain",
+        "detail": "Machines need {machineMin} to reach {env}, and changes wait {waitMin} at the gates. Faster tests would change almost nothing."
+      },
+      "nonBlocking": {
+        "title": "“{stage}” stops nothing",
+        "detail": "The step runs and publishes its result, but a failure lets the rest of the chain through. The report exists; the barrier does not."
+      },
+      "realData": {
+        "title": "{env} holds real data with no security barrier",
+        "detail": "No blocking security step comes before this deployment: a commit can reach production data without any check able to stop it."
+      },
+      "rollbackUntested": {
+        "title": "Rollback has never been rehearsed",
+        "detail": "The procedure is written and announced at {durationMin}, but no rehearsal is recorded. The first time will be an incident."
+      },
+      "noVerify": {
+        "title": "Nothing checks the deployment to {env}",
+        "detail": "The chain declares success as soon as the manifests are applied. Operations, or a user, will be the ones to find out the application does not start."
+      }
+    },
+    "change": {
+      "verdict": {
+        "pass": "Compliant",
+        "review": "Needs review",
+        "blocked": "Blocked"
+      },
+      "approverRole": {
+        "business": "Business",
+        "techLead": "Tech lead",
+        "security": "Security"
+      },
+      "finding": {
+        "ticket": {
+          "missing": {
+            "title": "No ticket justifies this change",
+            "detail": "Neither the branch, the title nor the commits cite a ticket: nobody asked for what is being delivered."
+          },
+          "unavailable": {
+            "title": "Ticket could not be read",
+            "detail": "The ticket is cited but could not be read from the tracker: conformance cannot be checked."
+          }
+        },
+        "spec": {
+          "notApproved": {
+            "title": "Specification not approved",
+            "detail": "The ticket's status is “{status}”: the business has not approved what is being delivered."
+          },
+          "approvedByAuthor": {
+            "title": "Specification approved by the author of the change",
+            "detail": "The person delivering the code also approved the request: nobody else looked at it."
+          },
+          "rewrittenByAuthor": {
+            "title": "Specification rewritten by the author after approval",
+            "detail": "The author of the change edited the ticket {count, plural, one {once} other {# times}} after it was approved. The code is compared with the approved text, not the edited one."
+          },
+          "changedAfterApproval": {
+            "title": "Specification changed after approval",
+            "detail": "The ticket changed {count, plural, one {once} other {# times}} since it was approved, with no new approval."
+          }
+        },
+        "zone": {
+          "notInSpec": {
+            "title": "Sensitive zone not covered by the specification",
+            "detail": "The change touches a critical zone that the approved specification does not mention."
+          }
+        },
+        "approval": {
+          "missing": {
+            "title": "Missing {role, select, business {business} techLead {tech lead} security {security} other {required}} approval",
+            "detail": "This critical zone requires a {role, select, business {business} techLead {tech lead} security {security} other {required}} approval; nobody with that role approved, the author excluded."
+          },
+          "self": {
+            "title": "The author approved their own change",
+            "detail": "Their approval is not counted."
+          }
+        },
+        "change": {
+          "amountNotInSpec": {
+            "title": "Amount {to, number} not in the approved specification",
+            "detail": "The code sets a value that the approved specification does not mention."
+          },
+          "amount": {
+            "title": "Amount {to, number} matches the specification",
+            "detail": "The new value appears in the approved specification."
+          },
+          "authorization": {
+            "title": "Access rights changed",
+            "detail": "Roles, permissions or authorisations: {added, plural, one {# line added} other {# lines added}}, {removed, plural, one {# removed} other {# removed}}."
+          },
+          "validationRemoved": {
+            "title": "Checks removed",
+            "detail": "{count, plural, one {One check (exception, validation, assertion) is removed} other {# checks (exceptions, validations, assertions) are removed}} without a replacement."
+          },
+          "hardcodedAccount": {
+            "title": "Bank account hardcoded ({account})",
+            "detail": "A valid IBAN appears in the code: a beneficiary should never be fixed in code."
+          }
+        }
+      }
     }
   }
 }
