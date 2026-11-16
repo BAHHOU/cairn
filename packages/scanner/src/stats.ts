@@ -93,11 +93,13 @@ export function computeStats(project: Project): ScanStats {
       files: 0,
       lines: 0,
       tokens: 0,
+      tokensNoise: 0,
       deployable: false,
     };
     stat.files += 1;
     stat.lines += f.lines;
     stat.tokens += f.tokens;
+    if (noise.has(f.kind)) stat.tokensNoise = (stat.tokensNoise ?? 0) + f.tokens;
     units.set(unit.key, stat);
 
     if (f.kind === "source") structure.sourceFiles += 1;

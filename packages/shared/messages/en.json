@@ -359,6 +359,70 @@
           }
         }
       }
+    },
+    "trace": {
+      "category": {
+        "unrequested": {
+          "label": "Shipped without request",
+          "hint": "Code on main that no approved ticket asked for."
+        },
+        "notShipped": {
+          "label": "Requested, not shipped",
+          "hint": "Tickets closed in the tracker that never reached main."
+        },
+        "changedAfterReview": {
+          "label": "Changed after review",
+          "hint": "Code or spec that moved after the people accountable approved it."
+        },
+        "agent": {
+          "label": "AI-agent changes",
+          "hint": "Code written by an AI agent without the human review it needs."
+        }
+      },
+      "finding": {
+        "trace": {
+          "noTicket": {
+            "title": "Merged without a ticket",
+            "detail": "No ticket in the title, branch, description or commits: nobody in the business asked for this change."
+          },
+          "directPush": {
+            "title": "Pushed straight to main",
+            "detail": "This commit skipped the merge request: no review, no approval, no ticket check."
+          },
+          "specNotApproved": {
+            "title": "Built from a ticket nobody approved",
+            "detail": "The ticket it cites never reached an approved status: the business did not sign off what was built."
+          },
+          "mergedBlocked": {
+            "title": "Merged despite a blocked review",
+            "detail": "Change control found {count, plural, one {# blocking issue} other {# blocking issues}}, and the merge went through anyway."
+          },
+          "doneNotShipped": {
+            "title": "Closed in the tracker, not on main",
+            "detail": "The business considers it delivered, but no merge or commit on main in the window cites it."
+          },
+          "commitsAfterApproval": {
+            "title": "Changed after approval",
+            "detail": "{count, plural, one {# commit was} other {# commits were}} added after the last approval: reviewers did not see the code that shipped."
+          },
+          "specEditedAfterApproval": {
+            "title": "Spec edited after approval",
+            "detail": "The ticket changed after the business approved it: the code may follow a version nobody accountable agreed to."
+          },
+          "specEditedAfterDelivery": {
+            "title": "Spec edited after delivery",
+            "detail": "The ticket changed {count, plural, one {once} other {# times}} after the code shipped: what runs may no longer be what is asked."
+          },
+          "agentNoHumanReview": {
+            "title": "{agent} change with no human review",
+            "detail": "Written by an AI agent and merged without any human approval."
+          },
+          "agentCriticalZone": {
+            "title": "{agent} changed a critical zone",
+            "detail": "A human approved, but not every role the policy requires for this zone signed off this agent's change."
+          }
+        }
+      }
     }
   }
 }

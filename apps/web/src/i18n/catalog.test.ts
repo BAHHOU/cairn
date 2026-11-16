@@ -14,6 +14,8 @@ import {
   LOCALES,
   NOT_CHECKED,
   SPEC_EVIDENCE,
+  TRACE_CATEGORIES,
+  TRACE_FINDING_KINDS,
 } from "@cairn/shared";
 import domainEn from "@cairn/shared/messages/en.json";
 import domainFr from "@cairn/shared/messages/fr.json";
@@ -135,6 +137,14 @@ it.each([...LOCALES])("%s has a message for every change-control finding", (loca
     ]),
     ...CHANGE_VERDICTS.map((v) => `domain.change.verdict.${v}`),
     ...APPROVER_ROLES.map((r) => `domain.change.approverRole.${r}`),
+    ...TRACE_FINDING_KINDS.flatMap((k) => [
+      `domain.trace.finding.${k}.title`,
+      `domain.trace.finding.${k}.detail`,
+    ]),
+    ...TRACE_CATEGORIES.flatMap((c) => [
+      `domain.trace.category.${c}.label`,
+      `domain.trace.category.${c}.hint`,
+    ]),
   ];
   for (const key of expected) expect(keys.has(key), key).toBe(true);
 });

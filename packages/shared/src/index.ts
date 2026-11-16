@@ -14,5 +14,6 @@ export * from "./portfolio";
 export * from "./readiness";
 export * from "./roles";
 export * from "./scan";
+export * from "./traceability";
 export * from "./trackers";
 export * from "./usage";

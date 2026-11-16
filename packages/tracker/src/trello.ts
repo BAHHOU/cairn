@@ -6,7 +6,7 @@
  * approved is rebuilt exactly, by undoing later edits newest first. Cards are cited by link.
  */
 
-import type { ChangeRequest, SpecView } from "@cairn/shared";
+import type { ChangeRequest, SpecView, TicketItem } from "@cairn/shared";
 import { z } from "zod";
 import type { AdapterOptions, TrackerAdapter, TrackerConnection } from "./adapter";
 import { shaped, TrackerError, trackerCall, utc } from "./http";
@@ -108,6 +108,47 @@ export function trelloTracker(
         get(`/cards/${id}/actions?filter=updateCard,createCard&limit=1000`),
       ]);
       return shaped("Trello", () => toTrelloSpec(ref, { card: c, actions: a }, approvedStatuses));
+    },
+    async list(scope, query) {
+      const board = /^[A-Za-z0-9]{8,24}$/.exec(scope.board ?? "")?.[0];
+      if (!board) throw new TrackerError("not_found", "A Trello board id is required");
+      const [lists, cards] = await Promise.all([
+        get(`/boards/${board}/lists?fields=name&filter=all`),
+        get(`/boards/${board}/cards/all?fields=name,shortLink,url,dateLastActivity,idList`),
+      ]);
+      return shaped("Trello", () => {
+        const names = new Map(
+          z
+            .array(z.object({ id: z.string(), name: z.string() }))
+            .parse(lists)
+            .map((l) => [l.id, l.name]),
+        );
+        return z
+          .array(
+            z.object({
+              name: z.string(),
+              shortLink: z.string(),
+              url: z.string(),
+              dateLastActivity: z.string(),
+              idList: z.string(),
+            }),
+          )
+          .parse(cards)
+          .filter((c) => utc(c.dateLastActivity) >= query.since)
+          .slice(0, query.limit ?? 100)
+          .map((c): TicketItem => {
+            const status = names.get(c.idList) ?? "";
+            return {
+              key: `trello:${c.shortLink}`,
+              title: c.name,
+              status,
+              done: query.doneStatuses.includes(status),
+              tracker: "trello",
+              url: c.url,
+              updatedAt: utc(c.dateLastActivity),
+            };
+          });
+      });
     },
     async check() {
       const me = await get("/members/me?fields=fullName,username");

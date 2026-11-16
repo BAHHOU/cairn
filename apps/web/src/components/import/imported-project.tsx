@@ -4,50 +4,46 @@ import {
   type ImportView,
   isImportActive,
   type ScanView,
+  type TraceSummary,
 } from "@cairn/shared";
-import { ExternalLink } from "lucide-react";
-import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { AutoRefresh } from "@/components/import/auto-refresh";
-import { HealthBriefPanel } from "@/components/import/overview/health-brief";
-import { ProjectMap } from "@/components/import/overview/project-map";
 import {
-  Gaps,
-  Kpis,
-  LargestFiles,
-  ReadinessAxes,
-  ScanHealth,
-  SectionTitle,
-  TokenCharts,
-  VerdictPanel,
-} from "@/components/import/overview/sections";
-import { ImportStatusBadge } from "@/components/import/status";
-import { PageHeader } from "@/components/page";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { useFormat } from "@/i18n/format";
+  AreaHealth,
+  LatestScan,
+  PostureBanner,
+  TokensByModule,
+  TopRisks,
+} from "@/components/import/overview/dashboard";
+import { LargestFiles, ReadinessAxes, TokenCharts } from "@/components/import/overview/sections";
+import { TraceSignal } from "@/components/traceability/trace-signal";
 import type { SourceBase } from "@/lib/import/source-link";
 
+/**
+ * Overview of an imported repository: the posture and what to fix for the person who decides,
+ * project facts and actions on the side, then the evidence for the engineers who act.
+ */
 export function ImportedProject({
   runs,
   scan,
   source,
   aiIgnoreFiles,
-  canRescan = false,
+  trace = null,
 }: {
   runs: ImportView[];
   scan: ScanView | null;
   source: SourceBase | null;
   aiIgnoreFiles: string[] | null;
-  canRescan?: boolean;
+  /** The last traceability run, counts only. */
+  trace?: { summary: TraceSummary; computedAt: string } | null;
 }) {
-  const t = useTranslations("overview");
+  const t = useTranslations("overview.dash");
+  const tch = useTranslations("overview.charts");
   const ti = useTranslations("projects.imported");
-  const fmt = useFormat();
   const latest = runs[0];
   if (!latest) return null;
-  const { repository: repo } = latest;
+  const projectId = latest.repository.id;
   const active = runs.some((r) => isImportActive(r.status));
   const technologies = runs.find((r) => r.status === "done")?.facts?.technologies ?? [];
   const readiness = scan
@@ -69,108 +65,80 @@ export function ImportedProject({
       : null;
 
   return (
-    <>
+    <div className="flex flex-col gap-6 pb-6">
       <AutoRefresh active={active} />
-      <PageHeader
-        title={repo.fullPath}
-        description={
-          <span className="flex flex-wrap items-center gap-2">
-            <span>
-              {repo.team} · {repo.host}
-            </span>
-            <Badge variant="outline" className="font-mono">
-              {repo.branch}
-            </Badge>
-            {scan ? (
-              <span className="font-mono text-xs">{scan.report.commit.slice(0, 10)}</span>
-            ) : null}
-            <ImportStatusBadge status={latest.status} />
-            {scan ? (
-              <span className="text-xs">
-                {t("scannedAt", {
-                  date: fmt.date(scan.report.generatedAt),
-                  seconds: fmt.seconds(scan.report.durationMs),
-                })}
-              </span>
-            ) : null}
-            {technologies.map((tech) => (
-              <Badge key={tech} variant="outline">
-                {tech}
-              </Badge>
-            ))}
-          </span>
-        }
-        actions={
-          <>
-            {repo.webUrl ? (
-              <a
-                href={repo.webUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={buttonVariants({ variant: "outline", size: "sm" })}
-              >
-                <ExternalLink aria-hidden />{" "}
-                {ti("openOn", { provider: repo.provider === "github" ? "GitHub" : "GitLab" })}
-              </a>
-            ) : null}
-            <Link
-              href="/projects/import"
-              className={buttonVariants({ variant: "outline", size: "sm" })}
-            >
-              {ti("newImport")}
-            </Link>
-          </>
-        }
-      />
+      <h1 className="sr-only">
+        {t("overview")} · {latest.repository.fullPath}
+      </h1>
 
+      {/* Rows stretch: cards side by side share one height, so no row leaves a hole. */}
       {scan && readiness && health ? (
-        <>
-          <ProjectMap projectId={repo.id} scan={scan} />
-          <HealthBriefPanel brief={health} projectId={repo.id} />
-          <SectionTitle id="actions" title={t("actionsTitle")} hint={t("actionsHint")} />
-          <Gaps readiness={readiness} base={source} />
-          <VerdictPanel readiness={readiness} />
-          <Kpis scan={scan} readiness={readiness} />
-          <TokenCharts scan={scan} />
-          <section className="grid items-start gap-4 xl:grid-cols-2">
-            <LargestFiles scan={scan} base={source} />
-            <ReadinessAxes readiness={readiness} base={source} />
-          </section>
-          <ScanHealth scan={scan} repositoryId={repo.id} canRescan={canRescan} active={active} />
-        </>
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-2 xl:grid-cols-3">
+          <PostureBanner
+            brief={health}
+            readiness={readiness}
+            scan={scan}
+            className="lg:col-span-2"
+          />
+          {/* Two columns pair tokens with risks, then delivery with the scan; three keep DOM order. */}
+          <TraceSignal
+            projectId={projectId}
+            snapshot={trace}
+            className="h-full lg:order-4 xl:order-none"
+          />
+          <TokensByModule scan={scan} className="h-full lg:order-2 xl:order-none" />
+          <TopRisks
+            readiness={readiness}
+            projectId={projectId}
+            className="h-full lg:order-3 xl:order-none"
+          />
+          <LatestScan
+            runs={runs}
+            scan={scan}
+            technologies={technologies}
+            className="h-full lg:order-5 xl:order-none"
+          />
+          <AreaHealth
+            brief={health}
+            projectId={projectId}
+            className="lg:order-6 lg:col-span-2 xl:order-none xl:col-span-3"
+          />
+        </div>
       ) : (
-        <Card className="border-dashed">
-          <CardHeader>
-            <CardTitle className="text-base">{active ? ti("running") : ti("noSuccess")}</CardTitle>
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-2">
+          <section className="flex flex-col gap-1 rounded-xl border border-dashed p-6">
+            <h2 className="font-semibold text-base">{active ? ti("running") : ti("noSuccess")}</h2>
             <p className="text-muted-foreground text-sm">{ti("viewsPending")}</p>
-          </CardHeader>
-        </Card>
+          </section>
+          <LatestScan runs={runs} scan={scan} technologies={technologies} />
+        </div>
       )}
 
-      <Card className="gap-0 py-0">
-        <CardHeader className="py-5">
-          <CardTitle>{ti("history", { count: runs.length })}</CardTitle>
-        </CardHeader>
-        <ul className="divide-y border-t">
-          {runs.map((run) => (
-            <li key={run.id} className="flex flex-wrap items-center gap-3 px-6 py-3 text-sm">
-              <ImportStatusBadge status={run.status} />
-              <span className="font-mono text-xs">
-                {(run.commitSha ?? run.requestedSha)?.slice(0, 10) ?? "—"}
-              </span>
-              <span className="text-xs text-muted-foreground">
-                {run.requestedBy} · {fmt.date(run.createdAt)}
-              </span>
-              <Link
-                href={`/projects/import/${run.id}`}
-                className="ml-auto text-xs underline underline-offset-4 hover:text-primary"
-              >
-                {ti("runDetail")}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Card>
-    </>
+      {scan && readiness ? (
+        <section aria-labelledby="evidence-title" className="flex flex-col gap-4 pt-4">
+          <div className="flex flex-col gap-0.5">
+            <h2 id="evidence-title" className="font-semibold text-lg">
+              {t("evidenceTitle")}
+            </h2>
+            <p className="text-muted-foreground text-sm">{t("evidenceHint")}</p>
+          </div>
+          <ReadinessAxes readiness={readiness} base={source} />
+          <LargestFiles scan={scan} base={source} />
+          <details className="group rounded-xl border bg-card">
+            <summary className="flex cursor-pointer list-none flex-wrap items-center gap-x-2 gap-y-1 rounded-xl px-5 py-4 font-medium text-sm outline-none hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden">
+              <ChevronRight
+                className="size-4 text-muted-foreground transition-transform group-open:rotate-90"
+                aria-hidden
+              />
+              {tch("title")}
+              <span className="font-normal text-muted-foreground text-xs">{tch("hint")}</span>
+            </summary>
+            <div className="flex flex-col gap-4 px-5 pb-5">
+              <TokenCharts scan={scan} titled={false} />
+            </div>
+          </details>
+        </section>
+      ) : null}
+    </div>
   );
 }

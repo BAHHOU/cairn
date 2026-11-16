@@ -359,6 +359,70 @@
           }
         }
       }
+    },
+    "trace": {
+      "category": {
+        "unrequested": {
+          "label": "Livré sans demande",
+          "hint": "Du code sur main qu'aucun ticket validé n'a demandé."
+        },
+        "notShipped": {
+          "label": "Demandé, non livré",
+          "hint": "Des tickets clos dans l'outil qui n'ont jamais atteint main."
+        },
+        "changedAfterReview": {
+          "label": "Modifié après revue",
+          "hint": "Du code ou une spec qui a bougé après la validation des responsables."
+        },
+        "agent": {
+          "label": "Changements d'agents IA",
+          "hint": "Du code écrit par un agent IA sans la revue humaine requise."
+        }
+      },
+      "finding": {
+        "trace": {
+          "noTicket": {
+            "title": "Fusionné sans ticket",
+            "detail": "Aucun ticket dans le titre, la branche, la description ou les commits : personne côté métier n'a demandé ce changement."
+          },
+          "directPush": {
+            "title": "Poussé directement sur main",
+            "detail": "Ce commit a contourné la merge request : ni revue, ni validation, ni contrôle du ticket."
+          },
+          "specNotApproved": {
+            "title": "Réalisé sur un ticket non validé",
+            "detail": "Le ticket cité n'a jamais atteint un statut validé : le métier n'a pas approuvé ce qui a été construit."
+          },
+          "mergedBlocked": {
+            "title": "Fusionné malgré une revue bloquée",
+            "detail": "Le contrôle des changements a relevé {count, plural, one {# point bloquant} other {# points bloquants}}, et la fusion a eu lieu quand même."
+          },
+          "doneNotShipped": {
+            "title": "Clos dans l'outil, absent de main",
+            "detail": "Le métier le considère livré, mais aucune fusion ni aucun commit sur main dans la période ne le cite."
+          },
+          "commitsAfterApproval": {
+            "title": "Modifié après validation",
+            "detail": "{count, plural, one {# commit a été ajouté} other {# commits ont été ajoutés}} après la dernière validation : les relecteurs n'ont pas vu le code livré."
+          },
+          "specEditedAfterApproval": {
+            "title": "Spec modifiée après validation",
+            "detail": "Le ticket a changé après la validation du métier : le code suit peut-être une version qu'aucun responsable n'a acceptée."
+          },
+          "specEditedAfterDelivery": {
+            "title": "Spec modifiée après livraison",
+            "detail": "Le ticket a changé {count, plural, one {une fois} other {# fois}} après la livraison : ce qui tourne n'est peut-être plus ce qui est demandé."
+          },
+          "agentNoHumanReview": {
+            "title": "Changement de {agent} sans revue humaine",
+            "detail": "Écrit par un agent IA et fusionné sans aucune validation humaine."
+          },
+          "agentCriticalZone": {
+            "title": "{agent} a modifié une zone critique",
+            "detail": "Un humain a validé, mais pas tous les rôles que la politique exige pour cette zone."
+          }
+        }
+      }
     }
   }
 }

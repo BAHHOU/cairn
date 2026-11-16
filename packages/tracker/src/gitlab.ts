@@ -7,7 +7,7 @@
  * as approved is today's, flagged inexact: change control then refuses it as proof once edited.
  */
 
-import type { ChangeRequest, SpecView } from "@cairn/shared";
+import type { ChangeRequest, SpecView, TicketItem } from "@cairn/shared";
 import { z } from "zod";
 import type { AdapterOptions, TrackerAdapter, TrackerConnection } from "./adapter";
 import { shaped, TrackerError, trackerCall, utc } from "./http";
@@ -118,6 +118,39 @@ export function gitlabTracker(
       ]);
       return shaped("GitLab", () =>
         toGitLabSpec(ref, { issue, labels, notes: history }, approvedStatuses),
+      );
+    },
+    async list(scope, query) {
+      const project = scope.project || connection.project;
+      const body = await get(
+        `/projects/${encodeURIComponent(project)}/issues?scope=all&updated_after=${encodeURIComponent(query.since)}` +
+          `&order_by=updated_at&sort=desc&per_page=${Math.min(query.limit ?? 100, 100)}`,
+      );
+      return shaped("GitLab", () =>
+        z
+          .array(
+            z.object({
+              iid: z.number(),
+              title: z.string(),
+              state: z.string(),
+              labels: z.array(z.string()),
+              web_url: z.string(),
+              updated_at: z.string(),
+            }),
+          )
+          .parse(body)
+          .map((i): TicketItem => {
+            const doneLabel = i.labels.find((l) => query.doneStatuses.includes(l));
+            return {
+              key: project === connection.project ? `#${i.iid}` : `${project}#${i.iid}`,
+              title: i.title,
+              status: doneLabel ?? i.state,
+              done: i.state === "closed" || doneLabel !== undefined,
+              tracker: "gitlab",
+              url: i.web_url,
+              updatedAt: utc(i.updated_at),
+            };
+          }),
       );
     },
     async check() {

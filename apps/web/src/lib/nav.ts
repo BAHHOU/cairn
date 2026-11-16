@@ -174,6 +174,7 @@ export const WORKSPACE_NAV: NavGroup[] = [
     icon: "gitPullRequest",
     items: [
       live("changeControl", "/changes", "gitPullRequest"),
+      live("traceability", "/governance/traceability", "route"),
       live("policies", "/governance/policies", "fileCheck", LEADS),
       {
         ...live("integrations", "/settings/integrations", "plug", ["superadmin"]),
@@ -255,7 +256,7 @@ export const PROJECT_NAV: NavGroup[] = [
     icon: "gitPullRequest",
     items: [
       live("changeControl", "/changes", "gitPullRequest"),
-      planned("traceability", "/traceability", "route"),
+      live("traceability", "/traceability", "route"),
     ],
   },
   {

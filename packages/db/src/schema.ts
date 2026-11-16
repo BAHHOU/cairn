@@ -10,6 +10,7 @@ import {
   type ProjectArchitecture,
   type ScanFileRecord,
   type ScanReport,
+  type TraceSummary,
   type TrackerKind,
 } from "@cairn/shared";
 import {
@@ -202,4 +203,38 @@ export const trackerConnections = pgTable("tracker_connection", {
   createdBy: text("created_by").notNull(),
   createdAt: createdAt(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/**
+ * Which board holds a repository's tickets, in one connected tool: a Jira JQL query, a Trello
+ * board, a Notion database. Traceability lists them to find what was asked and never shipped.
+ */
+export const repositoryTrackerLinks = pgTable(
+  "repository_tracker_link",
+  {
+    id: id(),
+    repositoryId: text("repository_id")
+      .notNull()
+      .references(() => repositories.id, { onDelete: "cascade" }),
+    connectionId: text("connection_id")
+      .notNull()
+      .references(() => trackerConnections.id, { onDelete: "cascade" }),
+    /** Not secret: `{ jql }`, `{ board }`, `{ database }`. */
+    scope: jsonb("scope").$type<Record<string, string>>().notNull(),
+    createdBy: text("created_by").notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index("repository_tracker_link_repository_idx").on(t.repositoryId)],
+);
+
+/**
+ * The last traceability run of a repository, as counts only: what the overview and the
+ * portfolio show without calling GitLab and the trackers on every page load.
+ */
+export const traceSnapshots = pgTable("trace_snapshot", {
+  repositoryId: text("repository_id")
+    .primaryKey()
+    .references(() => repositories.id, { onDelete: "cascade" }),
+  summary: jsonb("summary").$type<TraceSummary>().notNull(),
+  computedAt: timestamp("computed_at", { withTimezone: true }).notNull().defaultNow(),
 });

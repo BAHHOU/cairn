@@ -7,6 +7,7 @@ export * from "./imports";
 export * from "./queue";
 export * from "./scans";
 export * from "./schema";
+export * from "./traceability";
 export { schema };
 
 export function createDb(connectionString: string = process.env.DATABASE_URL ?? "") {

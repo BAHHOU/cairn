@@ -8,7 +8,7 @@
  * as one: Cairn would rather ask for a look than vouch for a page it cannot date.
  */
 
-import type { ChangeRequest, SpecView } from "@cairn/shared";
+import type { ChangeRequest, SpecView, TicketItem } from "@cairn/shared";
 import { z } from "zod";
 import type { AdapterOptions, TrackerAdapter, TrackerConnection } from "./adapter";
 import { localPart, shaped, TrackerError, trackerCall, utc } from "./http";
@@ -118,6 +118,17 @@ export function notionTracker(
 ): TrackerAdapter {
   const headers = { authorization: `Bearer ${connection.token}`, "notion-version": VERSION };
   const get = (path: string) => trackerCall("Notion", `${API}${path}`, { headers }, options);
+  const post = (path: string, body: unknown) =>
+    trackerCall(
+      "Notion",
+      `${API}${path}`,
+      {
+        method: "POST",
+        headers: { ...headers, "content-type": "application/json" },
+        body: JSON.stringify(body),
+      },
+      options,
+    );
   return {
     kind: "notion",
     find: findNotionPages,
@@ -130,6 +141,34 @@ export function notionTracker(
       ]);
       return shaped("Notion", () =>
         toNotionSpec(ref, { page: pg, blocks: bl }, approvedStatuses, connection),
+      );
+    },
+    async list(scope, query) {
+      const raw = (scope.database ?? "").replace(/-/g, "").toLowerCase();
+      const database = /^[0-9a-f]{32}$/.exec(raw)?.[0];
+      if (!database) throw new TrackerError("not_found", "A Notion database id is required");
+      const body = await post(`/databases/${database}/query`, {
+        filter: { timestamp: "last_edited_time", last_edited_time: { on_or_after: query.since } },
+        sorts: [{ timestamp: "last_edited_time", direction: "descending" }],
+        page_size: Math.min(query.limit ?? 100, 100),
+      });
+      return shaped("Notion", () =>
+        z
+          .object({ results: z.array(page.extend({ id: z.string() })) })
+          .parse(body)
+          .results.map((p): TicketItem => {
+            const titleProp = Object.values(p.properties).find((v) => v.type === "title");
+            const status = optionName(p.properties[connection.statusProperty ?? "Status"]) ?? "";
+            return {
+              key: `notion:${p.id.replace(/-/g, "").toLowerCase()}`,
+              title: plain(richText.optional().parse(titleProp?.title)),
+              status,
+              done: query.doneStatuses.includes(status),
+              tracker: "notion",
+              url: p.url,
+              updatedAt: utc(p.last_edited_time),
+            };
+          }),
       );
     },
     async check() {

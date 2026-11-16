@@ -39,6 +39,8 @@ export function createFormat(locale: Locale) {
     maximumFractionDigits: 0,
   });
 
+  const relative = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "short" });
+
   return {
     number: (n: number) => nf.format(n),
     tokens(n: number): string {
@@ -67,6 +69,16 @@ export function createFormat(locale: Locale) {
     },
     /** Short month name, 0 = January. */
     month: (index: number) => month.format(Date.UTC(2000, index, 1)),
+    /** "2 h ago" / "il y a 2 h", relative to now; past a month, the plain date. */
+    ago(iso: string, now = Date.now()): string {
+      const s = Math.round((new Date(iso).getTime() - now) / 1000);
+      const abs = Math.abs(s);
+      if (abs < 60) return relative.format(s, "second");
+      if (abs < 3600) return relative.format(Math.round(s / 60), "minute");
+      if (abs < 86_400) return relative.format(Math.round(s / 3600), "hour");
+      if (abs < 30 * 86_400) return relative.format(Math.round(s / 86_400), "day");
+      return date.format(new Date(iso));
+    },
   };
 }
 

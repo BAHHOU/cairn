@@ -9,7 +9,7 @@ import { type ConnectionRow, TrackerSettings } from "./tracker-settings";
 
 /** What may be shown of a connection's settings: an address or a project, never a credential. */
 const detailOf = (settings: Record<string, unknown>): string | null => {
-  for (const key of ["baseUrl", "defaultRepo", "project", "apiUrl"]) {
+  for (const key of ["baseUrl", "orgUrl", "workspace", "defaultRepo", "project", "apiUrl"]) {
     const v = settings[key];
     if (typeof v === "string" && v) return v;
   }

@@ -1,21 +1,19 @@
-import { listImportViewsForRepository } from "@cairn/db";
+import { getTraceSnapshot, listImportViewsForRepository } from "@cairn/db";
 import { AXES, can, MATURITY_LEVELS } from "@cairn/shared";
 import { Check } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { GateBadge } from "@/components/badges";
 import { Radar } from "@/components/charts/radar";
 import { ScoreRing } from "@/components/charts/score-ring";
 import { Sparkline } from "@/components/charts/sparkline";
 import { ImportedProject } from "@/components/import/imported-project";
 import { IssueTable } from "@/components/issue-table";
-import { PageHeader, ProgressBar } from "@/components/page";
+import { ProgressBar } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getFormat } from "@/i18n/format";
 import { getApi } from "@/lib/api";
-import { getDb, isImportConfigured, viewerMayImport } from "@/lib/import/runtime";
+import { getDb, isImportConfigured } from "@/lib/import/runtime";
 import { loadImportedScan } from "@/lib/import/scan";
 import { getViewer } from "@/lib/session";
 import { cn } from "@/lib/utils";
@@ -35,14 +33,19 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     if (UUID.test(id) && isImportConfigured() && can(viewer.role, "see.allTeams")) {
       const runs = await listImportViewsForRepository(getDb(), id);
       if (runs.length > 0) {
-        const imported = await loadImportedScan(id);
+        const [imported, trace] = await Promise.all([
+          loadImportedScan(id),
+          getTraceSnapshot(getDb(), id),
+        ]);
         return (
           <ImportedProject
             runs={runs}
             scan={imported?.scan ?? null}
             source={imported?.source ?? null}
             aiIgnoreFiles={imported?.aiIgnoreFiles ?? null}
-            canRescan={viewerMayImport(viewer)}
+            trace={
+              trace ? { summary: trace.summary, computedAt: trace.computedAt.toISOString() } : null
+            }
           />
         );
       }
@@ -52,58 +55,23 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   const t = await getTranslations("projects.detail");
   const td = await getTranslations("domain");
   const tc = await getTranslations("charts");
-  const fmt = await getFormat();
+  const _fmt = await getFormat();
   const issues = await api.issues.list({ projectId: id });
   const next = Math.min(project.maturity + 1, 5);
 
   return (
     <>
-      <PageHeader
-        title={project.name}
-        description={
-          <span className="flex flex-wrap items-center gap-2">
-            {t("subtitle", {
-              team: project.team,
-              provider: project.provider,
-              date: fmt.date(project.lastScan),
-            })}
-            {project.tech.map((t) => (
-              <Badge key={t} variant="outline">
-                {t}
-              </Badge>
-            ))}
-          </span>
-        }
-        actions={
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href={`/projects/${project.id}/architecture`}
-              className="text-sm underline underline-offset-4 hover:text-primary"
-            >
-              {t("linkArchitecture")}
-            </Link>
-            <Link
-              href={`/projects/${project.id}/code-map`}
-              className="text-sm underline underline-offset-4 hover:text-primary"
-            >
-              {t("linkCodeMap")}
-            </Link>
-            <Link
-              href={`/projects/${project.id}/delivery`}
-              className="text-sm underline underline-offset-4 hover:text-primary"
-            >
-              {t("linkDelivery")}
-            </Link>
-            <Link
-              href={`/projects/${project.id}/onboarding`}
-              className="text-sm underline underline-offset-4 hover:text-primary"
-            >
-              {t("linkOnboarding")}
-            </Link>
-            <GateBadge status={project.gate} />
-          </div>
-        }
-      />
+      {/* Name, facts, gate and the views are in the project layout's shared header. */}
+      <h1 className="sr-only">{project.name}</h1>
+      {project.tech.length > 0 ? (
+        <div className="-mt-2 flex flex-wrap gap-1.5">
+          {project.tech.map((tech) => (
+            <Badge key={tech} variant="outline">
+              {tech}
+            </Badge>
+          ))}
+        </div>
+      ) : null}
 
       <section className="grid gap-4 lg:grid-cols-3">
         <Card>

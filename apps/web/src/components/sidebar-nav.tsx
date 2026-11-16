@@ -54,7 +54,7 @@ import {
 import { splitProjectName } from "@/lib/project-name";
 import { cn } from "@/lib/utils";
 
-const ICONS: Record<NavIcon, React.ComponentType<{ className?: string }>> = {
+export const NAV_ICONS: Record<NavIcon, React.ComponentType<{ className?: string }>> = {
   home: House,
   sparkles: Sparkles,
   gauge: Gauge,
@@ -211,7 +211,7 @@ function NavSection({
   useEffect(() => {
     if (holdsActive) setOpen(true);
   }, [holdsActive]);
-  const Icon = ICONS[group.icon];
+  const Icon = NAV_ICONS[group.icon];
   const id = `sb-${base ? "p" : "w"}-${title}`;
 
   return (
@@ -258,7 +258,7 @@ function NavLink({
   nested?: boolean;
 }) {
   const t = useTranslations("nav");
-  const Icon = ICONS[item.icon];
+  const Icon = NAV_ICONS[item.icon];
   const label = t(`item.${item.key}`);
   return (
     <Link

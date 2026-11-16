@@ -79,7 +79,7 @@ export function parseUnifiedDiff(diff: string): Pick<ChangedFile, "added" | "rem
   };
 }
 
-function gitlabOnly(remote: RemoteRepo): string {
+export function gitlabOnly(remote: RemoteRepo): string {
   if (remote.provider !== "gitlab") {
     throw new GitError("provider_error", "Change control reads GitLab merge requests only for now");
   }

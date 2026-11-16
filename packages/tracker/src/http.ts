@@ -87,3 +87,51 @@ export const utc = (stamp: string): string => {
 /** A person's id the policy can map: the e-mail's local part, else the name the tool gives. */
 export const localPart = (email: string | null | undefined): string | undefined =>
   email ? email.split("@")[0] : undefined;
+
+/** Where a merge request can cite a ticket: branch, title, description, commit messages. */
+export const changeTexts = (change: {
+  sourceBranch: string;
+  title: string;
+  description: string;
+  commitMessages: string[];
+}): string[] => [change.sourceBranch, change.title, change.description, ...change.commitMessages];
+
+/** Every match of `pattern`'s first group in the texts, through `key`, without duplicates. */
+export function collect(
+  texts: string[],
+  patterns: RegExp[],
+  key: (id: string) => string,
+): string[] {
+  const refs = new Set<string>();
+  for (const text of texts) {
+    for (const pattern of patterns) {
+      for (const m of text.matchAll(pattern)) if (m[1]) refs.add(key(m[1]));
+    }
+  }
+  return [...refs];
+}
+
+/** Rich text some tools store as HTML, as the plain text people read and compare. */
+export function htmlText(html: string | null | undefined): string {
+  if (!html) return "";
+  return html
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|li|h[1-6]|tr)>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+/** `2026-10-16T…` → `2026-10-16`, for APIs that filter by day. */
+export const day = (iso: string): string => iso.slice(0, 10);
+
+/** The base of a self-hosted tool's address, without a trailing slash. */
+export const trimBase = (url: string): string => url.replace(/\/+$/, "");
+
+export const escapeRegExp = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

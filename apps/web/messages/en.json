@@ -55,7 +55,8 @@
       "traceability": "Traceability",
       "policies": "Critical zones",
       "integrations": "Integrations"
-    }
+    },
+    "projectSections": "Project sections"
   },
   "shell": {
     "language": "Language",
@@ -730,8 +731,6 @@
   },
   "overview": {
     "scannedAt": "Scanned on {date} in {seconds} s",
-    "actionsTitle": "Actions",
-    "actionsHint": "What pays off most, first.",
     "projectMap": {
       "title": "Explore the project",
       "description": "Explore the repository through the latest scan.",
@@ -766,18 +765,11 @@
       "seeChecks": "See the checks"
     },
     "kpi": {
-      "label": "Key indicators",
       "tokens": "Repository tokens",
       "tokensHint": "{pct} % useful to an assistant",
       "wasted": "Wasted tokens",
-      "wastedHint": "Data and generated files{binaries, plural, =0 {} one { · # unreadable binary} other { · # unreadable binaries}}",
       "blockers": "Blocking findings",
-      "blockersHint": "Secrets, private keys or tokens in the repository",
-      "blockersNone": "No secret, key or token detected",
-      "coverage": "Documentation",
-      "coverageHint": "Reader questions covered · {steps, plural, =0 {no getting-started step} one {# getting-started step} other {# getting-started steps}}",
-      "coverageHintNoOnboarding": "Reader questions covered",
-      "coverageUnavailable": "Not available: run a new scan"
+      "coverage": "Documentation"
     },
     "charts": {
       "title": "Where the tokens go",
@@ -949,6 +941,45 @@
       "unreadable": "Not read (declared)",
       "duration": "Duration",
       "seconds": "{value} s"
+    },
+    "dash": {
+      "overview": "Overview",
+      "aiReadiness": "AI readiness",
+      "scanned": "Last scanned {ago}",
+      "team": "Team: {team}",
+      "posture": "Project posture",
+      "blockers": "Blocking findings",
+      "readiness": "AI readiness",
+      "noise": "Token noise",
+      "tokensTitle": "Where the tokens go",
+      "tokensHint": "Estimated tokens per module (1 token per 4 bytes).",
+      "useful": "Read by AI",
+      "noiseLegend": "Noise",
+      "otherModules": "{count, plural, one {+ # other module} other {+ # other modules}}",
+      "noiseApprox": "Noise per module is a minimum from the largest noise files. Re-scan for exact figures.",
+      "risksTitle": "Top risks",
+      "viewAll": "View all",
+      "noRisks": "Nothing to fix according to the available checks.",
+      "saves": "Saves ≈ {value} tokens",
+      "toCreate": "Create {path}",
+      "areasTitle": "Health by area",
+      "notChecked": "Not checked yet: {items}.",
+      "activityTitle": "Scan activity",
+      "by": "by {who}",
+      "commit": "Commit",
+      "stack": "Stack",
+      "scanMode": "Scan mode",
+      "files": "Files analysed",
+      "duration": "Duration",
+      "durationValue": "{value} s",
+      "evidenceTitle": "Evidence",
+      "evidenceHint": "Each check behind the score, the heaviest files, and where the tokens go.",
+      "fileCount": "{count, plural, one {# file} other {# files}}",
+      "scanTitle": "Latest scan",
+      "risksFooter": "{count, plural, one {# fix} other {# fixes}} in total · ≈ {tokens} tokens to save",
+      "lines": "Lines",
+      "languages": "Languages",
+      "modulesLabel": "Modules"
     }
   },
   "planned": {
@@ -1112,16 +1143,14 @@
     }
   },
   "health": {
-    "eyebrow": "Project health · what the scan can tell",
-    "derivedFromScan": "Derived from repository scan",
     "verdict": {
       "notSafe": {
         "title": "Not safe to share as it is",
-        "message": "Secrets are written in the code. Anyone who can read this repository — including an AI tool — can use them. Fix this before anything else."
+        "message": "Secrets are written in the code. Anyone who can read this repository, an AI tool included, can use them. Fix this before anything else."
       },
       "atRisk": {
         "title": "At risk: some areas need work before you rely on it",
-        "message": "{risk, plural, one {# area is at risk} other {# areas are at risk}}, {watch, plural, =0 {none to watch} one {# to watch} other {# to watch}}. Start with the red cards below."
+        "message": "{risk, plural, one {# area is at risk} other {# areas are at risk}}, {watch, plural, =0 {none to watch} one {# to watch} other {# to watch}}. Start with the areas marked at risk."
       },
       "watch": {
         "title": "Usable, with points to watch",
@@ -1129,7 +1158,7 @@
       },
       "healthy": {
         "title": "Healthy on everything Cairn can see",
-        "message": "{good, plural, one {# area is} other {# areas are}} in good shape. This does not cover what Cairn does not check yet — see the list below."
+        "message": "{good, plural, one {# area is} other {# areas are}} in good shape. Cairn does not check everything yet: see the list below."
       },
       "unknown": {
         "title": "Not enough evidence yet",
@@ -1151,7 +1180,7 @@
       "knowledge": "Knowledge & onboarding"
     },
     "owner": {
-      "label": "Who acts: {owner}",
+      "label": "Owner: {owner}",
       "security": "security",
       "developer": "developers",
       "ops": "DevOps",
@@ -1478,7 +1507,16 @@
         "gitlab": "For issues of another project than the imported repository: a personal or project token with the read_api scope.",
         "linear": "Linear → Settings → Security & access → Personal API keys.",
         "trello": "trello.com/power-ups/admin: your Power-Up's API key, then a token generated from that page.",
-        "notion": "notion.so/my-integrations: create an internal integration with “Read content”, then share your specification pages with it."
+        "notion": "notion.so/my-integrations: create an internal integration with “Read content”, then share your specification pages with it.",
+        "azure": "Azure DevOps → User settings → Personal access tokens: a token with the Work Items (Read) scope.",
+        "youtrack": "YouTrack → your profile → Account security → New token, with the YouTrack scope. A read-only account is enough.",
+        "openproject": "OpenProject → My account → Access tokens → API: generate a key. Its account must see the projects involved.",
+        "redmine": "Redmine → My account → API access key (Show). An administrator must enable the REST API under Administration → Settings → API.",
+        "asana": "Asana → Settings → Apps → Developer apps (app.asana.com/0/my-apps): create a personal access token.",
+        "clickup": "ClickUp → Settings → Apps → API Token: generate your personal token (starts with pk_).",
+        "shortcut": "Shortcut → Settings → Your account → API Tokens: generate a token.",
+        "plane": "Plane → Workspace settings → API tokens: add a token. Self-hosted: use your instance address instead of api.plane.so.",
+        "monday": "monday.com → your avatar → Developers → My access tokens. Name the board columns that hold the status and, ideally, the approval date."
       }
     },
     "field": {
@@ -1541,6 +1579,14 @@
       },
       "approverProperty": {
         "label": "“Approved by” property"
+      },
+      "orgUrl": {
+        "label": "Organisation address",
+        "hint": "https://dev.azure.com/your-org, or your Azure DevOps Server collection."
+      },
+      "workspace": {
+        "label": "Workspace",
+        "hint": "The slug in your Plane address: app.plane.so/acme → acme."
       }
     },
     "result": {
@@ -1603,6 +1649,147 @@
       "invalid": "Each zone needs a name, at least one folder and one required approval.",
       "duplicate": "Two zones or two people share the same id.",
       "noDatabase": "The database is not configured."
+    }
+  },
+  "traceability": {
+    "title": "Traceability",
+    "description": "What the business asked for, against what reached {branch}, over the last {days} days.",
+    "unavailable": "Traceability unavailable",
+    "matrixTitle": "Request ↔ delivery",
+    "totals": "{tickets, plural, one {# ticket} other {# tickets}} · {deliveries, plural, one {# delivery} other {# deliveries}} · {agents} by AI agents",
+    "filtered": "Showing: {category}",
+    "showAll": "Show all",
+    "col": {
+      "request": "Request",
+      "delivered": "Delivered on {branch}",
+      "findings": "Findings"
+    },
+    "noTicket": "No ticket",
+    "directPush": "Direct push",
+    "notOnMain": "Not on {branch}",
+    "conforms": "Conforms",
+    "empty": "Nothing reached {branch} in the window, and no ticket was closed.",
+    "emptyFilter": "Nothing in this category.",
+    "boards": {
+      "title": "Ticket sources",
+      "hint": "Where this project's requests live. Done tickets that never reach main are flagged.",
+      "repoIssues": "This repository's GitLab issues",
+      "always": "Always read",
+      "add": "Link a board",
+      "connection": "Tool",
+      "submit": "Test and link",
+      "unlink": "Unlink",
+      "failed": "Not read on this run: {reason}",
+      "noAccess": "Only an admin can link boards to a project.",
+      "noConnections": "Connect your ticket tool in Integrations first, then link its board here.",
+      "openIntegrations": "Open integrations",
+      "scope": {
+        "jira": {
+          "label": "Project key or JQL",
+          "placeholder": "PAY",
+          "hint": "A key reads the whole project; JQL narrows it (component, label…)."
+        },
+        "trello": {
+          "label": "Board link",
+          "placeholder": "https://trello.com/b/AbCd1234/payments",
+          "hint": "Cards in a list named like a done status count as delivered."
+        },
+        "notion": {
+          "label": "Database link",
+          "placeholder": "https://www.notion.so/team/0123…",
+          "hint": "The database must be shared with the Cairn integration."
+        },
+        "gitlab": {
+          "label": "Project path",
+          "placeholder": "group/project",
+          "hint": "Another GitLab project whose issues hold this project's requests."
+        },
+        "azure": {
+          "label": "Project",
+          "placeholder": "Payments",
+          "hint": "The Azure DevOps project name, or any link inside it. Work items in a done state count as delivered."
+        },
+        "youtrack": {
+          "label": "Project or query",
+          "placeholder": "PAY",
+          "hint": "A project ID reads the whole project; a YouTrack query narrows it. Resolved issues count as delivered."
+        },
+        "openproject": {
+          "label": "Project",
+          "placeholder": "payments",
+          "hint": "The project identifier, or its link."
+        },
+        "redmine": {
+          "label": "Project",
+          "placeholder": "payments",
+          "hint": "The project identifier, or its link. Closed issues count as delivered."
+        },
+        "asana": {
+          "label": "Project link",
+          "placeholder": "https://app.asana.com/0/1201234567890/list",
+          "hint": "Completed tasks count as delivered."
+        },
+        "clickup": {
+          "label": "List link",
+          "placeholder": "https://app.clickup.com/9012345/v/li/901234567",
+          "hint": "Tasks in a closed status count as delivered."
+        },
+        "shortcut": {
+          "label": "Search",
+          "placeholder": "team:payments",
+          "hint": "A Shortcut search: team, project or label. Completed stories count as delivered."
+        },
+        "plane": {
+          "label": "Project link",
+          "placeholder": "https://app.plane.so/acme/projects/0f8c…/issues",
+          "hint": "Work items in a completed state count as delivered."
+        },
+        "monday": {
+          "label": "Board link",
+          "placeholder": "https://acme.monday.com/boards/1234567890",
+          "hint": "Items whose status reads like a done status count as delivered."
+        }
+      }
+    },
+    "link": {
+      "result": {
+        "linked": "Linked: {count, plural, =0 {no recent ticket found yet} one {# recent ticket found} other {# recent tickets found}}.",
+        "removed": "Board unlinked.",
+        "forbidden": "Only an admin can link boards.",
+        "invalid": "This does not look like a board for this tool.",
+        "noDatabase": "The database is not configured.",
+        "unsupported": "This tool cannot list tickets yet.",
+        "not_found": "Board not found, or not shared with this connection.",
+        "unauthorized": "The tool refused the connection's credentials.",
+        "rate_limited": "The tool's rate limit was reached. Try again later.",
+        "unreachable": "The tool cannot be reached.",
+        "timeout": "The tool did not answer in time.",
+        "provider_error": "The tool sent an unexpected answer."
+      }
+    },
+    "method": {
+      "title": "How Cairn decides",
+      "reference": "The main branch is the reference: every merge request merged into it and every commit pushed directly.",
+      "tickets": "Each delivery is matched with the tickets it cites, as they were approved; done tickets that never reach main are listed.",
+      "agents": "AI agents are recognised by their Co-authored-by trailers, accounts and branch names, never by guessing.",
+      "deterministic": "Rules only, no AI: the same history always gives the same result.",
+      "demo": "Demo data: fictitious tickets and merges."
+    },
+    "signal": {
+      "title": "Request ↔ delivery",
+      "open": "Open",
+      "asOf": "Last run {ago}.",
+      "never": "Not traced yet. Open Traceability to compare tickets with the main branch."
+    },
+    "portfolio": {
+      "title": "Traceability",
+      "description": "Every project's requests against its main branch, as of its last run.",
+      "tableTitle": "Projects",
+      "project": "Project",
+      "lastRun": "Last run",
+      "demo": "Demo",
+      "empty": "No project traced yet. Open a project's Traceability page to run it.",
+      "note": "Imported projects are traced when their Traceability page is opened; the counts here are from that run."
     }
   }
 }

@@ -6,7 +6,23 @@ import { z } from "zod";
  * Labels and hints: `integrations.field.<name>`. Secret fields are encrypted and never shown back.
  */
 
-export const LIVE_TRACKERS = ["jira", "github", "gitlab", "linear", "trello", "notion"] as const;
+export const LIVE_TRACKERS = [
+  "jira",
+  "github",
+  "gitlab",
+  "linear",
+  "trello",
+  "notion",
+  "azure",
+  "youtrack",
+  "openproject",
+  "redmine",
+  "asana",
+  "clickup",
+  "shortcut",
+  "plane",
+  "monday",
+] as const;
 export type LiveTracker = (typeof LIVE_TRACKERS)[number];
 
 export const isLiveTracker = (kind: TrackerKind): kind is LiveTracker =>
@@ -28,7 +44,9 @@ export type FieldName =
   | "criteriaName"
   | "statusProperty"
   | "approvedAtProperty"
-  | "approverProperty";
+  | "approverProperty"
+  | "orgUrl"
+  | "workspace";
 
 export interface Field {
   name: FieldName;
@@ -74,6 +92,38 @@ export const TRACKER_FIELDS: Record<LiveTracker, Field[]> = {
     { name: "approvedAtProperty", type: "text", required: false, placeholder: "Approved on" },
     { name: "approverProperty", type: "text", required: false, placeholder: "Approver" },
   ],
+  azure: [
+    { name: "orgUrl", type: "url", required: true, placeholder: "https://dev.azure.com/your-org" },
+    { name: "token", type: "secret", required: true },
+  ],
+  youtrack: [
+    { name: "baseUrl", type: "url", required: true, placeholder: "https://acme.youtrack.cloud" },
+    { name: "token", type: "secret", required: true, placeholder: "perm:…" },
+    { name: "projects", type: "text", required: false, placeholder: "PAY, TRE" },
+  ],
+  openproject: [
+    { name: "baseUrl", type: "url", required: true, placeholder: "https://acme.openproject.com" },
+    { name: "apiKey", type: "secret", required: true },
+  ],
+  redmine: [
+    { name: "baseUrl", type: "url", required: true, placeholder: "https://redmine.example.org" },
+    { name: "apiKey", type: "secret", required: true },
+  ],
+  asana: [{ name: "token", type: "secret", required: true }],
+  clickup: [{ name: "token", type: "secret", required: true, placeholder: "pk_…" }],
+  shortcut: [{ name: "token", type: "secret", required: true }],
+  plane: [
+    { name: "baseUrl", type: "url", required: true, defaultValue: "https://api.plane.so" },
+    { name: "workspace", type: "text", required: true, placeholder: "acme" },
+    { name: "apiKey", type: "secret", required: true, placeholder: "plane_api_…" },
+    { name: "projects", type: "text", required: false, placeholder: "WEB, API" },
+  ],
+  monday: [
+    { name: "token", type: "secret", required: true },
+    { name: "statusProperty", type: "text", required: true, defaultValue: "Status" },
+    { name: "approvedAtProperty", type: "text", required: false, placeholder: "Approved on" },
+    { name: "approverProperty", type: "text", required: false, placeholder: "Approver" },
+  ],
 };
 
 const url = z
@@ -103,6 +153,10 @@ const optional = z
   .optional()
   .transform((v) => v || undefined);
 const KEY = /^[A-Z][A-Z0-9]{1,9}$/;
+/** Tools that need only a personal token. */
+const tokenOnly = z
+  .object({ token: secret })
+  .transform((v) => ({ settings: {}, secret: { token: v.token } }));
 
 /**
  * Server-side validation per kind: what is stored in clear (`settings`) and what is encrypted
@@ -177,6 +231,58 @@ export const TRACKER_INPUT = {
   notion: z
     .object({
       token: secret,
+      statusProperty: z.string().trim().min(1).max(120),
+      approvedAtProperty: optional,
+      approverProperty: optional,
+    })
+    .transform((v) => ({
+      settings: {
+        statusProperty: v.statusProperty,
+        approvedAtProperty: v.approvedAtProperty,
+        approverProperty: v.approverProperty,
+      },
+      secret: { token: v.token },
+    })),
+  azure: z.object({ orgUrl: url, token: secret }).transform((v) => ({
+    settings: { orgUrl: v.orgUrl.replace(/\/+$/, "") },
+    secret: { token: v.token },
+  })),
+  youtrack: z.object({ baseUrl: url, token: secret, projects: list(KEY) }).transform((v) => ({
+    settings: { baseUrl: v.baseUrl.replace(/\/+$/, ""), projects: v.projects },
+    secret: { token: v.token },
+  })),
+  openproject: z.object({ baseUrl: url, apiKey: secret }).transform((v) => ({
+    settings: { baseUrl: v.baseUrl.replace(/\/+$/, "") },
+    secret: { token: v.apiKey },
+  })),
+  redmine: z.object({ baseUrl: url, apiKey: secret }).transform((v) => ({
+    settings: { baseUrl: v.baseUrl.replace(/\/+$/, "") },
+    secret: { token: v.apiKey },
+  })),
+  asana: tokenOnly,
+  clickup: tokenOnly,
+  shortcut: tokenOnly,
+  plane: z
+    .object({
+      baseUrl: url,
+      workspace: z
+        .string()
+        .trim()
+        .regex(/^[a-z0-9][a-z0-9_-]{0,47}$/i),
+      apiKey: secret,
+      projects: list(KEY),
+    })
+    .transform((v) => ({
+      settings: {
+        baseUrl: v.baseUrl.replace(/\/+$/, ""),
+        workspace: v.workspace,
+        projects: v.projects,
+      },
+      secret: { token: v.apiKey },
+    })),
+  monday: z
+    .object({
+      token: z.string().trim().min(8).max(2000),
       statusProperty: z.string().trim().min(1).max(120),
       approvedAtProperty: optional,
       approverProperty: optional,

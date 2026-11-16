@@ -292,6 +292,8 @@ export interface ModuleStat {
   files: number;
   lines: number;
   tokens: number;
+  /** Tokens of data, generated files and binaries in this module. Absent in scans made before it. */
+  tokensNoise?: number;
   /** Runs on its own (Spring Boot application, Angular app) rather than being a library. */
   deployable: boolean;
 }

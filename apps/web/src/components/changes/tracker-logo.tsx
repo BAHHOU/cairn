@@ -1,10 +1,11 @@
 import { TRACKERS, type TrackerKind } from "@cairn/shared";
 import { KanbanSquare } from "lucide-react";
-import { TRACKER_ICONS } from "@/lib/tracker-icons";
+import { TRACKER_ICONS, TRACKER_MARKS } from "@/lib/tracker-icons";
 
 /** A tool's mark on a white tile, in its own colour; a neutral glyph for tools without one. */
 export function TrackerLogo({ kind, size = 32 }: { kind: TrackerKind; size?: number }) {
   const icon = TRACKER_ICONS[kind];
+  const mark = TRACKER_MARKS[kind];
   const glyph = Math.round(size * 0.58);
   return (
     <span
@@ -13,7 +14,13 @@ export function TrackerLogo({ kind, size = 32 }: { kind: TrackerKind; size?: num
       role="img"
       aria-label={TRACKERS[kind].name}
     >
-      {icon ? (
+      {mark ? (
+        <svg width={glyph} height={glyph} viewBox={mark.viewBox} aria-hidden>
+          {mark.paths.map((p) => (
+            <path key={p.d} d={p.d} fill={p.fill} />
+          ))}
+        </svg>
+      ) : icon ? (
         <svg width={glyph} height={glyph} viewBox="0 0 24 24" fill={`#${icon.hex}`} aria-hidden>
           <path d={icon.path} />
         </svg>

@@ -84,6 +84,7 @@ export async function getRepositorySource(db: Db, id: string) {
       host: repositories.host,
       fullPath: repositories.fullPath,
       credentialEnc: repositories.credentialEnc,
+      defaultBranch: repositories.defaultBranch,
     })
     .from(repositories)
     .where(eq(repositories.id, id))

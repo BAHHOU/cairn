@@ -6,7 +6,7 @@
  * (`userContentEdits`), so the text as approved is rebuilt exactly; only GraphQL exposes it.
  */
 
-import type { ChangeRequest, SpecView } from "@cairn/shared";
+import type { ChangeRequest, SpecView, TicketItem } from "@cairn/shared";
 import { z } from "zod";
 import type { AdapterOptions, TrackerAdapter, TrackerConnection } from "./adapter";
 import { shaped, TrackerError, trackerCall, utc } from "./http";
@@ -162,6 +162,51 @@ export function githubTracker(
       const [owner, name] = (m[1] as string).split("/");
       const raw = await graphql(QUERY, { owner, name, number: Number(m[2]) });
       return shaped("GitHub", () => toGitHubSpec(ref, raw, approvedStatuses));
+    },
+    async list(scope, query) {
+      const repo = new RegExp(`^${REPO}$`).exec(scope.repo?.trim() ?? "")?.[0];
+      if (!repo) throw new TrackerError("not_found", "A GitHub owner/repository is required");
+      const body = await trackerCall(
+        "GitHub",
+        `${connection.apiUrl.replace(/\/+$/, "")}/repos/${repo}/issues?state=all` +
+          `&since=${encodeURIComponent(query.since)}&sort=updated&direction=desc` +
+          `&per_page=${Math.min(query.limit ?? 100, 100)}`,
+        { headers: { ...headers, accept: "application/vnd.github+json" } },
+        options,
+      );
+      return shaped("GitHub", () =>
+        z
+          .array(
+            z.object({
+              number: z.number(),
+              title: z.string(),
+              state: z.string(),
+              state_reason: z.string().nullish(),
+              html_url: z.string(),
+              updated_at: z.string(),
+              labels: z.array(z.object({ name: z.string() })),
+              pull_request: z.unknown().optional(),
+            }),
+          )
+          .parse(body)
+          // The issues endpoint lists pull requests too: they are deliveries, not requests.
+          .filter((i) => i.pull_request === undefined)
+          .map((i): TicketItem => {
+            const doneLabel = i.labels.find((l) => query.doneStatuses.includes(l.name))?.name;
+            return {
+              key: `${repo}#${i.number}`,
+              title: i.title,
+              status: doneLabel ?? (i.state_reason === "not_planned" ? "not planned" : i.state),
+              // Closed as not planned was dropped, not delivered.
+              done:
+                doneLabel !== undefined ||
+                (i.state === "closed" && i.state_reason !== "not_planned"),
+              tracker: "github",
+              url: i.html_url,
+              updatedAt: utc(i.updated_at),
+            };
+          }),
+      );
     },
     async check() {
       const raw = await graphql("query { viewer { login name } }", {});

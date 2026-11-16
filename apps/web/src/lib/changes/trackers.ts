@@ -65,6 +65,38 @@ export function toConnection(row: StoredTrackerConnection): TrackerConnection {
         approvedAtProperty: str(s.approvedAtProperty),
         approverProperty: str(s.approverProperty),
       };
+    case "azure":
+      return { kind: "azure", orgUrl: str(s.orgUrl) ?? "", token: secret.token ?? "" };
+    case "youtrack":
+      return {
+        kind: "youtrack",
+        baseUrl: str(s.baseUrl) ?? "",
+        token: secret.token ?? "",
+        projects: strings(s.projects),
+      };
+    case "openproject":
+    case "redmine":
+      return { kind: row.kind, baseUrl: str(s.baseUrl) ?? "", token: secret.token ?? "" };
+    case "asana":
+    case "clickup":
+    case "shortcut":
+      return { kind: row.kind, token: secret.token ?? "" };
+    case "plane":
+      return {
+        kind: "plane",
+        baseUrl: str(s.baseUrl) ?? "https://api.plane.so",
+        workspace: str(s.workspace) ?? "",
+        token: secret.token ?? "",
+        projects: strings(s.projects),
+      };
+    case "monday":
+      return {
+        kind: "monday",
+        token: secret.token ?? "",
+        statusProperty: str(s.statusProperty),
+        approvedAtProperty: str(s.approvedAtProperty),
+        approverProperty: str(s.approverProperty),
+      };
     default:
       throw new TrackerError("provider_error", `${row.kind} is not connectable yet`);
   }

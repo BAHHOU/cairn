@@ -5,26 +5,27 @@
 
 :root {
   --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.2 0.012 255);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
+  --card-foreground: oklch(0.2 0.012 255);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.527 0.154 150.069);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --warning: oklch(0.769 0.188 70.08);
-  --info: oklch(0.623 0.214 259.815);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.527 0.154 150.069);
-  --radius: 0.5rem;
+  --popover-foreground: oklch(0.2 0.012 255);
+  --primary: oklch(0.56 0.125 162);
+  --primary-foreground: oklch(0.99 0.004 162);
+  --secondary: oklch(0.965 0.004 255);
+  --secondary-foreground: oklch(0.24 0.012 255);
+  --muted: oklch(0.965 0.004 255);
+  --muted-foreground: oklch(0.5 0.014 255);
+  --accent: oklch(0.965 0.004 255);
+  --accent-foreground: oklch(0.24 0.012 255);
+  --destructive: oklch(0.56 0.2 27);
+  --warning: oklch(0.76 0.15 70);
+  --warning-ink: oklch(0.52 0.12 60);
+  --info: oklch(0.56 0.15 255);
+  --border: oklch(0.92 0.005 255);
+  --input: oklch(0.9 0.006 255);
+  --ring: oklch(0.56 0.125 162);
+  --radius: 0.625rem;
   /* Categorical chart slots, in this fixed order (validated for colour-blind separation on the card
      surface). A kind keeps its slot whatever is shown: colour follows the entity, never its rank. */
   --viz-1: #2a78d6;
@@ -38,26 +39,27 @@
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.627 0.17 149.214);
-  --primary-foreground: oklch(0.141 0.005 285.823);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --warning: oklch(0.828 0.189 84.429);
-  --info: oklch(0.707 0.165 254.624);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.627 0.17 149.214);
+  --background: oklch(0.165 0.01 255);
+  --foreground: oklch(0.96 0.004 255);
+  --card: oklch(0.2 0.011 255);
+  --card-foreground: oklch(0.96 0.004 255);
+  --popover: oklch(0.2 0.011 255);
+  --popover-foreground: oklch(0.96 0.004 255);
+  --primary: oklch(0.72 0.14 162);
+  --primary-foreground: oklch(0.17 0.02 162);
+  --secondary: oklch(0.25 0.012 255);
+  --secondary-foreground: oklch(0.96 0.004 255);
+  --muted: oklch(0.25 0.012 255);
+  --muted-foreground: oklch(0.71 0.012 255);
+  --accent: oklch(0.25 0.012 255);
+  --accent-foreground: oklch(0.96 0.004 255);
+  --destructive: oklch(0.7 0.17 25);
+  --warning: oklch(0.82 0.14 80);
+  --warning-ink: oklch(0.84 0.13 82);
+  --info: oklch(0.72 0.13 255);
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.72 0.14 162);
   --viz-1: #3987e5;
   --viz-2: #d95926;
   --viz-3: #199e70;
@@ -85,6 +87,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-warning: var(--warning);
+  --color-warning-ink: var(--warning-ink);
   --color-info: var(--info);
   --color-border: var(--border);
   --color-input: var(--input);
@@ -93,8 +96,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
 @layer base {
@@ -110,6 +113,11 @@
       transition-duration: 0.01ms !important;
     }
   }
+}
+
+/* Selected text carries the brand colour, not the browser's blue. */
+::selection {
+  background: color-mix(in oklch, var(--primary) 24%, transparent);
 }
 
 /* Folded sidebar: icons only, centred. Labels carry `.sb-label`. */

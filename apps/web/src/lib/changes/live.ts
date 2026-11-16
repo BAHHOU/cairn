@@ -37,15 +37,17 @@ export type Live<T> =
 const LIST_LIMIT = 20;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-interface Source {
+export interface Source {
   remote: RemoteRepo;
   token: string | undefined;
   name: string;
+  /** The main branch: what is delivered, the reference for traceability. */
+  branch: string;
   timeoutMs: number;
 }
 
 /** The repository as a forge remote, for viewers allowed to see every team. Null: not visible. */
-async function sourceOf(id: string): Promise<Source | LiveFailure | null> {
+export async function sourceOf(id: string): Promise<Source | LiveFailure | null> {
   if (!UUID.test(id) || !isImportConfigured()) return null;
   const viewer = await getViewer();
   if (!can(viewer.role, "see.allTeams")) return null;
@@ -67,11 +69,12 @@ async function sourceOf(id: string): Promise<Source | LiveFailure | null> {
     },
     token,
     name: repo.fullPath,
+    branch: repo.defaultBranch,
     timeoutMs: config.apiTimeoutMs,
   };
 }
 
-function failureOf(error: unknown): LiveFailure {
+export function failureOf(error: unknown): LiveFailure {
   if (isGitError(error)) {
     if (error.code === "unauthorized" || error.code === "not_found") return "unauthorized";
     if (error.code === "unreachable" || error.code === "timeout") return "unreachable";
@@ -80,7 +83,7 @@ function failureOf(error: unknown): LiveFailure {
 }
 
 /** The policy, people and trackers a repository's changes are judged with. */
-async function context(source: Source) {
+export async function context(source: Source) {
   const settings = await getChangeControlSettings(getDb());
   const repoIssues = {
     kind: "gitlab" as const,

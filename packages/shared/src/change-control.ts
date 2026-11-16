@@ -61,6 +61,11 @@ export interface ChangePolicy {
   approvedStatuses: string[];
   /** Ticket project keys to recognise (`PAY`); empty accepts any key-shaped reference. */
   ticketProjects: string[];
+  /**
+   * Statuses meaning the work is done, for tools without a workflow category (Trello, Notion).
+   * Absent in policies saved before traceability: `DEFAULT_DONE_STATUSES` then applies.
+   */
+  doneStatuses?: string[];
 }
 
 export interface Person {
@@ -572,6 +577,7 @@ export const changePolicySchema = z.object({
   zones: z.array(criticalZoneSchema).max(50),
   approvedStatuses: z.array(z.string().trim().min(1).max(60)).min(1).max(20),
   ticketProjects: z.array(z.string().regex(/^[A-Z][A-Z0-9]{1,9}$/)).max(50),
+  doneStatuses: z.array(z.string().trim().min(1).max(60)).max(20).optional(),
 });
 
 export const personViewSchema = z.object({

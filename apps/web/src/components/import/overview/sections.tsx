@@ -23,8 +23,6 @@ import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { ProvenanceBadge, SeverityBadge } from "@/components/badges";
 import { SourceRef } from "@/components/guide/bits";
-import { RescanButton } from "@/components/import/rescan-button";
-import { KpiCard } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFormat } from "@/i18n/format";
@@ -146,62 +144,9 @@ export function VerdictPanel({ readiness }: { readiness: Readiness }) {
   );
 }
 
-/* ---------------------------------------------------------------- 2. KPIs */
-
-export function Kpis({ scan, readiness }: { scan: ScanView; readiness: Readiness }) {
-  const t = useTranslations("overview.kpi");
-  const fmt = useFormat();
-  const { stats } = scan.report;
-  const usefulPct =
-    stats.tokens > 0 ? Math.round((stats.tokensAiRelevant / stats.tokens) * 100) : 0;
-  const binaries = stats.byKind.find((k) => k.kind === "binary")?.files ?? 0;
-  const coverage = scan.docs?.coverage ?? [];
-  const present = coverage.filter((c) => c.present).length;
-  const steps = scan.onboarding?.steps.length;
-
-  return (
-    <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label={t("label")}>
-      <KpiCard
-        label={t("tokens")}
-        value={fmt.tokens(stats.tokens)}
-        hint={t("tokensHint", { pct: usefulPct })}
-        visual={<ProvenanceBadge provenance="estimated" />}
-      />
-      <KpiCard
-        label={t("wasted")}
-        value={fmt.tokens(stats.tokensNoise)}
-        hint={t("wastedHint", { binaries })}
-        visual={<ProvenanceBadge provenance="estimated" />}
-      />
-      <KpiCard
-        label={t("blockers")}
-        value={
-          <span className={cn(readiness.blockers > 0 && "text-destructive")}>
-            {fmt.number(readiness.blockers)}
-          </span>
-        }
-        hint={readiness.blockers > 0 ? t("blockersHint") : t("blockersNone")}
-        visual={<ProvenanceBadge provenance="measured" />}
-      />
-      <KpiCard
-        label={t("coverage")}
-        value={coverage.length > 0 ? `${present} / ${coverage.length}` : "—"}
-        hint={
-          coverage.length === 0
-            ? t("coverageUnavailable")
-            : steps === undefined
-              ? t("coverageHintNoOnboarding")
-              : t("coverageHint", { steps })
-        }
-        visual={<ProvenanceBadge provenance="measured" />}
-      />
-    </section>
-  );
-}
-
 /* ---------------------------------------------------------------- 3. charts */
 
-export function TokenCharts({ scan }: { scan: ScanView }) {
+export function TokenCharts({ scan, titled = true }: { scan: ScanView; titled?: boolean }) {
   const t = useTranslations("overview.charts");
   const { stats } = scan.report;
   const kinds = tokensByKind(scan.report);
@@ -210,7 +155,7 @@ export function TokenCharts({ scan }: { scan: ScanView }) {
 
   return (
     <>
-      <SectionTitle title={t("title")} hint={t("hint")} />
+      {titled ? <SectionTitle title={t("title")} hint={t("hint")} /> : null}
       <section className="grid items-start gap-4 lg:grid-cols-2">
         <ChartCard
           title={t("donutTitle")}
@@ -562,64 +507,6 @@ function GapRow({
         )}
       </div>
     </li>
-  );
-}
-
-/* ---------------------------------------------------------------- 6. scan health */
-
-export function ScanHealth({
-  scan,
-  repositoryId,
-  canRescan,
-  active,
-}: {
-  scan: ScanView;
-  repositoryId: string;
-  canRescan: boolean;
-  active: boolean;
-}) {
-  const t = useTranslations("overview.health");
-  const fmt = useFormat();
-  const { incremental, counts, durationMs } = scan.report;
-  const rows: [string, ReactNode][] = [
-    [
-      t("mode"),
-      incremental.mode === "incremental"
-        ? t("incremental", { commit: incremental.previousCommit?.slice(0, 7) ?? "—" })
-        : t("full"),
-    ],
-    [t("analysed"), fmt.number(incremental.analysed)],
-    [t("reused"), fmt.number(incremental.reused)],
-    [t("removed"), fmt.number(incremental.removed)],
-    [
-      t("unreadable"),
-      <span key="u" className={cn(counts.unreadable > 0 && "text-warning")}>
-        {fmt.number(counts.unreadable)}
-      </span>,
-    ],
-    [t("duration"), t("seconds", { value: fmt.seconds(durationMs) })],
-  ];
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex flex-wrap items-center gap-2">
-          {t("title")}
-          <ProvenanceBadge provenance="measured" />
-        </CardTitle>
-        <CardDescription>{t("hint")}</CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-wrap items-end justify-between gap-4">
-        <dl className="grid flex-1 grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-3">
-          {rows.map(([label, value]) => (
-            <div key={label} className="flex flex-col">
-              <dt className="text-muted-foreground text-xs">{label}</dt>
-              <dd className="font-medium tabular-nums">{value}</dd>
-            </div>
-          ))}
-        </dl>
-        {canRescan ? <RescanButton repositoryId={repositoryId} disabled={active} /> : null}
-      </CardContent>
-    </Card>
   );
 }
 

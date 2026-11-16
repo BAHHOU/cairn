@@ -55,7 +55,8 @@
       "traceability": "Traçabilité",
       "policies": "Zones critiques",
       "integrations": "Intégrations"
-    }
+    },
+    "projectSections": "Sections du projet"
   },
   "shell": {
     "language": "Langue",
@@ -730,8 +731,6 @@
   },
   "overview": {
     "scannedAt": "Analysé le {date} en {seconds} s",
-    "actionsTitle": "Actions",
-    "actionsHint": "Ce qui rapporte le plus, en premier.",
     "projectMap": {
       "title": "Explorer le projet",
       "description": "Explorez le dépôt à partir de la dernière analyse.",
@@ -766,18 +765,11 @@
       "seeChecks": "Voir les contrôles"
     },
     "kpi": {
-      "label": "Indicateurs clés",
       "tokens": "Tokens du dépôt",
       "tokensHint": "{pct} % utiles à un assistant",
       "wasted": "Tokens gaspillés",
-      "wastedHint": "Données et fichiers générés{binaries, plural, =0 {} one { · # binaire non lisible} other { · # binaires non lisibles}}",
       "blockers": "Points bloquants",
-      "blockersHint": "Secrets, clés privées ou jetons dans le dépôt",
-      "blockersNone": "Aucun secret, clé ou jeton détecté",
-      "coverage": "Documentation",
-      "coverageHint": "Questions de lecteur couvertes · {steps, plural, =0 {aucune étape de démarrage} one {# étape de démarrage} other {# étapes de démarrage}}",
-      "coverageHintNoOnboarding": "Questions de lecteur couvertes",
-      "coverageUnavailable": "Non disponible : relancez une analyse"
+      "coverage": "Documentation"
     },
     "charts": {
       "title": "Où partent les tokens",
@@ -949,6 +941,45 @@
       "unreadable": "Non lus (déclarés)",
       "duration": "Durée",
       "seconds": "{value} s"
+    },
+    "dash": {
+      "overview": "Vue d'ensemble",
+      "aiReadiness": "Préparation IA",
+      "scanned": "Dernière analyse {ago}",
+      "team": "Équipe : {team}",
+      "posture": "État du projet",
+      "blockers": "Points bloquants",
+      "readiness": "Préparation IA",
+      "noise": "Bruit en tokens",
+      "tokensTitle": "Où partent les tokens",
+      "tokensHint": "Tokens estimés par module (1 token pour 4 octets).",
+      "useful": "Lu par l'IA",
+      "noiseLegend": "Bruit",
+      "otherModules": "{count, plural, one {+ # autre module} other {+ # autres modules}}",
+      "noiseApprox": "Le bruit par module est un minimum tiré des plus gros fichiers de bruit. Relancez l'analyse pour les chiffres exacts.",
+      "risksTitle": "Risques principaux",
+      "viewAll": "Tout voir",
+      "noRisks": "Rien à corriger selon les contrôles disponibles.",
+      "saves": "Économise ≈ {value} tokens",
+      "toCreate": "Créer {path}",
+      "areasTitle": "Santé par domaine",
+      "notChecked": "Pas encore vérifié : {items}.",
+      "activityTitle": "Historique des analyses",
+      "by": "par {who}",
+      "commit": "Commit",
+      "stack": "Technologies",
+      "scanMode": "Mode d'analyse",
+      "files": "Fichiers analysés",
+      "duration": "Durée",
+      "durationValue": "{value} s",
+      "evidenceTitle": "Preuves",
+      "evidenceHint": "Chaque contrôle derrière le score, les fichiers les plus lourds et la répartition des tokens.",
+      "fileCount": "{count, plural, one {# fichier} other {# fichiers}}",
+      "scanTitle": "Dernière analyse",
+      "risksFooter": "{count, plural, one {# correction} other {# corrections}} au total · ≈ {tokens} tokens à économiser",
+      "lines": "Lignes",
+      "languages": "Langages",
+      "modulesLabel": "Modules"
     }
   },
   "planned": {
@@ -1112,16 +1143,14 @@
     }
   },
   "health": {
-    "eyebrow": "Santé du projet · ce que l'analyse peut dire",
-    "derivedFromScan": "Déduit de l'analyse du dépôt",
     "verdict": {
       "notSafe": {
         "title": "Pas sûr à partager en l'état",
-        "message": "Des secrets sont écrits dans le code. Toute personne qui lit ce dépôt — y compris un outil d'IA — peut s'en servir. À corriger avant tout le reste."
+        "message": "Des secrets sont écrits dans le code. Toute personne qui lit ce dépôt, outil d'IA compris, peut s'en servir. À corriger avant tout le reste."
       },
       "atRisk": {
         "title": "À risque : certaines zones demandent du travail avant de s'y fier",
-        "message": "{risk, plural, one {# zone est à risque} other {# zones sont à risque}}, {watch, plural, =0 {aucune à surveiller} one {# à surveiller} other {# à surveiller}}. Commencez par les cartes rouges ci-dessous."
+        "message": "{risk, plural, one {# zone est à risque} other {# zones sont à risque}}, {watch, plural, =0 {aucune à surveiller} one {# à surveiller} other {# à surveiller}}. Commencez par les zones à risque."
       },
       "watch": {
         "title": "Utilisable, avec des points à surveiller",
@@ -1129,7 +1158,7 @@
       },
       "healthy": {
         "title": "En bonne santé sur tout ce que Cairn voit",
-        "message": "{good, plural, one {# zone est} other {# zones sont}} en bon état. Cela ne couvre pas ce que Cairn ne vérifie pas encore — voir la liste ci-dessous."
+        "message": "{good, plural, one {# zone est} other {# zones sont}} en bon état. Cairn ne vérifie pas encore tout : voir la liste ci-dessous."
       },
       "unknown": {
         "title": "Pas encore assez d'éléments",
@@ -1151,7 +1180,7 @@
       "knowledge": "Connaissance & prise en main"
     },
     "owner": {
-      "label": "Qui agit : {owner}",
+      "label": "Responsable : {owner}",
       "security": "sécurité",
       "developer": "développeurs",
       "ops": "DevOps",
@@ -1478,7 +1507,16 @@
         "gitlab": "Pour les issues d'un autre projet que le dépôt importé : jeton personnel ou de projet avec le droit read_api.",
         "linear": "Linear → Settings → Security & access → Personal API keys.",
         "trello": "trello.com/power-ups/admin : la clé d'API de votre Power-Up, puis un jeton généré depuis cette page.",
-        "notion": "notion.so/my-integrations : créez une intégration interne avec « Lire le contenu », puis partagez-lui vos pages de spécifications."
+        "notion": "notion.so/my-integrations : créez une intégration interne avec « Lire le contenu », puis partagez-lui vos pages de spécifications.",
+        "azure": "Azure DevOps → User settings → Personal access tokens : un jeton avec le droit Work Items (Read).",
+        "youtrack": "YouTrack → votre profil → Account security → New token, avec le périmètre YouTrack. Un compte en lecture seule suffit.",
+        "openproject": "OpenProject → Mon compte → Jetons d'accès → API : générez une clé. Son compte doit voir les projets concernés.",
+        "redmine": "Redmine → Mon compte → Clé d'accès API (Afficher). Un administrateur doit activer l'API REST dans Administration → Configuration → API.",
+        "asana": "Asana → Paramètres → Applications → Applications de développeur (app.asana.com/0/my-apps) : créez un jeton d'accès personnel.",
+        "clickup": "ClickUp → Settings → Apps → API Token : générez votre jeton personnel (il commence par pk_).",
+        "shortcut": "Shortcut → Settings → Your account → API Tokens : générez un jeton.",
+        "plane": "Plane → Paramètres de l'espace → API tokens : ajoutez un jeton. Auto-hébergé : indiquez l'adresse de votre instance au lieu de api.plane.so.",
+        "monday": "monday.com → votre avatar → Développeurs → Mes jetons d'accès. Nommez les colonnes du tableau qui portent le statut et, idéalement, la date de validation."
       }
     },
     "field": {
@@ -1541,6 +1579,14 @@
       },
       "approverProperty": {
         "label": "Propriété « validé par »"
+      },
+      "orgUrl": {
+        "label": "Adresse de l'organisation",
+        "hint": "https://dev.azure.com/votre-org, ou la collection de votre Azure DevOps Server."
+      },
+      "workspace": {
+        "label": "Espace de travail",
+        "hint": "L'identifiant dans votre adresse Plane : app.plane.so/acme → acme."
       }
     },
     "result": {
@@ -1603,6 +1649,147 @@
       "invalid": "Chaque zone a besoin d'un nom, d'au moins un dossier et d'une validation exigée.",
       "duplicate": "Deux zones ou deux personnes ont le même identifiant.",
       "noDatabase": "La base de données n'est pas configurée."
+    }
+  },
+  "traceability": {
+    "title": "Traçabilité",
+    "description": "Ce que le métier a demandé, face à ce qui a atteint {branch}, sur les {days} derniers jours.",
+    "unavailable": "Traçabilité indisponible",
+    "matrixTitle": "Demande ↔ livraison",
+    "totals": "{tickets, plural, one {# ticket} other {# tickets}} · {deliveries, plural, one {# livraison} other {# livraisons}} · {agents} par des agents IA",
+    "filtered": "Affichage : {category}",
+    "showAll": "Tout afficher",
+    "col": {
+      "request": "Demande",
+      "delivered": "Livré sur {branch}",
+      "findings": "Constats"
+    },
+    "noTicket": "Sans ticket",
+    "directPush": "Push direct",
+    "notOnMain": "Absent de {branch}",
+    "conforms": "Conforme",
+    "empty": "Rien n'a atteint {branch} sur la période, et aucun ticket n'a été clos.",
+    "emptyFilter": "Rien dans cette catégorie.",
+    "boards": {
+      "title": "Sources des tickets",
+      "hint": "Où vivent les demandes de ce projet. Les tickets terminés qui n'atteignent jamais main sont signalés.",
+      "repoIssues": "Les tickets GitLab de ce dépôt",
+      "always": "Toujours lus",
+      "add": "Lier un tableau",
+      "connection": "Outil",
+      "submit": "Tester et lier",
+      "unlink": "Délier",
+      "failed": "Non lu lors de cette analyse : {reason}",
+      "noAccess": "Seul un administrateur peut lier des tableaux à un projet.",
+      "noConnections": "Connectez d'abord votre outil de tickets dans Intégrations, puis liez son tableau ici.",
+      "openIntegrations": "Ouvrir les intégrations",
+      "scope": {
+        "jira": {
+          "label": "Clé de projet ou JQL",
+          "placeholder": "PAY",
+          "hint": "Une clé lit tout le projet ; une JQL le restreint (composant, label…)."
+        },
+        "trello": {
+          "label": "Lien du tableau",
+          "placeholder": "https://trello.com/b/AbCd1234/paiements",
+          "hint": "Les cartes dans une liste nommée comme un statut terminé comptent comme livrées."
+        },
+        "notion": {
+          "label": "Lien de la base",
+          "placeholder": "https://www.notion.so/equipe/0123…",
+          "hint": "La base doit être partagée avec l'intégration Cairn."
+        },
+        "gitlab": {
+          "label": "Chemin du projet",
+          "placeholder": "groupe/projet",
+          "hint": "Un autre projet GitLab dont les tickets portent les demandes de ce projet."
+        },
+        "azure": {
+          "label": "Projet",
+          "placeholder": "Paiements",
+          "hint": "Le nom du projet Azure DevOps, ou n'importe quel lien à l'intérieur. Les éléments dans un état terminé comptent comme livrés."
+        },
+        "youtrack": {
+          "label": "Projet ou requête",
+          "placeholder": "PAY",
+          "hint": "Un identifiant de projet lit tout le projet ; une requête YouTrack le restreint. Les tickets résolus comptent comme livrés."
+        },
+        "openproject": {
+          "label": "Projet",
+          "placeholder": "paiements",
+          "hint": "L'identifiant du projet, ou son lien."
+        },
+        "redmine": {
+          "label": "Projet",
+          "placeholder": "paiements",
+          "hint": "L'identifiant du projet, ou son lien. Les demandes fermées comptent comme livrées."
+        },
+        "asana": {
+          "label": "Lien du projet",
+          "placeholder": "https://app.asana.com/0/1201234567890/list",
+          "hint": "Les tâches terminées comptent comme livrées."
+        },
+        "clickup": {
+          "label": "Lien de la liste",
+          "placeholder": "https://app.clickup.com/9012345/v/li/901234567",
+          "hint": "Les tâches dans un statut fermé comptent comme livrées."
+        },
+        "shortcut": {
+          "label": "Recherche",
+          "placeholder": "team:paiements",
+          "hint": "Une recherche Shortcut : équipe, projet ou label. Les stories terminées comptent comme livrées."
+        },
+        "plane": {
+          "label": "Lien du projet",
+          "placeholder": "https://app.plane.so/acme/projects/0f8c…/issues",
+          "hint": "Les éléments dans un état « completed » comptent comme livrés."
+        },
+        "monday": {
+          "label": "Lien du tableau",
+          "placeholder": "https://acme.monday.com/boards/1234567890",
+          "hint": "Les éléments dont le statut vaut un statut terminé comptent comme livrés."
+        }
+      }
+    },
+    "link": {
+      "result": {
+        "linked": "Lié : {count, plural, =0 {aucun ticket récent pour l'instant} one {# ticket récent trouvé} other {# tickets récents trouvés}}.",
+        "removed": "Tableau délié.",
+        "forbidden": "Seul un administrateur peut lier des tableaux.",
+        "invalid": "Cela ne ressemble pas à un tableau de cet outil.",
+        "noDatabase": "La base de données n'est pas configurée.",
+        "unsupported": "Cet outil ne sait pas encore lister les tickets.",
+        "not_found": "Tableau introuvable, ou non partagé avec cette connexion.",
+        "unauthorized": "L'outil a refusé les identifiants de la connexion.",
+        "rate_limited": "La limite d'appels de l'outil est atteinte. Réessayez plus tard.",
+        "unreachable": "L'outil est injoignable.",
+        "timeout": "L'outil n'a pas répondu à temps.",
+        "provider_error": "L'outil a envoyé une réponse inattendue."
+      }
+    },
+    "method": {
+      "title": "Comment Cairn décide",
+      "reference": "La branche principale fait référence : chaque merge request fusionnée et chaque commit poussé directement.",
+      "tickets": "Chaque livraison est rapprochée des tickets qu'elle cite, tels qu'ils ont été validés ; les tickets terminés qui n'atteignent jamais main sont listés.",
+      "agents": "Les agents IA sont reconnus par leurs trailers Co-authored-by, leurs comptes et leurs noms de branche, jamais par déduction.",
+      "deterministic": "Des règles uniquement, sans IA : le même historique donne toujours le même résultat.",
+      "demo": "Données de démonstration : tickets et fusions fictifs."
+    },
+    "signal": {
+      "title": "Demande ↔ livraison",
+      "open": "Ouvrir",
+      "asOf": "Dernière analyse {ago}.",
+      "never": "Pas encore tracé. Ouvrez Traçabilité pour comparer les tickets à la branche principale."
+    },
+    "portfolio": {
+      "title": "Traçabilité",
+      "description": "Les demandes de chaque projet face à sa branche principale, à la date de sa dernière analyse.",
+      "tableTitle": "Projets",
+      "project": "Projet",
+      "lastRun": "Dernière analyse",
+      "demo": "Démo",
+      "empty": "Aucun projet tracé pour l'instant. Ouvrez la page Traçabilité d'un projet pour la lancer.",
+      "note": "Les projets importés sont tracés à l'ouverture de leur page Traçabilité ; les chiffres ici viennent de cette analyse."
     }
   }
 }

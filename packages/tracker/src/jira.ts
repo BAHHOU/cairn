@@ -8,9 +8,9 @@
  * from the ticket's own wording ("approved", a label…): only workflow history counts.
  */
 
-import { type ChangeRequest, type SpecView, ticketKeys } from "@cairn/shared";
+import { type ChangeRequest, type SpecView, type TicketItem, ticketKeys } from "@cairn/shared";
 import { z } from "zod";
-import type { AdapterOptions, TrackerAdapter } from "./adapter";
+import type { AdapterOptions, ListQuery, TrackerAdapter } from "./adapter";
 import { type FetchOptions, TrackerError, trackerCall, utc } from "./http";
 
 export interface JiraConnection {
@@ -191,6 +191,66 @@ export async function getSpec(
   }
 }
 
+const searchSchema = z.object({
+  issues: z.array(
+    z.object({
+      key: z.string(),
+      fields: z.object({
+        summary: z.string(),
+        updated: z.string(),
+        status: z.object({
+          name: z.string(),
+          statusCategory: z.object({ key: z.string() }).optional(),
+        }),
+      }),
+    }),
+  ),
+});
+
+/**
+ * The tickets a JQL query selects, updated since the window's start. Done is Jira's own status
+ * category, so every workflow's "Livré" or "Closed" counts without listing it. Cloud serves
+ * `/search/jql`; Data Center only `/search`: both are tried.
+ */
+export async function listIssues(
+  connection: JiraConnection,
+  jql: string,
+  query: ListQuery,
+  options: FetchOptions = {},
+): Promise<TicketItem[]> {
+  const day = query.since.slice(0, 10);
+  const full = `(${jql}) AND updated >= "${day}" ORDER BY updated DESC`;
+  const params = `jql=${encodeURIComponent(full)}&fields=summary,status,updated&maxResults=${query.limit ?? 100}`;
+  let body: unknown;
+  try {
+    body = await jiraGet(connection, `/rest/api/2/search/jql?${params}`, options, "no search");
+  } catch (error) {
+    if (!(error instanceof TrackerError && error.code === "not_found")) throw error;
+    body = await jiraGet(
+      connection,
+      `/rest/api/2/search?${params}`,
+      options,
+      "Jira search not found",
+    );
+  }
+  const base = baseOf(connection);
+  try {
+    return searchSchema.parse(body).issues.map((i) => ({
+      key: i.key,
+      title: i.fields.summary,
+      status: i.fields.status.name,
+      done:
+        i.fields.status.statusCategory?.key === "done" ||
+        query.doneStatuses.includes(i.fields.status.name),
+      tracker: "jira" as const,
+      url: `${base}/browse/${i.key}`,
+      updatedAt: utc(i.fields.updated),
+    }));
+  } catch {
+    throw new TrackerError("provider_error", "Unexpected answer from Jira");
+  }
+}
+
 /** Proves the URL and credentials work: who Jira says the token belongs to. */
 export async function checkConnection(
   connection: JiraConnection,
@@ -220,5 +280,9 @@ export function jiraTracker(
         contentFields: [...DEFAULT_FIELDS, ...(connection.contentFields ?? [])],
       }),
     check: () => checkConnection(connection, options),
+    list: (scope, query) => {
+      if (!scope.jql) throw new TrackerError("not_found", "A JQL query is required");
+      return listIssues(connection, scope.jql, query, options);
+    },
   };
 }
