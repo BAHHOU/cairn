@@ -257,7 +257,7 @@ function ConnectDialog({ kind, onClose }: { kind: LiveTracker; onClose: () => vo
         }}
       >
         <p className="flex gap-2 rounded-lg bg-muted/50 p-3 text-xs">
-          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
+          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary-ink" aria-hidden />
           {t(`dialog.help.${kind}`)}
         </p>
         <div className="flex flex-col gap-1.5">

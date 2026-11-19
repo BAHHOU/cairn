@@ -69,7 +69,7 @@ function JobCard({
       className={cn(
         "flex w-full flex-col gap-2.5 rounded-xl border bg-card p-3 text-left shadow-xs transition-all",
         "hover:-translate-y-px hover:shadow-md focus-visible:outline-2 focus-visible:outline-ring",
-        selected && "border-primary ring-2 ring-primary/40",
+        selected && "border-primary-ink ring-2 ring-primary-ink/40",
       )}
     >
       <span className="flex items-center gap-2.5">
@@ -262,7 +262,7 @@ export function PipelineFlow({ delivery, base }: { delivery: DeliveryView; base:
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4 rounded-2xl border bg-muted/30 p-5">
         <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-          <span className="grid size-8 place-items-center rounded-lg bg-primary/15 text-primary">
+          <span className="grid size-8 place-items-center rounded-lg bg-primary/15 text-primary-ink">
             <GitCommitHorizontal className="size-4" aria-hidden />
           </span>
           <span className="font-medium">{tp("commitPushed")}</span>

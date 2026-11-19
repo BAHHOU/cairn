@@ -32,7 +32,7 @@ export function TraceSignal({
       action={
         <Link
           href={href}
-          className="inline-flex items-center gap-1 rounded font-medium text-[13px] outline-none hover:text-primary focus-visible:ring-2 focus-visible:ring-ring/50"
+          className="inline-flex items-center gap-1 rounded font-medium text-[13px] outline-none hover:text-primary-ink focus-visible:ring-2 focus-visible:ring-ring/50"
         >
           {t("open")}
           <ArrowRight className="size-3.5" aria-hidden />

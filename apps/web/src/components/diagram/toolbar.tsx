@@ -143,7 +143,7 @@ export function DiagramToolbar({
       </div>
 
       <p className="text-muted-foreground text-xs">{td(`archViewHint.${state.view}`)}</p>
-      {notice && <p className="text-primary text-xs">{notice}</p>}
+      {notice && <p className="text-primary-ink text-xs">{notice}</p>}
     </div>
   );
 }

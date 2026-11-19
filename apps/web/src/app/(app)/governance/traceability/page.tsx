@@ -85,7 +85,7 @@ export default async function PortfolioTraceabilityPage() {
                     <td className="px-5 py-3">
                       <Link
                         href={`/projects/${l.id}/traceability`}
-                        className="font-medium outline-none hover:text-primary focus-visible:underline"
+                        className="font-medium outline-none hover:text-primary-ink focus-visible:underline"
                       >
                         {l.name}
                       </Link>

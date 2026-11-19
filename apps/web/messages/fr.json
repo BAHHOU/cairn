@@ -1,7 +1,7 @@
 {
   "meta": {
     "description": "Des projets lisibles, documentés et sûrs pour l'IA, au moindre coût en tokens.",
-    "brand": "Cairn"
+    "brand": "MergeOK"
   },
   "nav": {
     "label": "Navigation principale",
@@ -134,7 +134,7 @@
     "trackedProjects": "{count, plural, one {# projet suivi} other {# projets suivis}}",
     "demoTitle": "Exemple de pilotage",
     "demoBadge": "Démo · données fictives",
-    "demoBody": "Scores, maturité, portes qualité et budget tokens ne sont pas encore mesurés sur les dépôts réels : {count} projets fictifs illustrent ce que Cairn affichera.",
+    "demoBody": "Scores, maturité, portes qualité et budget tokens ne sont pas encore mesurés sur les dépôts réels : {count} projets fictifs illustrent ce que MergeOK affichera.",
     "kpis": "Indicateurs clés",
     "avgScore": "Score IA moyen",
     "sixMonths": "Sur six mois",
@@ -254,12 +254,12 @@
     "invalid_url": "L'URL du dépôt n'est pas valide. Attendu : https://hôte/groupe/projet.",
     "invalid_branch": "Nom de branche invalide.",
     "credentials_in_url": "Retirez les identifiants de l'URL : utilisez le champ « Jeton d'accès ».",
-    "host_not_allowed": "Cet hôte n'est pas autorisé. Ajoutez-le à GIT_HOSTS (liste blanche des hôtes Git de Cairn).",
+    "host_not_allowed": "Cet hôte n'est pas autorisé. Ajoutez-le à GIT_HOSTS (liste blanche des hôtes Git de MergeOK).",
     "unauthorized": "Jeton refusé, expiré ou sans les droits nécessaires.",
     "not_found": "Dépôt introuvable, ou le jeton n'y a pas accès.",
     "branch_not_found": "Cette branche n'existe pas dans le dépôt.",
     "rate_limited": "Limite de requêtes du fournisseur atteinte. Réessayez plus tard.",
-    "unreachable": "Hôte injoignable depuis Cairn (réseau, proxy ou certificat).",
+    "unreachable": "Hôte injoignable depuis MergeOK (réseau, proxy ou certificat).",
     "timeout": "Le fournisseur n'a pas répondu à temps.",
     "provider_error": "Réponse inattendue du fournisseur.",
     "clone_failed": "Le clonage a échoué.",
@@ -280,7 +280,7 @@
   "import": {
     "form": {
       "step1": "1 · Dépôt à importer",
-      "step1Hint": "Cairn interroge réellement le fournisseur pour vérifier le jeton, le dépôt et ses branches.",
+      "step1Hint": "MergeOK interroge réellement le fournisseur pour vérifier le jeton, le dépôt et ses branches.",
       "provider": "Fournisseur",
       "providerDetected": "Détecté d'après l'hôte.",
       "url": "URL du dépôt",
@@ -341,14 +341,20 @@
       "noTechnology": "Aucune reconnue",
       "duration": "Durée",
       "seconds": "{seconds} s",
-      "doneNote": "Copie de travail supprimée. Seuls les faits (technologies, nombre de fichiers) sont conservés ; aucun contenu de fichier n'est conservé."
+      "doneNote": "Copie de travail supprimée. Seuls les faits (technologies, nombre de fichiers) sont conservés ; aucun contenu de fichier n'est conservé.",
+      "stalledQueuedTitle": "Aucun worker n’a pris cet import",
+      "stalledQueuedBody": "Les imports tournent dans un processus worker séparé, et aucun n’est lancé. La taille n’y est pour rien : un dépôt de 9 000 fichiers s’importe en quelques secondes. Lancez le worker et cet import démarrera tout seul.",
+      "stalledRunTitle": "Cet import n’avance plus",
+      "stalledRunBody": "Il tourne depuis plus de 15 minutes : le worker s’est sans doute arrêté. Relancez-le ; l’import sera alors marqué interrompu et vous pourrez le relancer."
     },
     "status": {
       "queued": "En file d'attente",
       "cloning": "Clonage en cours",
       "scanning": "Analyse en cours",
       "done": "Importé",
-      "failed": "Échec"
+      "failed": "Échec",
+      "waitingWorker": "En attente du worker",
+      "stuck": "Bloqué"
     },
     "step": {
       "queued": "Demande enregistrée",
@@ -467,7 +473,7 @@
       "runs": "Exécute",
       "builtBy": "Construite par",
       "variables": "Variables",
-      "variablesHint": "Les noms que la chaîne lit. Leurs valeurs ne sont jamais lues ni conservées par Cairn.",
+      "variablesHint": "Les noms que la chaîne lit. Leurs valeurs ne sont jamais lues ni conservées par MergeOK.",
       "usedBy": "Utilisée par {jobs}",
       "environments": "Environnements dans le dépôt",
       "environmentsHint": "Dossiers de configuration nommés d'après un environnement. Ce n'est pas la liste de ce qui est déployé.",
@@ -492,9 +498,9 @@
       "topologyOutdated": "Cette analyse date d'avant le schéma de déploiement. Relancez-la depuis la fiche du projet pour le dessiner.",
       "jobsDetail": "Détail des jobs",
       "jobsDetailHint": "Les étapes dans l'ordre du pipeline. Cliquez sur un job pour voir quand il s'exécute, ce qu'il produit et ce qui l'affaiblit.",
-      "findingsHint": "Des constats vérifiables dans le fichier, avec la ligne. Cairn propose, il ne modifie jamais le dépôt.",
+      "findingsHint": "Des constats vérifiables dans le fichier, avec la ligne. MergeOK propose, il ne modifie jamais le dépôt.",
       "noFinding": "Aucun point d'attention relevé dans le pipeline.",
-      "limits": "Tout vient du fichier de pipeline, lu sans l'exécuter. Les durées, les validations, les reprises sur incident et l'historique des exécutions n'y figurent pas : Cairn ne les invente pas. Lecture à base de motifs, pas d'analyse complète du YAML : un job généré par inclusion ou par règle dynamique peut ne pas apparaître."
+      "limits": "Tout vient du fichier de pipeline, lu sans l'exécuter. Les durées, les validations, les reprises sur incident et l'historique des exécutions n'y figurent pas : MergeOK ne les invente pas. Lecture à base de motifs, pas d'analyse complète du YAML : un job généré par inclusion ou par règle dynamique peut ne pas apparaître."
     },
     "board": {
       "minutes": "{count} min",
@@ -562,7 +568,7 @@
       "findings": "Points d'attention",
       "findingsHint": "Ce qui ralentit un nouvel arrivant, avec la ligne d'où ça vient.",
       "noFinding": "Le README couvre l'essentiel d'un démarrage.",
-      "limits": "Lu dans le README et les fichiers de build, jamais exécuté : Cairn ne sait pas si une commande fonctionne aujourd'hui. Les durées et les accès à demander ne figurent pas dans un dépôt, ils ne sont donc pas affichés."
+      "limits": "Lu dans le README et les fichiers de build, jamais exécuté : MergeOK ne sait pas si une commande fonctionne aujourd'hui. Les durées et les accès à demander ne figurent pas dans un dépôt, ils ne sont donc pas affichés."
     },
     "steps": {
       "minutes": "{count} min",
@@ -600,8 +606,8 @@
     "filesHint": "Les fichiers de documentation, avec ce qu'il en coûte de les lire.",
     "noFiles": "Aucun document trouvé.",
     "ai": "Pour les assistants IA",
-    "aiHint": "Les fichiers d'instructions que les assistants lisent d'eux-mêmes. Cairn en propose, il n'en écrit jamais.",
-    "limits": "Lecture à base de motifs : Cairn compare des versions et des chemins cités, il ne juge pas la qualité de la rédaction. Un document peut être exact et absent de cette liste, ou l'inverse. Les coûts de lecture sont des estimations (taille / 4)."
+    "aiHint": "Les fichiers d'instructions que les assistants lisent d'eux-mêmes. MergeOK en propose, il n'en écrit jamais.",
+    "limits": "Lecture à base de motifs : MergeOK compare des versions et des chemins cités, il ne juge pas la qualité de la rédaction. Un document peut être exact et absent de cette liste, ou l'inverse. Les coûts de lecture sont des estimations (taille / 4)."
   },
   "findings": {
     "empty": "Rien à signaler sur ce point.",
@@ -689,7 +695,7 @@
       "unavailable": "Indisponible."
     },
     "canvas": {
-      "mermaidHeader": "{title} — exporté depuis Cairn",
+      "mermaidHeader": "{title} — exporté depuis MergeOK",
       "linkCopied": "Lien copié.",
       "copyRefused": "Copie refusée par le navigateur.",
       "mermaidCopied": "Mermaid copié.",
@@ -715,7 +721,7 @@
       "layers": "Couches, de l'extérieur vers l'intérieur",
       "forbidden": "Dépendances interdites",
       "validated": "Validé par {by} le {at}.",
-      "defaultContract": "Contrat par défaut de Cairn : aucune équipe ne l'a encore validé.",
+      "defaultContract": "Contrat par défaut de MergeOK : aucune équipe ne l'a encore validé.",
       "introducedBy": "introduit par {ref} · {title} ({date})",
       "proposedFix": "Correction proposée :",
       "node": "Nœud",
@@ -853,7 +859,7 @@
     },
     "gaps": {
       "title": "Quoi corriger d'abord",
-      "hint": "Trié par gravité, puis par tokens économisés. Cairn propose, il ne modifie jamais le dépôt.",
+      "hint": "Trié par gravité, puis par tokens économisés. MergeOK propose, il ne modifie jamais le dépôt.",
       "empty": "Rien à corriger d'après les contrôles disponibles.",
       "create": "À créer : {path}",
       "saved": "≈ {value} tokens",
@@ -986,7 +992,7 @@
     "common": {
       "badge": "Prévu",
       "whatYouGet": "Ce que vous trouverez ici",
-      "roadmap": "Cette page est dans la feuille de route de Cairn. Sa place dans la navigation est fixée ; les données ne sont pas encore branchées.",
+      "roadmap": "Cette page est dans la feuille de route de MergeOK. Sa place dans la navigation est fixée ; les données ne sont pas encore branchées.",
       "back": "Retour à la vue d'ensemble"
     },
     "feature": {
@@ -1099,7 +1105,7 @@
         "p3": "L'évolution du modèle dans le temps"
       },
       "files": {
-        "summary": "Parcourez le dépôt avec le contexte de Cairn à côté de chaque fichier.",
+        "summary": "Parcourez le dépôt avec le contexte de MergeOK à côté de chaque fichier.",
         "p1": "L'arborescence à n'importe quelle branche ou commit",
         "p2": "Le rôle de chaque dossier, en une ligne",
         "p3": "Coût et risques signalés sur chaque fichier"
@@ -1135,7 +1141,7 @@
         "p3": "Des règles communes à toutes les équipes, appliquées à chaque merge request"
       },
       "integrations": {
-        "summary": "Les outils que Cairn lit pour relier spécifications, code et validations.",
+        "summary": "Les outils que MergeOK lit pour relier spécifications, code et validations.",
         "p1": "Jira (Cloud ou Data Center) : tickets, statuts et historique des modifications",
         "p2": "GitLab et GitHub : merge requests, diffs et approbations",
         "p3": "Le résultat renvoyé dans la merge request, comme contrôle bloquant"
@@ -1157,8 +1163,8 @@
         "message": "Rien n'est à risque, mais {watch, plural, one {# zone mérite} other {# zones méritent}} de l'attention avant que le projet grandisse."
       },
       "healthy": {
-        "title": "En bonne santé sur tout ce que Cairn voit",
-        "message": "{good, plural, one {# zone est} other {# zones sont}} en bon état. Cairn ne vérifie pas encore tout : voir la liste ci-dessous."
+        "title": "En bonne santé sur tout ce que MergeOK voit",
+        "message": "{good, plural, one {# zone est} other {# zones sont}} en bon état. MergeOK ne vérifie pas encore tout : voir la liste ci-dessous."
       },
       "unknown": {
         "title": "Pas encore assez d'éléments",
@@ -1214,7 +1220,7 @@
         "rescan": "Relancez l'analyse pour lire le pipeline de ce projet."
       },
       "infrastructure": {
-        "described": "L'infrastructure est décrite dans le code ({count, plural, one {# élément} other {# éléments}}). Cairn ne vérifie pas encore sa sécurité.",
+        "described": "L'infrastructure est décrite dans le code ({count, plural, one {# élément} other {# éléments}}). MergeOK ne vérifie pas encore sa sécurité.",
         "notAsCode": "Le pipeline déploie, mais la cible du déploiement n'est pas décrite dans le dépôt.",
         "none": "Aucune infrastructure n'est décrite dans ce dépôt.",
         "rescan": "Relancez l'analyse pour lire l'infrastructure de ce projet."
@@ -1228,7 +1234,7 @@
     },
     "notChecked": {
       "title": "Pas encore vérifié",
-      "hint": "Cairn n'examine pas encore ces points. Un bilan sain ne dit rien à leur sujet.",
+      "hint": "MergeOK n'examine pas encore ces points. Un bilan sain ne dit rien à leur sujet.",
       "item": {
         "dependencies": "Dépendances vulnérables ou inventées",
         "accessControl": "Contrôles de connexion et de permissions",
@@ -1452,8 +1458,8 @@
   },
   "integrations": {
     "title": "Intégrations",
-    "description": "Les outils de gestion de projet où vivent vos spécifications : Cairn les lit pour vérifier que chaque merge request livre ce qui a été validé. Toujours en lecture seule.",
-    "noDatabase": "Les intégrations demandent la base de données de Cairn (DATABASE_URL).",
+    "description": "Les outils de gestion de projet où vivent vos spécifications : MergeOK les lit pour vérifier que chaque merge request livre ce qui a été validé. Toujours en lecture seule.",
+    "noDatabase": "Les intégrations demandent la base de données de MergeOK (DATABASE_URL).",
     "connected": {
       "title": "Outils connectés",
       "hint": "Les tickets cités par une merge request sont cherchés dans chacun de ces outils.",
@@ -1497,7 +1503,7 @@
     },
     "dialog": {
       "title": "Connecter {name}",
-      "description": "Lecture seule. Cairn teste la connexion avant de l'enregistrer ; le secret est chiffré et jamais réaffiché.",
+      "description": "Lecture seule. MergeOK teste la connexion avant de l'enregistrer ; le secret est chiffré et jamais réaffiché.",
       "label": "Nom de la connexion",
       "submit": "Tester et connecter",
       "cancel": "Annuler",
@@ -1611,7 +1617,7 @@
       "unauthorized": "L'outil refuse ces identifiants.",
       "not_found": "Cette adresse ne répond pas comme l'API attendue.",
       "rate_limited": "L'outil limite les appels : réessayez dans un instant.",
-      "unreachable": "L'outil est injoignable depuis le serveur de Cairn.",
+      "unreachable": "L'outil est injoignable depuis le serveur de MergeOK.",
       "timeout": "L'outil n'a pas répondu à temps.",
       "provider_error": "L'outil a renvoyé une réponse inattendue."
     }
@@ -1641,7 +1647,7 @@
     },
     "tickets": {
       "title": "Tickets",
-      "hint": "Ce qui fait qu'une spécification est validée, et quels tickets Cairn reconnaît.",
+      "hint": "Ce qui fait qu'une spécification est validée, et quels tickets MergeOK reconnaît.",
       "statuses": "Statuts qui valent validation",
       "projects": "Projets Jira reconnus (vide : tous)"
     },
@@ -1709,7 +1715,7 @@
         "notion": {
           "label": "Lien de la base",
           "placeholder": "https://www.notion.so/equipe/0123…",
-          "hint": "La base doit être partagée avec l'intégration Cairn."
+          "hint": "La base doit être partagée avec l'intégration MergeOK."
         },
         "gitlab": {
           "label": "Chemin du projet",
@@ -1810,7 +1816,7 @@
       }
     },
     "method": {
-      "title": "Comment Cairn décide",
+      "title": "Comment MergeOK décide",
       "reference": "La branche principale fait référence : chaque merge request fusionnée et chaque commit poussé directement.",
       "tickets": "Chaque livraison est rapprochée des tickets qu'elle cite, tels qu'ils ont été validés ; les tickets terminés qui n'atteignent jamais main sont listés.",
       "agents": "Les agents IA sont reconnus par leurs trailers Co-authored-by, leurs comptes et leurs noms de branche, jamais par déduction.",
@@ -1848,13 +1854,17 @@
     "mode": "Mode",
     "statusNote": "Les couleurs suivent le message dans tous les thèmes : vert sûr, orange à regarder, rouge critique, rouge foncé plein bloquant.",
     "template": {
+      "mergeok": {
+        "name": "MergeOK",
+        "hint": "Citron sur minéral, Satoshi. Par défaut."
+      },
       "apple": {
         "name": "Apple",
-        "hint": "Couleurs système, SF Pro, gris Apple. Par défaut."
+        "hint": "Couleurs système, SF Pro, gris Apple."
       },
       "cairn": {
         "name": "Cairn",
-        "hint": "Bruyère sur basalte."
+        "hint": "Bruyère sur basalte, le premier look."
       },
       "ledger": {
         "name": "Registre",
@@ -1878,6 +1888,7 @@
       }
     },
     "accentName": {
+      "citron": "Citron",
       "heather": "Bruyère",
       "copper": "Cuivre",
       "lagoon": "Lagon",
@@ -1890,6 +1901,7 @@
       "pink": "Rose"
     },
     "baseName": {
+      "mineral": "Minéral",
       "basalt": "Basalte",
       "slate": "Ardoise",
       "stone": "Pierre",
@@ -1897,6 +1909,7 @@
       "apple": "Apple"
     },
     "fontName": {
+      "satoshi": "Satoshi",
       "schibsted": "Schibsted",
       "plex": "IBM Plex",
       "system": "Système (SF Pro)"

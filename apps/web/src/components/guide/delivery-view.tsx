@@ -43,7 +43,7 @@ function Images({
               {image.nodeId ? (
                 <Link
                   href={`/projects/${id}/architecture?vue=flux&noeud=${encodeURIComponent(image.nodeId)}`}
-                  className="ml-auto text-xs underline underline-offset-4 hover:text-primary"
+                  className="ml-auto text-xs underline underline-offset-4 hover:text-primary-ink"
                 >
                   {t("seeInArchitecture")}
                 </Link>

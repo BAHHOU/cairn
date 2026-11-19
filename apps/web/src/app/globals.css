@@ -3,6 +3,29 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Satoshi (Indian Type Foundry, Fontshare free licence), self-hosted. */
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/satoshi-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/satoshi-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/satoshi-700.woff2") format("woff2");
+  font-weight: 600 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: oklch(0.995 0.0018 330);
   --foreground: oklch(0.2 0.0132 330);
@@ -214,6 +237,72 @@
   --primary-foreground: #f8fafc;
   --ring: #8855f6;
 }
+:root[data-base="mineral"] {
+  /* MergeOK, light: warm Ivory ground, white cards, Mineral ink. Muted text 5.6:1 on the ground. */
+  --background: #f5f4ee;
+  --foreground: #0f1a16;
+  --card: #ffffff;
+  --card-foreground: #0f1a16;
+  --popover: #ffffff;
+  --popover-foreground: #0f1a16;
+  --secondary: #ecebe3;
+  --secondary-foreground: #0f1a16;
+  --muted: #ecebe3;
+  --muted-foreground: #5c6359;
+  --accent: #e6e7dc;
+  --accent-foreground: #0f1a16;
+  --border: #dcdcd2;
+  --input: #d2d3c7;
+  --success: #248a3d;
+  --warning: #ff9500;
+  --warning-ink: #c93400;
+  --destructive: #d70015;
+  --critical: #b80014;
+  --critical-foreground: #ffffff;
+  --info: #0071e3;
+  --highlight: #d5e66b;
+}
+:root.dark[data-base="mineral"] {
+  /* MergeOK, dark: the brand guide. Mineral ground, Moss surfaces, Ivory and Stone text. "Safe" is
+     a true green, never the brand's Citron, so a blocked page never looks OK. */
+  --background: #0f1a16;
+  --foreground: #f2f0e8;
+  --card: #16231e;
+  --card-foreground: #f2f0e8;
+  --popover: #1d2b25;
+  --popover-foreground: #f2f0e8;
+  --secondary: #293630;
+  --secondary-foreground: #f2f0e8;
+  --muted: #293630;
+  --muted-foreground: #a8ada1;
+  --accent: #293630;
+  --accent-foreground: #f2f0e8;
+  --border: #2a3832;
+  --input: #34433c;
+  --success: #30d158;
+  --warning: #ff9f0a;
+  --warning-ink: #ffb340;
+  --destructive: #ff453a;
+  --critical: #d70015;
+  --critical-foreground: #ffffff;
+  --info: #0a84ff;
+  --highlight: #d5e66b;
+}
+:root[data-accent="citron"] {
+  /* Citron stays the brand in light mode as a fill, with Mineral letters (13:1), as in the brand
+     guide. It cannot be text, an icon or a line on a light ground (1.3:1): those take primary-ink,
+     a deep olive of the same hue (7.2:1 on white). */
+  --primary: #d5e66b;
+  --primary-foreground: #0f1a16;
+  --primary-ink: #4d5e00;
+  --ring: #4d5e00;
+}
+:root.dark[data-accent="citron"] {
+  --primary: #d5e66b;
+  --primary-foreground: #0f1a16;
+  --primary-ink: #d5e66b;
+  --ring: #d5e66b;
+}
 :root[data-base="slate"] {
   --background: oklch(0.995 0.0018 255);
   --foreground: oklch(0.2 0.0132 255);
@@ -324,6 +413,10 @@
   --primary-foreground: oklch(0.2 0 0);
   --ring: oklch(0.94 0 0);
 }
+:root[data-font="satoshi"] {
+  --app-font: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+  --app-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
 :root[data-font="plex"] {
   --app-font: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
 }
@@ -343,6 +436,8 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  /* The brand colour where it is read as text, an icon or a line. Most accents need no separate value. */
+  --color-primary-ink: var(--primary-ink, var(--primary));
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -364,7 +459,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --font-sans: var(--app-font);
-  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-mono: var(--app-mono, "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace);
 }
 
 @layer base {

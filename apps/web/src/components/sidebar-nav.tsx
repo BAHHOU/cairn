@@ -132,7 +132,7 @@ export function SidebarNav({
           title={full}
           className="flex items-center gap-2.5 rounded-md px-1.5 py-1 outline-none hover:bg-accent/60 focus-visible:ring-2 focus-visible:ring-ring/50"
         >
-          <span className="grid size-8 shrink-0 place-items-center rounded-md bg-primary/15 font-semibold text-primary text-sm">
+          <span className="grid size-8 shrink-0 place-items-center rounded-md bg-primary/15 font-semibold text-primary-ink text-sm">
             {name.short.slice(0, 1).toUpperCase()}
           </span>
           <span className="sb-label flex min-w-0 flex-col">

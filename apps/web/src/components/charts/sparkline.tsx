@@ -21,7 +21,7 @@ export function Sparkline({
   return (
     <svg
       viewBox={`0 0 ${w} ${h}`}
-      className={className ?? "h-8 w-28 text-primary"}
+      className={className ?? "h-8 w-28 text-primary-ink"}
       role="img"
       aria-label={label}
     >

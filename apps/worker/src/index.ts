@@ -10,6 +10,7 @@ const log = pino({ name: "cairn-worker" });
 
 const SCAN_QUEUE = "scan";
 const STALE_IMPORT_MS = 15 * 60_000;
+const SWEEP_EVERY_MS = 5 * 60_000;
 
 interface ScanJob {
   path: string;
@@ -32,8 +33,16 @@ async function main() {
     "git egress allowlist",
   );
 
-  const interrupted = await failStaleImports(db, STALE_IMPORT_MS);
-  if (interrupted > 0) log.warn({ interrupted }, "marked interrupted imports as failed");
+  // At start, then every few minutes: a run stuck in cloning or scanning (a crashed job, a killed
+  // process) must end as failed, never spin forever in the UI.
+  const sweep = async () => {
+    const interrupted = await failStaleImports(db, STALE_IMPORT_MS);
+    if (interrupted > 0) log.warn({ interrupted }, "marked interrupted imports as failed");
+  };
+  await sweep();
+  const sweeper = setInterval(() => {
+    sweep().catch((error) => log.error({ error }, "stale import sweep failed"));
+  }, SWEEP_EVERY_MS);
 
   const boss = new PgBoss(databaseUrl);
   boss.on("error", (error) => log.error({ error }, "pg-boss error"));
@@ -57,6 +66,7 @@ async function main() {
   log.info("worker started");
 
   const stop = async () => {
+    clearInterval(sweeper);
     await boss.stop();
     await db.pool.end();
     process.exit(0);

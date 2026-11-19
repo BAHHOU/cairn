@@ -207,7 +207,7 @@ export function EnvironmentCard({
                 <a
                   key={nodeId}
                   href={architectureHref(nodeId)}
-                  className="rounded-md border px-2 py-0.5 text-xs hover:border-primary hover:text-primary"
+                  className="rounded-md border px-2 py-0.5 text-xs hover:border-primary-ink hover:text-primary-ink"
                 >
                   {label}
                 </a>

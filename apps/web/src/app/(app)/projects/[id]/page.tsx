@@ -86,7 +86,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
               <Sparkline
                 label={tc("sixMonthTrend")}
                 values={project.trend}
-                className="h-8 w-28 text-primary"
+                className="h-8 w-28 text-primary-ink"
               />
             </div>
           </CardContent>

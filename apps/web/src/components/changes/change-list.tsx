@@ -66,7 +66,7 @@ export function ChangeList({
             <div className="flex min-w-0 flex-1 flex-col gap-1">
               <Link
                 href={`/projects/${c.projectId}/changes/${c.iid}`}
-                className="truncate font-medium text-sm after:absolute after:inset-0 group-hover:text-primary"
+                className="truncate font-medium text-sm after:absolute after:inset-0 group-hover:text-primary-ink"
               >
                 {c.title}
               </Link>

@@ -209,7 +209,7 @@ export function PortfolioTable({
                   <td className="px-4 py-2.5">
                     <Link
                       href={`/projects/${row.id}/ai-readiness`}
-                      className="font-medium hover:text-primary"
+                      className="font-medium hover:text-primary-ink"
                     >
                       {row.name}
                     </Link>

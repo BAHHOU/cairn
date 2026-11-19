@@ -72,7 +72,7 @@ export default async function OverviewPage() {
               <Sparkline
                 label={tc("sixMonthTrend")}
                 values={o.scoreTrend}
-                className="h-5 w-16 text-primary"
+                className="h-5 w-16 text-primary-ink"
               />
             </div>
           }

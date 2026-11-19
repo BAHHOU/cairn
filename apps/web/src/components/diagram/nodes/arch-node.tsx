@@ -32,7 +32,7 @@ const ICON: Record<ArchNodeKind, typeof Server> = {
 /** Colour carries the layer, never the severity: severity is shown by the ring. */
 const LAYER_STYLE: Record<string, string> = {
   experience: "border-info/50 bg-info/5",
-  application: "border-primary/50 bg-primary/5",
+  application: "border-primary-ink/50 bg-primary/5",
   domaine: "border-foreground/25 bg-foreground/[0.03]",
   infrastructure: "border-muted-foreground/35 bg-muted/40",
   externe: "border-dashed border-muted-foreground/50 bg-background",

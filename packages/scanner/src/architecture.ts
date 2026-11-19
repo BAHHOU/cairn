@@ -12,6 +12,7 @@ import type {
   ScanFileRecord,
 } from "@cairn/shared";
 import { imageRepository } from "./facts/ci";
+import { buildNodeArchitecture, NOT_PRODUCT, OTHER } from "./node-modules";
 import type { JavaType, Project, Unit } from "./project";
 
 export interface ArchitectureInput {
@@ -282,6 +283,8 @@ export function buildArchitecture(input: ArchitectureInput): ProjectArchitecture
   for (const [key, list] of typesByUnit) {
     const unit = unitsByKey.get(key);
     if (!unit) continue;
+    // A bare folder of tests or examples holds fixtures, not a part of the product.
+    if (unit.kind === "folder" && NOT_PRODUCT.test(`${unit.key}/`)) continue;
     if (list.some((t) => t.roles.includes("application"))) services.push(unit);
     else libs.push(unit);
   }
@@ -386,17 +389,75 @@ export function buildArchitecture(input: ArchitectureInput): ProjectArchitecture
     });
   }
 
+  /* ---- TypeScript / JavaScript modules (Node services, CLIs, libraries) ---- */
+  const node = buildNodeArchitecture(project);
+  const nodeId = (key: string) => `mod-${slug(key === OTHER ? "autres-modules" : key)}`;
+  for (const m of node.modules) {
+    addNode({
+      id: nodeId(m.key),
+      label: m.label,
+      kind: "component",
+      layer: m.layer,
+      parentId: sysId,
+      description: `Module TypeScript : ${m.files.length} fichier${m.files.length > 1 ? "s" : ""} (${m.key}).${
+        node.hiddenImports > 0
+          ? " Seules ses dépendances principales sont tracées ; la carte du code montre toutes les autres."
+          : ""
+      }`,
+      tech: ["TypeScript"],
+      provenance: "extracted",
+      sources: [src(m.key, undefined, "dossier du module")],
+    });
+  }
+  if (node.folded.length > 0) {
+    const count = node.folded.reduce((n, m) => n + m.files.length, 0);
+    addNode({
+      id: nodeId(OTHER),
+      label: `${node.folded.length} autres modules`,
+      kind: "component",
+      layer: "infrastructure",
+      parentId: sysId,
+      description: `Regroupés pour la lisibilité (${count} fichiers) : ${node.folded
+        .slice(0, 8)
+        .map((m) => m.label)
+        .join(", ")}${node.folded.length > 8 ? "…" : ""}.`,
+      tech: ["TypeScript"],
+      provenance: "extracted",
+    });
+  }
+  for (const i of node.imports) {
+    addEdge({
+      source: nodeId(i.from),
+      target: nodeId(i.to),
+      kind: "build",
+      label: `importe (${i.count})`,
+      sources: [src(i.example, undefined, `${i.count} imports`)],
+    });
+  }
+  const nodeFiles = node.modules.reduce((n, m) => n + m.files.length, 0);
+  const rootPkg = project.files.find((f) => f.path === "package.json" && f.facts?.pkg);
+  // The system is named after what most of its code is written in, not after the first language seen.
+  if (nodeFiles > 0) {
+    const ts = new Set(["TypeScript", ...(rootPkg ? ["Node.js"] : [])]);
+    const javaFirst = prodTypes.length >= nodeFiles;
+    const merged = javaFirst ? [...sysTech, ...ts] : [...ts, ...sysTech];
+    sysTech.clear();
+    for (const t of merged) sysTech.add(t);
+  }
+  const moduleCount = node.modules.length + (node.folded.length > 0 ? 1 : 0);
+
   addNode({
     id: sysId,
     label: repoName.split("/").slice(-2).join("/"),
     kind: "system",
     layer: "application",
-    description: `Système importé depuis ${providerLabel(provider)} : ${containers.length} unités de code (${services.length} applications, ${libs.length} bibliothèques, ${uis.length} interfaces).`,
+    description: `Système importé depuis ${providerLabel(provider)} : ${containers.length + moduleCount} unités de code (${services.length} applications, ${libs.length} bibliothèques, ${uis.length} interfaces${moduleCount ? `, ${moduleCount} modules TypeScript` : ""}).`,
     tech: [...sysTech],
     provenance: "inferred",
     sources: [
       src(
-        project.maven.find((m) => m.dir === ".")?.pomPath ?? "pom.xml",
+        project.maven.find((m) => m.dir === ".")?.pomPath ??
+          (rootPkg ? "package.json" : (project.maven[0]?.pomPath ?? ".")),
         undefined,
         "périmètre = le dépôt",
       ),
@@ -686,6 +747,13 @@ export function buildArchitecture(input: ArchitectureInput): ProjectArchitecture
     }
   >();
   for (const c of configs.files) {
+    // Forge settings (issue templates, workflows) name GitHub and registries, not systems the code calls.
+    if (
+      /^\.(github|gitlab)\/|^\.gitlab-ci\.ya?ml$|(^|\/)\.?(circleci|buildkite)\//.test(
+        c.record.path,
+      )
+    )
+      continue;
     for (const e of c.entries) {
       if (/datasource|jdbc|broker|bootstrap|queue|mq\./i.test(e.key) || /^jdbc/.test(e.value))
         continue;

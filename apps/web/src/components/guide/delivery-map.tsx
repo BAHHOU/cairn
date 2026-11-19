@@ -196,7 +196,7 @@ function NodeDetail({
         {node.archNodeId ? (
           <Link
             href={`/projects/${id}/architecture?vue=flux&noeud=${encodeURIComponent(node.archNodeId)}`}
-            className="text-xs underline underline-offset-4 hover:text-primary"
+            className="text-xs underline underline-offset-4 hover:text-primary-ink"
           >
             {t("seeInArchitecture")}
           </Link>
@@ -331,7 +331,7 @@ function TopologyCanvas({
       layout.edges.map((e) => {
         const on = hover !== null && (e.edge.from === hover || e.edge.to === hover);
         const dim = hover !== null && !on;
-        const color = on ? "var(--primary)" : EDGE_STROKE[e.edge.basis];
+        const color = on ? "var(--color-primary-ink)" : EDGE_STROKE[e.edge.basis];
         return {
           id: e.edge.id,
           source: e.edge.from,

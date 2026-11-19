@@ -26,6 +26,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const FONT_FAMILY: Record<Font, string> = {
+  satoshi: '"Satoshi", sans-serif',
   schibsted: '"Schibsted Grotesk Variable", sans-serif',
   plex: '"IBM Plex Sans", sans-serif',
   system: "ui-sans-serif, system-ui, -apple-system, sans-serif",
@@ -84,7 +85,7 @@ function Choice({
       onClick={onSelect}
       className={cn(
         "relative flex items-center gap-2 rounded-lg border bg-card px-2.5 py-2 text-left text-sm outline-none transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/50",
-        selected && "border-primary ring-1 ring-primary",
+        selected && "border-primary-ink ring-1 ring-primary-ink",
         className,
       )}
     >
@@ -218,7 +219,9 @@ export function ThemeCustomizer({ initial }: { initial: ThemePrefs }) {
                         <Check
                           className={cn(
                             "size-3",
-                            dark && a === "graphite" ? "text-black" : "text-white",
+                            (dark && a === "graphite") || a === "citron"
+                              ? "text-black"
+                              : "text-white",
                           )}
                         />
                       ) : null}

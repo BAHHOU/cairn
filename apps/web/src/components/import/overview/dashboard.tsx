@@ -82,7 +82,7 @@ function ViewAll({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="inline-flex items-center gap-1 rounded font-medium text-[13px] outline-none hover:text-primary focus-visible:ring-2 focus-visible:ring-ring/50"
+      className="inline-flex items-center gap-1 rounded font-medium text-[13px] outline-none hover:text-primary-ink focus-visible:ring-2 focus-visible:ring-ring/50"
     >
       {label}
       <ArrowRight className="size-3.5" aria-hidden />
@@ -545,7 +545,7 @@ export function LatestScan({
               />
               <Link
                 href={`/projects/import/${run.id}`}
-                className="flex min-w-0 flex-1 items-baseline justify-between gap-3 rounded text-sm outline-none hover:text-primary focus-visible:ring-2 focus-visible:ring-ring/50"
+                className="flex min-w-0 flex-1 items-baseline justify-between gap-3 rounded text-sm outline-none hover:text-primary-ink focus-visible:ring-2 focus-visible:ring-ring/50"
               >
                 <span className="min-w-0 truncate">
                   <span className="font-medium">{ts(run.status)}</span>

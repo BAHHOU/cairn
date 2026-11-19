@@ -61,6 +61,18 @@ describe("projectGraph", () => {
     expect(view.nodes.some((n) => n.id === "sys-qis")).toBe(false);
   });
 
+  it("keeps the boxes when nothing is linked, instead of an empty canvas", () => {
+    const lonely = {
+      nodes: graph.nodes.filter((n) => n.kind === "system" || n.parentId === "sys-qis"),
+      edges: [],
+      violations: [],
+    };
+    for (const view of ["contexte", "conteneurs"] as const) {
+      expect(projectGraph(lonely, view).nodes.length).toBeGreaterThan(0);
+    }
+    expect(projectGraph(lonely, "contexte").nodes.some((n) => n.id === "sys-qis")).toBe(true);
+  });
+
   it("keeps only data-carrying links in the flow view", () => {
     const view = projectGraph(graph, "flux");
     expect(view.edges.length).toBeGreaterThan(0);

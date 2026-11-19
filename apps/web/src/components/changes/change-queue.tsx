@@ -79,7 +79,7 @@ export function ChangeQueue({
                 className={cn(
                   "-mb-px flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2.5 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                   active
-                    ? "border-primary font-medium text-foreground"
+                    ? "border-primary-ink font-medium text-foreground"
                     : "border-transparent text-muted-foreground hover:text-foreground",
                 )}
               >

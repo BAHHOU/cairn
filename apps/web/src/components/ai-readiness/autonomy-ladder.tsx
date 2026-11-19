@@ -61,7 +61,8 @@ export function AutonomyLadder({
                 aria-current={state === "current" ? "step" : undefined}
                 className={cn(
                   "flex gap-3 rounded-lg border p-3",
-                  state === "current" && "border-primary/50 bg-primary/5 ring-1 ring-primary/30",
+                  state === "current" &&
+                    "border-primary-ink/50 bg-primary/5 ring-1 ring-primary-ink/30",
                   state === "next" && "border-dashed border-warning/60",
                   state === "locked" && "opacity-60",
                 )}
@@ -127,7 +128,7 @@ function RungBadge({ state }: { state: RungState }) {
     <span
       className={cn(
         "inline-flex items-center gap-1 text-xs",
-        state === "current" ? "font-medium text-primary" : "text-muted-foreground",
+        state === "current" ? "font-medium text-primary-ink" : "text-muted-foreground",
       )}
     >
       <Icon className="size-3.5" aria-hidden />

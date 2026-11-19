@@ -1,4 +1,4 @@
-import type { ImportView } from "@cairn/shared";
+import { type ImportView, isImportStalled } from "@cairn/shared";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ImportStatusBadge } from "@/components/import/status";
@@ -16,6 +16,7 @@ import { useFormat } from "@/i18n/format";
 export function ImportsTable({ imports }: { imports: ImportView[] }) {
   const t = useTranslations("import.table");
   const fmt = useFormat();
+  const now = Date.now();
   return (
     <Table>
       <TableHeader>
@@ -42,7 +43,7 @@ export function ImportsTable({ imports }: { imports: ImportView[] }) {
             <TableCell className="font-mono text-xs">{i.repository.branch}</TableCell>
             <TableCell>
               <Link href={`/projects/import/${i.id}`} title={t("runDetail")}>
-                <ImportStatusBadge status={i.status} />
+                <ImportStatusBadge status={i.status} stalled={isImportStalled(i, now)} />
               </Link>
             </TableCell>
             <TableCell className="font-mono text-xs">{i.commitSha?.slice(0, 10) ?? "—"}</TableCell>

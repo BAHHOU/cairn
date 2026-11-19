@@ -1,7 +1,7 @@
 {
   "meta": {
     "description": "Projects that are readable, documented and safe for AI, at the lowest token cost.",
-    "brand": "Cairn"
+    "brand": "MergeOK"
   },
   "nav": {
     "label": "Main navigation",
@@ -134,7 +134,7 @@
     "trackedProjects": "{count, plural, one {# tracked project} other {# tracked projects}}",
     "demoTitle": "Steering example",
     "demoBadge": "Demo · fictitious data",
-    "demoBody": "Scores, maturity, quality gates and token budget are not measured on real repositories yet: {count} fictitious projects show what Cairn will display.",
+    "demoBody": "Scores, maturity, quality gates and token budget are not measured on real repositories yet: {count} fictitious projects show what MergeOK will display.",
     "kpis": "Key indicators",
     "avgScore": "Average AI score",
     "sixMonths": "Over six months",
@@ -254,12 +254,12 @@
     "invalid_url": "The repository URL is not valid. Expected: https://host/group/project.",
     "invalid_branch": "Invalid branch name.",
     "credentials_in_url": "Remove the credentials from the URL: use the “Access token” field.",
-    "host_not_allowed": "This host is not allowed. Add it to GIT_HOSTS (Cairn's allowlist of Git hosts).",
+    "host_not_allowed": "This host is not allowed. Add it to GIT_HOSTS (MergeOK's allowlist of Git hosts).",
     "unauthorized": "Token refused, expired or missing the required permissions.",
     "not_found": "Repository not found, or the token has no access to it.",
     "branch_not_found": "This branch does not exist in the repository.",
     "rate_limited": "Provider rate limit reached. Try again later.",
-    "unreachable": "Host unreachable from Cairn (network, proxy or certificate).",
+    "unreachable": "Host unreachable from MergeOK (network, proxy or certificate).",
     "timeout": "The provider did not answer in time.",
     "provider_error": "Unexpected answer from the provider.",
     "clone_failed": "The clone failed.",
@@ -280,7 +280,7 @@
   "import": {
     "form": {
       "step1": "1 · Repository to import",
-      "step1Hint": "Cairn really queries the provider to check the token, the repository and its branches.",
+      "step1Hint": "MergeOK really queries the provider to check the token, the repository and its branches.",
       "provider": "Provider",
       "providerDetected": "Detected from the host.",
       "url": "Repository URL",
@@ -341,14 +341,20 @@
       "noTechnology": "None recognised",
       "duration": "Duration",
       "seconds": "{seconds} s",
-      "doneNote": "Working copy deleted. Only the facts (technologies, number of files) are kept; no file content is kept."
+      "doneNote": "Working copy deleted. Only the facts (technologies, number of files) are kept; no file content is kept.",
+      "stalledQueuedTitle": "No worker has picked up this import",
+      "stalledQueuedBody": "Imports run in a separate worker process, and none is running. Size is not the cause: a repository of 9,000 files imports in seconds. Start the worker and this import begins on its own.",
+      "stalledRunTitle": "This import has stopped moving",
+      "stalledRunBody": "It has been running for more than 15 minutes, so the worker probably stopped. Restart it: the import is then marked as interrupted, and you can start it again."
     },
     "status": {
       "queued": "Queued",
       "cloning": "Cloning",
       "scanning": "Analysing",
       "done": "Imported",
-      "failed": "Failed"
+      "failed": "Failed",
+      "waitingWorker": "Waiting for the worker",
+      "stuck": "Stuck"
     },
     "step": {
       "queued": "Request recorded",
@@ -467,7 +473,7 @@
       "runs": "Runs",
       "builtBy": "Built by",
       "variables": "Variables",
-      "variablesHint": "The names the pipeline reads. Their values are never read nor kept by Cairn.",
+      "variablesHint": "The names the pipeline reads. Their values are never read nor kept by MergeOK.",
       "usedBy": "Used by {jobs}",
       "environments": "Environments in the repository",
       "environmentsHint": "Configuration folders named after an environment. This is not the list of what is deployed.",
@@ -492,9 +498,9 @@
       "topologyOutdated": "This scan predates the deployment diagram. Run it again from the project sheet to draw it.",
       "jobsDetail": "Job details",
       "jobsDetailHint": "The stages in pipeline order. Click a job to see when it runs, what it produces and what weakens it.",
-      "findingsHint": "Findings you can check in the file, with the line. Cairn proposes, it never changes the repository.",
+      "findingsHint": "Findings you can check in the file, with the line. MergeOK proposes, it never changes the repository.",
       "noFinding": "No point of attention found in the pipeline.",
-      "limits": "Everything comes from the pipeline file, read without running it. Durations, approvals, incident recovery and run history are not in it: Cairn does not invent them. Pattern-based reading, not a full YAML analysis: a job generated by an include or a dynamic rule may not appear."
+      "limits": "Everything comes from the pipeline file, read without running it. Durations, approvals, incident recovery and run history are not in it: MergeOK does not invent them. Pattern-based reading, not a full YAML analysis: a job generated by an include or a dynamic rule may not appear."
     },
     "board": {
       "minutes": "{count} min",
@@ -562,7 +568,7 @@
       "findings": "Points of attention",
       "findingsHint": "What slows a newcomer down, with the line it comes from.",
       "noFinding": "The README covers the essentials of getting started.",
-      "limits": "Read from the README and the build files, never executed: Cairn does not know whether a command works today. Durations and accesses to request are not in a repository, so they are not shown."
+      "limits": "Read from the README and the build files, never executed: MergeOK does not know whether a command works today. Durations and accesses to request are not in a repository, so they are not shown."
     },
     "steps": {
       "minutes": "{count} min",
@@ -600,8 +606,8 @@
     "filesHint": "The documentation files, with what it costs to read them.",
     "noFiles": "No document found.",
     "ai": "For AI assistants",
-    "aiHint": "The instruction files assistants read on their own. Cairn proposes them, it never writes them.",
-    "limits": "Pattern-based reading: Cairn compares quoted versions and paths, it does not judge the quality of the writing. A document can be accurate and missing from this list, or the other way round. Reading costs are estimates (size / 4)."
+    "aiHint": "The instruction files assistants read on their own. MergeOK proposes them, it never writes them.",
+    "limits": "Pattern-based reading: MergeOK compares quoted versions and paths, it does not judge the quality of the writing. A document can be accurate and missing from this list, or the other way round. Reading costs are estimates (size / 4)."
   },
   "findings": {
     "empty": "Nothing to report here.",
@@ -689,7 +695,7 @@
       "unavailable": "Unavailable."
     },
     "canvas": {
-      "mermaidHeader": "{title} — exported from Cairn",
+      "mermaidHeader": "{title} — exported from MergeOK",
       "linkCopied": "Link copied.",
       "copyRefused": "Copy refused by the browser.",
       "mermaidCopied": "Mermaid copied.",
@@ -715,7 +721,7 @@
       "layers": "Layers, from the outside in",
       "forbidden": "Forbidden dependencies",
       "validated": "Validated by {by} on {at}.",
-      "defaultContract": "Cairn's default contract: no team has validated it yet.",
+      "defaultContract": "MergeOK's default contract: no team has validated it yet.",
       "introducedBy": "introduced by {ref} · {title} ({date})",
       "proposedFix": "Proposed fix:",
       "node": "Node",
@@ -853,7 +859,7 @@
     },
     "gaps": {
       "title": "What to fix first",
-      "hint": "Sorted by severity, then by tokens saved. Cairn proposes, it never changes the repository.",
+      "hint": "Sorted by severity, then by tokens saved. MergeOK proposes, it never changes the repository.",
       "empty": "Nothing to fix according to the available checks.",
       "create": "To create: {path}",
       "saved": "≈ {value} tokens",
@@ -986,7 +992,7 @@
     "common": {
       "badge": "Planned",
       "whatYouGet": "What you will find here",
-      "roadmap": "This page is on Cairn's roadmap. Its place in the navigation is set; the data behind it is not wired yet.",
+      "roadmap": "This page is on MergeOK's roadmap. Its place in the navigation is set; the data behind it is not wired yet.",
       "back": "Back to the overview"
     },
     "feature": {
@@ -1099,7 +1105,7 @@
         "p3": "Changes to the model over time"
       },
       "files": {
-        "summary": "Browse the repository with Cairn's context beside each file.",
+        "summary": "Browse the repository with MergeOK's context beside each file.",
         "p1": "The file tree at any branch or commit",
         "p2": "What each folder is for, in one line",
         "p3": "Cost and risk flags on each file"
@@ -1135,7 +1141,7 @@
         "p3": "Rules shared by every team, applied to every merge request"
       },
       "integrations": {
-        "summary": "The tools Cairn reads to link specifications, code and approvals.",
+        "summary": "The tools MergeOK reads to link specifications, code and approvals.",
         "p1": "Jira (Cloud or Data Center): tickets, statuses and edit history",
         "p2": "GitLab and GitHub: merge requests, diffs and approvals",
         "p3": "The result posted back to the merge request, as a blocking check"
@@ -1157,8 +1163,8 @@
         "message": "Nothing is at risk, but {watch, plural, one {# area deserves} other {# areas deserve}} attention before the project grows."
       },
       "healthy": {
-        "title": "Healthy on everything Cairn can see",
-        "message": "{good, plural, one {# area is} other {# areas are}} in good shape. Cairn does not check everything yet: see the list below."
+        "title": "Healthy on everything MergeOK can see",
+        "message": "{good, plural, one {# area is} other {# areas are}} in good shape. MergeOK does not check everything yet: see the list below."
       },
       "unknown": {
         "title": "Not enough evidence yet",
@@ -1214,7 +1220,7 @@
         "rescan": "Re-scan this project to read its pipeline."
       },
       "infrastructure": {
-        "described": "Infrastructure is described in code ({count, plural, one {# element} other {# elements}}). Cairn does not check its security yet.",
+        "described": "Infrastructure is described in code ({count, plural, one {# element} other {# elements}}). MergeOK does not check its security yet.",
         "notAsCode": "The pipeline deploys, but where it deploys to is not described in the repository.",
         "none": "No infrastructure is described in this repository.",
         "rescan": "Re-scan this project to read its infrastructure."
@@ -1228,7 +1234,7 @@
     },
     "notChecked": {
       "title": "Not checked yet",
-      "hint": "Cairn does not look at these today. A healthy brief says nothing about them.",
+      "hint": "MergeOK does not look at these today. A healthy brief says nothing about them.",
       "item": {
         "dependencies": "Vulnerable or invented dependencies",
         "accessControl": "Login and permission checks",
@@ -1452,8 +1458,8 @@
   },
   "integrations": {
     "title": "Integrations",
-    "description": "The project-management tools your specifications live in: Cairn reads them to check that every merge request delivers what was approved. Always read-only.",
-    "noDatabase": "Integrations need Cairn's database (DATABASE_URL).",
+    "description": "The project-management tools your specifications live in: MergeOK reads them to check that every merge request delivers what was approved. Always read-only.",
+    "noDatabase": "Integrations need MergeOK's database (DATABASE_URL).",
     "connected": {
       "title": "Connected tools",
       "hint": "Tickets cited by a merge request are looked up in each of these tools.",
@@ -1497,7 +1503,7 @@
     },
     "dialog": {
       "title": "Connect {name}",
-      "description": "Read-only. Cairn tests the connection before saving it; the secret is encrypted and never shown again.",
+      "description": "Read-only. MergeOK tests the connection before saving it; the secret is encrypted and never shown again.",
       "label": "Connection name",
       "submit": "Test and connect",
       "cancel": "Cancel",
@@ -1611,7 +1617,7 @@
       "unauthorized": "The tool refuses these credentials.",
       "not_found": "This address does not answer like the expected API.",
       "rate_limited": "The tool is limiting calls: try again in a moment.",
-      "unreachable": "The tool cannot be reached from Cairn's server.",
+      "unreachable": "The tool cannot be reached from MergeOK's server.",
       "timeout": "The tool did not answer in time.",
       "provider_error": "The tool sent an unexpected answer."
     }
@@ -1641,7 +1647,7 @@
     },
     "tickets": {
       "title": "Tickets",
-      "hint": "What makes a specification approved, and which tickets Cairn recognises.",
+      "hint": "What makes a specification approved, and which tickets MergeOK recognises.",
       "statuses": "Statuses that count as approval",
       "projects": "Recognised Jira projects (empty: all)"
     },
@@ -1709,7 +1715,7 @@
         "notion": {
           "label": "Database link",
           "placeholder": "https://www.notion.so/team/0123…",
-          "hint": "The database must be shared with the Cairn integration."
+          "hint": "The database must be shared with the MergeOK integration."
         },
         "gitlab": {
           "label": "Project path",
@@ -1810,7 +1816,7 @@
       }
     },
     "method": {
-      "title": "How Cairn decides",
+      "title": "How MergeOK decides",
       "reference": "The main branch is the reference: every merge request merged into it and every commit pushed directly.",
       "tickets": "Each delivery is matched with the tickets it cites, as they were approved; done tickets that never reach main are listed.",
       "agents": "AI agents are recognised by their Co-authored-by trailers, accounts and branch names, never by guessing.",
@@ -1848,13 +1854,17 @@
     "mode": "Mode",
     "statusNote": "Colours follow the message in every theme: green is safe, orange asks for a look, red is critical, solid dark red blocks.",
     "template": {
+      "mergeok": {
+        "name": "MergeOK",
+        "hint": "Citron on mineral, Satoshi. The default."
+      },
       "apple": {
         "name": "Apple",
-        "hint": "System colours, SF Pro, Apple greys. The default."
+        "hint": "System colours, SF Pro, Apple greys."
       },
       "cairn": {
         "name": "Cairn",
-        "hint": "Heather on basalt."
+        "hint": "Heather on basalt, the first look."
       },
       "ledger": {
         "name": "Ledger",
@@ -1878,6 +1888,7 @@
       }
     },
     "accentName": {
+      "citron": "Citron",
       "heather": "Heather",
       "copper": "Copper",
       "lagoon": "Lagoon",
@@ -1890,6 +1901,7 @@
       "pink": "Pink"
     },
     "baseName": {
+      "mineral": "Mineral",
       "basalt": "Basalt",
       "slate": "Slate",
       "stone": "Stone",
@@ -1897,6 +1909,7 @@
       "apple": "Apple"
     },
     "fontName": {
+      "satoshi": "Satoshi",
       "schibsted": "Schibsted",
       "plex": "IBM Plex",
       "system": "System (SF Pro)"

@@ -171,7 +171,10 @@ export function Inspector({
           <ul className="space-y-1 text-xs">
             {[...(node.docs ?? []), ...(node.adrs ?? [])].map((l) => (
               <li key={l.id}>
-                <a className="underline underline-offset-2 hover:text-primary" href={l.href ?? "#"}>
+                <a
+                  className="underline underline-offset-2 hover:text-primary-ink"
+                  href={l.href ?? "#"}
+                >
                   {l.title}
                 </a>
               </li>

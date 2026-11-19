@@ -64,7 +64,7 @@ export function ProjectHeader({ data }: { data: ProjectHeaderData }) {
                 {data.name}
               </p>
               {data.branch ? (
-                <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 font-medium text-primary text-xs">
+                <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 font-medium text-primary-ink text-xs">
                   <GitBranch className="size-3.5" aria-hidden />
                   {data.branch}
                 </span>

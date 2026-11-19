@@ -54,13 +54,13 @@ export function UserMenu({
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={t("shell.userMenu")}
-        className="grid size-8 place-items-center rounded-full bg-primary/15 font-semibold text-primary text-xs outline-none ring-offset-background hover:bg-primary/25 focus-visible:ring-2 focus-visible:ring-ring/50"
+        className="grid size-8 place-items-center rounded-full bg-primary/15 font-semibold text-primary-ink text-xs outline-none ring-offset-background hover:bg-primary/25 focus-visible:ring-2 focus-visible:ring-ring/50"
       >
         {initials}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-72">
         <div className="flex items-center gap-2.5 px-2 py-2">
-          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-primary/15 font-semibold text-primary text-sm">
+          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-primary/15 font-semibold text-primary-ink text-sm">
             {initials}
           </span>
           <div className="flex min-w-0 flex-col">

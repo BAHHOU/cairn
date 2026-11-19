@@ -169,13 +169,19 @@ export function projectGraph(
     edges = edges.filter((e) => visible.has(e.source) && visible.has(e.target));
   }
 
-  // Drop boxes that no longer connect to anything: they are noise at this level of detail.
-  const connected = new Set<string>();
-  for (const e of edges) {
-    connected.add(e.source);
-    connected.add(e.target);
+  // Drop boxes that no longer connect to anything: they are noise at this level of detail. Not when
+  // nothing is linked at all (a context with no known neighbour still shows the system), and never
+  // the system in the context view, which is what the reader came to see there.
+  if (edges.length > 0) {
+    const connected = new Set<string>();
+    for (const e of edges) {
+      connected.add(e.source);
+      connected.add(e.target);
+    }
+    nodes = nodes.filter(
+      (n) => connected.has(n.id) || (view === "contexte" && n.kind === "system"),
+    );
   }
-  nodes = nodes.filter((n) => connected.has(n.id));
 
   const visibleIds = new Set(nodes.map((n) => n.id));
   for (const key of Object.keys(representative)) {

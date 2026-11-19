@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { AppShell } from "@/components/app-shell";
+import { BrandLogo, BrandMark } from "@/components/brand-mark";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CommandPalette, type PaletteEntry } from "@/components/command-palette";
 import { CreateMenu } from "@/components/create-menu";
@@ -59,12 +60,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           href="/"
           className="flex items-center gap-2 rounded-md px-1.5 py-1 outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
         >
-          <span className="grid size-7 place-items-center rounded-md bg-primary [background-image:var(--primary-image,none)] font-bold text-primary-foreground text-sm">
-            {Array.from(t("meta.brand"))[0]}
-          </span>
-          <span className="hidden font-semibold text-base tracking-tight sm:inline">
-            {t("meta.brand")}
-          </span>
+          <BrandMark className="sm:hidden" />
+          <span className="sr-only sm:hidden">{t("meta.brand")}</span>
+          <BrandLogo alt={t("meta.brand")} className="hidden sm:inline-flex" />
         </Link>
       }
       search={<CommandPalette entries={entries} />}

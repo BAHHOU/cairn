@@ -130,7 +130,11 @@ describe.skipIf(!process.env.DATABASE_URL)(
       expect(await processImport(deps(), importId)).toBe("done");
       const scan = await getLatestScan(db, repo?.id ?? "");
       expect(scan?.importId).toBe(importId);
-      expect(scan?.report.incremental).toMatchObject({ mode: "incremental", analysed: 0, reused: 3 });
+      expect(scan?.report.incremental).toMatchObject({
+        mode: "incremental",
+        analysed: 0,
+        reused: 3,
+      });
     }, 60_000);
 
     it("stores the token only encrypted and writes an audit trail without any secret", async () => {

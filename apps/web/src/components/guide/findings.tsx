@@ -136,7 +136,7 @@ export function Findings({
             {open.source ? <SourceRef source={open.source} base={base} /> : null}
             {open.proposal ? (
               <p className="flex items-start gap-2 rounded-md bg-muted/60 px-3 py-2 text-sm">
-                <Lightbulb className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />
+                <Lightbulb className="mt-0.5 size-3.5 shrink-0 text-primary-ink" aria-hidden />
                 <span>
                   <span className="font-medium">{t("proposal")} </span>
                   <Inline text={open.proposal} />

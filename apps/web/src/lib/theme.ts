@@ -9,9 +9,11 @@
  * (lib/tone.ts). A base may tune their shades, never their meaning.
  */
 
+/** Kept from the Cairn days so saved choices survive the rename. */
 export const THEME_COOKIE = "cairn-theme";
 
 export const ACCENTS = [
+  "citron",
   "blue",
   "purple",
   "pink",
@@ -25,13 +27,13 @@ export const ACCENTS = [
 ] as const;
 export type Accent = (typeof ACCENTS)[number];
 
-export const BASES = ["apple", "basalt", "obsidian", "slate", "stone"] as const;
+export const BASES = ["mineral", "apple", "basalt", "obsidian", "slate", "stone"] as const;
 export type Base = (typeof BASES)[number];
 
 export const RADII = [0, 0.25, 0.5, 0.75, 1] as const;
 export type Radius = (typeof RADII)[number];
 
-export const FONTS = ["schibsted", "plex", "system"] as const;
+export const FONTS = ["satoshi", "schibsted", "plex", "system"] as const;
 export type Font = (typeof FONTS)[number];
 
 export interface ThemePrefs {
@@ -43,6 +45,7 @@ export interface ThemePrefs {
 
 /** Swatches for the customizer, light then dark, matching globals.css. */
 export const ACCENT_SWATCH: Record<Accent, [string, string]> = {
+  citron: ["#D5E66B", "#D5E66B"],
   blue: ["#0071E3", "#0A84FF"],
   purple: ["#8944AB", "#BF5AF2"],
   pink: ["#D30F45", "#FF375F"],
@@ -56,6 +59,7 @@ export const ACCENT_SWATCH: Record<Accent, [string, string]> = {
 };
 
 export const BASE_SWATCH: Record<Base, [string, string]> = {
+  mineral: ["#F5F4EE", "#0F1A16"],
   apple: ["#F5F5F7", "#1C1C1E"],
   basalt: ["oklch(0.962 0.006 330)", "oklch(0.2 0.013 330)"],
   obsidian: ["#F1EEF6", "#080A0F"],
@@ -65,6 +69,7 @@ export const BASE_SWATCH: Record<Base, [string, string]> = {
 
 /** Ready-made looks: one click sets every part. */
 export const TEMPLATES = {
+  mergeok: { accent: "citron", base: "mineral", radius: 0.75, font: "satoshi" },
   apple: { accent: "blue", base: "apple", radius: 0.75, font: "system" },
   cairn: { accent: "heather", base: "basalt", radius: 0.5, font: "schibsted" },
   nebula: { accent: "violet", base: "obsidian", radius: 0.75, font: "schibsted" },
@@ -75,7 +80,7 @@ export const TEMPLATES = {
 } as const satisfies Record<string, ThemePrefs>;
 export type Template = keyof typeof TEMPLATES;
 
-export const DEFAULT_THEME: ThemePrefs = TEMPLATES.apple;
+export const DEFAULT_THEME: ThemePrefs = TEMPLATES.mergeok;
 
 const one = <T extends string | number>(list: readonly T[], v: unknown, fallback: T): T =>
   list.includes(v as T) ? (v as T) : fallback;

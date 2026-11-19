@@ -7,7 +7,8 @@
     "node": ">=24"
   },
   "scripts": {
-    "dev": "pnpm --filter @cairn/web dev",
+    "dev": "pnpm --parallel --filter @cairn/web --filter @cairn/worker dev",
+    "dev:web": "pnpm --filter @cairn/web dev",
     "dev:worker": "pnpm --filter @cairn/worker dev",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",

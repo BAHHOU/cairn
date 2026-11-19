@@ -1,5 +1,5 @@
 import { type ImportStatus, type ImportView, isImportActive } from "@cairn/shared";
-import { Check, CircleDashed, Loader2, X } from "lucide-react";
+import { Check, CircleDashed, Hourglass, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -12,8 +12,22 @@ const STATUS_VARIANT: Record<ImportStatus, "secondary" | "info" | "success" | "d
   failed: "destructive",
 };
 
-export function ImportStatusBadge({ status }: { status: ImportStatus }) {
+/** `stalled`: the run should be moving and is not (see `isImportStalled`). No spinner then. */
+export function ImportStatusBadge({
+  status,
+  stalled = false,
+}: {
+  status: ImportStatus;
+  stalled?: boolean;
+}) {
   const t = useTranslations("import.status");
+  if (stalled)
+    return (
+      <Badge variant="warning">
+        <Hourglass className="size-3" aria-hidden />
+        {t(status === "queued" ? "waitingWorker" : "stuck")}
+      </Badge>
+    );
   return (
     <Badge variant={STATUS_VARIANT[status]}>
       {isImportActive(status) ? <Loader2 className="size-3 animate-spin" aria-hidden /> : null}
@@ -55,7 +69,7 @@ export function ImportTimeline({ view }: { view: ImportView }) {
             <span
               className={cn(
                 "flex size-6 shrink-0 items-center justify-center rounded-full border",
-                state === "done" && "border-transparent bg-primary text-primary-foreground",
+                state === "done" && "border-transparent bg-success text-white",
                 state === "active" && "border-info text-info",
                 state === "failed" && "border-transparent bg-destructive text-white",
                 state === "todo" && "text-muted-foreground",

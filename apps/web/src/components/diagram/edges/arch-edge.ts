@@ -18,7 +18,7 @@ import type { ViewEdge } from "../views";
 const STROKE: Record<ArchEdge["kind"], string> = {
   sync: "var(--foreground)",
   async: "var(--info)",
-  data: "var(--primary)",
+  data: "var(--color-primary-ink)",
   build: "var(--muted-foreground)",
   deploy: "var(--muted-foreground)",
 };

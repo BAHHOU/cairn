@@ -1,5 +1,5 @@
 import { getImportView } from "@cairn/db";
-import { can, isImportActive } from "@cairn/shared";
+import { can, isImportActive, isImportStalled } from "@cairn/shared";
 import { RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -51,6 +51,7 @@ export default async function ImportRunPage({ params }: { params: Promise<{ id: 
   const te = await getTranslations("importErrors");
   const fmt = await getFormat();
   const active = isImportActive(view.status);
+  const stalled = isImportStalled(view, Date.now());
   const { repository: repo } = view;
   const moved = view.requestedSha && view.commitSha && view.requestedSha !== view.commitSha;
   const seconds =
@@ -74,11 +75,28 @@ export default async function ImportRunPage({ params }: { params: Promise<{ id: 
             <Badge variant="outline" className="font-mono">
               {repo.branch}
             </Badge>
-            <ImportStatusBadge status={view.status} />
+            <ImportStatusBadge status={view.status} stalled={stalled} />
           </span>
         }
         actions={
           <>
+            {stalled ? (
+              <div
+                role="status"
+                className="rounded-lg border border-warning/50 bg-warning/10 p-3 text-sm"
+              >
+                <p className="font-medium text-warning-ink">
+                  {t(view.status === "queued" ? "stalledQueuedTitle" : "stalledRunTitle")}
+                </p>
+                <p className="mt-1 text-muted-foreground">
+                  {t(view.status === "queued" ? "stalledQueuedBody" : "stalledRunBody")}
+                </p>
+                <code className="mt-2 inline-block rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+                  pnpm dev:worker
+                </code>
+              </div>
+            ) : null}
+
             {view.status === "failed" ? (
               <Link
                 href={`/projects/import?${retry}`}

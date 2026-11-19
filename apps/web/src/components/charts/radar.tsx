@@ -45,7 +45,7 @@ export function Radar({ values }: { values: Record<Axis, number> }) {
       })}
       <polygon
         points={polygon((i) => (values[AXES[i] as Axis] ?? 0) / 100)}
-        className="fill-primary/20 stroke-primary"
+        className="fill-primary-ink/20 stroke-primary-ink"
         strokeWidth={2}
         strokeLinejoin="round"
       />

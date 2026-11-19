@@ -114,7 +114,7 @@ function Request({ row }: { row: TraceRow }) {
   }
   const tk = row.ticket;
   const key = tk.url ? (
-    <a href={tk.url} target="_blank" rel="noopener noreferrer" className="hover:text-primary">
+    <a href={tk.url} target="_blank" rel="noopener noreferrer" className="hover:text-primary-ink">
       {tk.key}
     </a>
   ) : (
@@ -142,7 +142,7 @@ function Delivery({ d }: { d: DeliverySummary }) {
   const fmt = useFormat();
   const Icon = d.kind === "merge" ? GitMerge : GitCommitHorizontal;
   const ref = d.url ? (
-    <a href={d.url} target="_blank" rel="noopener noreferrer" className="hover:text-primary">
+    <a href={d.url} target="_blank" rel="noopener noreferrer" className="hover:text-primary-ink">
       {d.ref}
     </a>
   ) : (
@@ -243,7 +243,7 @@ export function TraceView({
               <Link
                 href={basePath}
                 scroll={false}
-                className="text-[13px] font-medium hover:text-primary"
+                className="text-[13px] font-medium hover:text-primary-ink"
               >
                 {t("showAll")}
               </Link>
