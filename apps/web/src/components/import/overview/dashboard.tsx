@@ -8,7 +8,6 @@ import type {
   ModuleStat,
   Readiness,
   ScanView,
-  Severity,
 } from "@cairn/shared";
 import {
   Activity,
@@ -37,6 +36,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import type { CSSProperties, ReactNode } from "react";
 import { useFormat } from "@/i18n/format";
+import { SEVERITY_PILL } from "@/lib/tone";
 import { cn } from "@/lib/utils";
 
 /** Reason and gap ids take different arguments per id (asserted by the catalog test). */
@@ -99,7 +99,7 @@ const VERDICT: Record<HealthVerdict, { Icon: LucideIcon; tone: string }> = {
   notSafe: { Icon: ShieldX, tone: "oklch(0.72 0.17 25)" },
   atRisk: { Icon: ShieldAlert, tone: "oklch(0.72 0.17 25)" },
   watch: { Icon: ShieldAlert, tone: "oklch(0.84 0.14 80)" },
-  healthy: { Icon: ShieldCheck, tone: "oklch(0.8 0.14 162)" },
+  healthy: { Icon: ShieldCheck, tone: "oklch(0.8 0.14 152)" },
   unknown: { Icon: ShieldQuestion, tone: "oklch(0.78 0.01 255)" },
 };
 
@@ -145,14 +145,14 @@ export function PostureBanner({
     <section
       aria-labelledby="posture-title"
       className={cn(
-        "relative isolate flex flex-wrap items-center justify-between gap-x-8 gap-y-6 overflow-hidden rounded-xl p-6 text-white shadow-[0_8px_24px_-12px_oklch(0.2_0.03_220/0.55)]",
+        "relative isolate flex flex-wrap items-center justify-between gap-x-8 gap-y-6 overflow-hidden rounded-xl p-6 text-white shadow-[0_8px_24px_-12px_oklch(0.15_0.01_300/0.55)]",
         className,
       )}
       style={
         {
           "--tone": tone,
           background:
-            "radial-gradient(90% 160% at 100% 0%, color-mix(in oklch, var(--tone) 26%, transparent), transparent 60%), linear-gradient(120deg, oklch(0.25 0.03 200), oklch(0.17 0.015 235))",
+            "radial-gradient(90% 160% at 100% 0%, color-mix(in oklch, var(--tone) 26%, transparent), transparent 60%), linear-gradient(120deg, color-mix(in oklch, var(--primary) 24%, oklch(0.19 0.008 300)), oklch(0.15 0.008 300))",
         } as CSSProperties
       }
     >
@@ -289,13 +289,6 @@ export function TokensByModule({ scan, className }: { scan: ScanView; className?
 
 /* ---------------------------------------------------------------- top risks */
 
-const SEVERITY_PILL: Record<Severity, string> = {
-  blocker: "bg-destructive/12 text-destructive",
-  critical: "bg-destructive/10 text-destructive",
-  major: "bg-warning/18 text-warning-ink",
-  minor: "bg-muted text-muted-foreground",
-};
-
 export function TopRisks({
   readiness,
   projectId,
@@ -322,7 +315,7 @@ export function TopRisks({
     >
       {gaps.length === 0 ? (
         <p className="flex items-center gap-2 text-muted-foreground text-sm">
-          <ShieldCheck className="size-4 text-primary" aria-hidden />
+          <ShieldCheck className="size-4 text-success" aria-hidden />
           {t("noRisks")}
         </p>
       ) : (
@@ -398,7 +391,7 @@ const AREA_HREF: Record<HealthArea, string> = {
 const LIGHT_PILL: Record<HealthLight, string> = {
   risk: "bg-destructive/10 text-destructive",
   watch: "bg-warning/18 text-warning-ink",
-  good: "bg-primary/10 text-primary",
+  good: "bg-success/10 text-success",
   unknown: "bg-muted text-muted-foreground",
 };
 
@@ -458,7 +451,7 @@ const STATUS_DOT: Record<ImportStatus, string> = {
   queued: "bg-muted-foreground/50",
   cloning: "bg-info",
   scanning: "bg-info",
-  done: "bg-primary",
+  done: "bg-success",
   failed: "bg-destructive",
 };
 

@@ -114,7 +114,7 @@ export function PitfallCard({ pitfall }: { pitfall: SetupPitfall }) {
   return (
     <article className="flex flex-col gap-2 rounded-lg border border-warning/40 bg-warning/5 p-3">
       <p className="flex items-start gap-2 font-mono text-xs leading-relaxed">
-        <CircleAlert className="mt-0.5 size-3.5 shrink-0 text-warning" aria-hidden />
+        <CircleAlert className="mt-0.5 size-3.5 shrink-0 text-warning-ink" aria-hidden />
         {pitfall.symptom}
       </p>
       <p className="text-muted-foreground text-sm">{pitfall.cause}</p>

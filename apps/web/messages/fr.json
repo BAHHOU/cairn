@@ -1516,7 +1516,11 @@
         "clickup": "ClickUp → Settings → Apps → API Token : générez votre jeton personnel (il commence par pk_).",
         "shortcut": "Shortcut → Settings → Your account → API Tokens : générez un jeton.",
         "plane": "Plane → Paramètres de l'espace → API tokens : ajoutez un jeton. Auto-hébergé : indiquez l'adresse de votre instance au lieu de api.plane.so.",
-        "monday": "monday.com → votre avatar → Développeurs → Mes jetons d'accès. Nommez les colonnes du tableau qui portent le statut et, idéalement, la date de validation."
+        "monday": "monday.com → votre avatar → Développeurs → Mes jetons d'accès. Nommez les colonnes du tableau qui portent le statut et, idéalement, la date de validation.",
+        "taiga": "Taiga n'a pas de jetons personnels : indiquez un compte qui peut lire le projet (un compte observateur dédié est l'idéal). Auto-hébergé : l'adresse de votre instance, sans /api/v1.",
+        "gitea": "Gitea ou Forgejo (Codeberg aussi) → Paramètres → Applications → Générer un jeton, avec l'accès en lecture aux tickets.",
+        "bugzilla": "Bugzilla → Preferences → API Keys : générez une clé. L'accès en lecture aux produits concernés suffit.",
+        "mantis": "MantisBT → Mon compte → Jetons d'API : créez un jeton. L'API REST doit être activée sur l'instance."
       }
     },
     "field": {
@@ -1587,6 +1591,14 @@
       "workspace": {
         "label": "Espace de travail",
         "hint": "L'identifiant dans votre adresse Plane : app.plane.so/acme → acme."
+      },
+      "username": {
+        "label": "Identifiant ou e-mail",
+        "hint": "Taiga n'a pas de jetons personnels : utilisez un compte qui peut lire le projet, idéalement dédié."
+      },
+      "password": {
+        "label": "Mot de passe",
+        "hint": "Chiffré avant stockage (AES-256-GCM), jamais réaffiché."
       }
     },
     "result": {
@@ -1748,6 +1760,36 @@
           "label": "Lien du tableau",
           "placeholder": "https://acme.monday.com/boards/1234567890",
           "hint": "Les éléments dont le statut vaut un statut terminé comptent comme livrés."
+        },
+        "github": {
+          "label": "Dépôt",
+          "placeholder": "proprietaire/depot",
+          "hint": "Les tickets fermés comme terminés comptent comme livrés ; fermés comme non prévus, non."
+        },
+        "linear": {
+          "label": "Clé d'équipe",
+          "placeholder": "ENG",
+          "hint": "Les tickets dans un état terminé comptent comme livrés."
+        },
+        "taiga": {
+          "label": "Projet",
+          "placeholder": "acme-paiements",
+          "hint": "L'identifiant du projet de cette connexion. Les user stories fermées comptent comme livrées."
+        },
+        "gitea": {
+          "label": "Dépôt",
+          "placeholder": "proprietaire/depot",
+          "hint": "Les tickets fermés comptent comme livrés."
+        },
+        "bugzilla": {
+          "label": "Produit",
+          "placeholder": "Paiements",
+          "hint": "Le nom du produit, ou un lien de recherche qui le nomme. Les bugs résolus comme corrigés comptent comme livrés."
+        },
+        "mantis": {
+          "label": "Identifiant du projet",
+          "placeholder": "3",
+          "hint": "Le nombre dans le lien du projet (project_id=3). Les tickets résolus et fermés comptent comme livrés."
         }
       }
     },
@@ -1790,6 +1832,79 @@
       "demo": "Démo",
       "empty": "Aucun projet tracé pour l'instant. Ouvrez la page Traçabilité d'un projet pour la lancer.",
       "note": "Les projets importés sont tracés à l'ouverture de leur page Traçabilité ; les chiffres ici viennent de cette analyse."
+    }
+  },
+  "theme": {
+    "open": "Personnaliser l'interface",
+    "title": "Personnaliser",
+    "description": "Choisissez un modèle, ou réglez chaque élément vous-même. Les changements s'appliquent aussitôt et restent dans ce navigateur.",
+    "reset": "Réinitialiser",
+    "close": "Fermer",
+    "templates": "Modèles",
+    "accent": "Couleur",
+    "base": "Neutres",
+    "radius": "Angles",
+    "font": "Police",
+    "mode": "Mode",
+    "statusNote": "Les couleurs suivent le message dans tous les thèmes : vert sûr, orange à regarder, rouge critique, rouge foncé plein bloquant.",
+    "template": {
+      "apple": {
+        "name": "Apple",
+        "hint": "Couleurs système, SF Pro, gris Apple. Par défaut."
+      },
+      "cairn": {
+        "name": "Cairn",
+        "hint": "Bruyère sur basalte."
+      },
+      "ledger": {
+        "name": "Registre",
+        "hint": "Cuivre et pierre, angles serrés."
+      },
+      "console": {
+        "name": "Console",
+        "hint": "Graphite, carré, technique."
+      },
+      "tide": {
+        "name": "Marée",
+        "hint": "Bleu lagon, angles doux."
+      },
+      "classic": {
+        "name": "Classique",
+        "hint": "Le premier look émeraude."
+      },
+      "nebula": {
+        "name": "Nébuleuse",
+        "hint": "Violet sur obsidienne, corail et orange."
+      }
+    },
+    "accentName": {
+      "heather": "Bruyère",
+      "copper": "Cuivre",
+      "lagoon": "Lagon",
+      "indigo": "Indigo",
+      "emerald": "Émeraude",
+      "graphite": "Graphite",
+      "violet": "Violet",
+      "blue": "Bleu",
+      "purple": "Violet",
+      "pink": "Rose"
+    },
+    "baseName": {
+      "basalt": "Basalte",
+      "slate": "Ardoise",
+      "stone": "Pierre",
+      "obsidian": "Obsidienne",
+      "apple": "Apple"
+    },
+    "fontName": {
+      "schibsted": "Schibsted",
+      "plex": "IBM Plex",
+      "system": "Système (SF Pro)"
+    },
+    "modeName": {
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
     }
   }
 }

@@ -22,7 +22,7 @@ function Notice({ title, children }: { title: string; children: ReactNode }) {
   return (
     <Card className="border-warning/40">
       <CardContent className="flex items-start gap-2.5 text-sm">
-        <TriangleAlert className="mt-0.5 size-4 shrink-0 text-warning" aria-hidden />
+        <TriangleAlert className="mt-0.5 size-4 shrink-0 text-warning-ink" aria-hidden />
         <div className="flex flex-col gap-1">
           <span className="font-medium">{title}</span>
           <span className="text-muted-foreground">{children}</span>

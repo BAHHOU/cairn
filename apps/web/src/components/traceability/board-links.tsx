@@ -166,7 +166,7 @@ export function BoardLinks({
       {outcome ? (
         <p
           role="status"
-          className={cn("text-xs", outcome.ok ? "text-primary" : "text-destructive")}
+          className={cn("text-xs", outcome.ok ? "text-success" : "text-destructive")}
         >
           {tr(outcome.code, { count: outcome.count ?? 0 })}
         </p>

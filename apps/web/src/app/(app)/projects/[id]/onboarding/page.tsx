@@ -88,7 +88,7 @@ export default async function OnboardingPage({ params }: { params: Promise<{ id:
             <Card className="border-warning/50 bg-warning/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <CalendarClock className="size-4 text-warning" aria-hidden />
+                  <CalendarClock className="size-4 text-warning-ink" aria-hidden />
                   {t("askToday")}
                 </CardTitle>
                 <CardDescription>

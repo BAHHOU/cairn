@@ -2,8 +2,8 @@ import type { GateStatus, IssueType, Provenance, Severity } from "@cairn/shared"
 import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 
-const SEVERITY_VARIANT: Record<Severity, "destructive" | "warning" | "secondary"> = {
-  blocker: "destructive",
+const SEVERITY_VARIANT: Record<Severity, "critical" | "destructive" | "warning" | "secondary"> = {
+  blocker: "critical",
   critical: "destructive",
   major: "warning",
   minor: "secondary",
@@ -14,10 +14,10 @@ export function SeverityBadge({ severity }: { severity: Severity }) {
   return <Badge variant={SEVERITY_VARIANT[severity]}>{t(severity)}</Badge>;
 }
 
-const GATE_VARIANT: Record<GateStatus, "success" | "warning" | "destructive"> = {
+const GATE_VARIANT: Record<GateStatus, "success" | "warning" | "critical"> = {
   passed: "success",
   warning: "warning",
-  failed: "destructive",
+  failed: "critical",
 };
 
 export function GateBadge({ status }: { status: GateStatus }) {

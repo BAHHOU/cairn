@@ -81,8 +81,10 @@ export default async function OverviewPage() {
           label={t("gates")}
           value={
             <span className="flex items-baseline gap-3 text-base">
-              <span className="text-primary">{t("gatesPassed", { count: o.gates.passed })}</span>
-              <span className="text-warning">{t("gatesWarning", { count: o.gates.warning })}</span>
+              <span className="text-success">{t("gatesPassed", { count: o.gates.passed })}</span>
+              <span className="text-warning-ink">
+                {t("gatesWarning", { count: o.gates.warning })}
+              </span>
               <span className="text-destructive">
                 {t("gatesFailed", { count: o.gates.failed })}
               </span>

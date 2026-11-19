@@ -4,28 +4,34 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.2 0.012 255);
+  --background: oklch(0.995 0.0018 330);
+  --foreground: oklch(0.2 0.0132 330);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.012 255);
+  --card-foreground: oklch(0.2 0.0132 330);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.012 255);
-  --primary: oklch(0.56 0.125 162);
-  --primary-foreground: oklch(0.99 0.004 162);
-  --secondary: oklch(0.965 0.004 255);
-  --secondary-foreground: oklch(0.24 0.012 255);
-  --muted: oklch(0.965 0.004 255);
-  --muted-foreground: oklch(0.5 0.014 255);
-  --accent: oklch(0.965 0.004 255);
-  --accent-foreground: oklch(0.24 0.012 255);
+  --popover-foreground: oklch(0.2 0.0132 330);
+  --primary: oklch(0.5 0.15 340);
+  --primary-foreground: oklch(0.985 0.01 340);
+  --secondary: oklch(0.962 0.006 330);
+  --secondary-foreground: oklch(0.24 0.0132 330);
+  --muted: oklch(0.962 0.006 330);
+  --muted-foreground: oklch(0.5 0.0156 330);
+  --accent: oklch(0.962 0.006 330);
+  --accent-foreground: oklch(0.24 0.0132 330);
   --destructive: oklch(0.56 0.2 27);
+  /* Blocking: a solid dark red with white text, the strongest signal on the page. */
+  --critical: oklch(0.48 0.19 25);
+  --critical-foreground: #ffffff;
+  /* "Pass", "healthy", "done": green whatever the brand colour, so a verdict reads the same in every theme. */
+  --success: oklch(0.55 0.13 152);
   --warning: oklch(0.76 0.15 70);
   --warning-ink: oklch(0.52 0.12 60);
   --info: oklch(0.56 0.15 255);
-  --border: oklch(0.92 0.005 255);
-  --input: oklch(0.9 0.006 255);
-  --ring: oklch(0.56 0.125 162);
-  --radius: 0.625rem;
+  --border: oklch(0.915 0.0066 330);
+  --input: oklch(0.895 0.0078 330);
+  --ring: oklch(0.5 0.15 340);
+  --radius: 0.75rem;
+  --app-font: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
   /* Categorical chart slots, in this fixed order (validated for colour-blind separation on the card
      surface). A kind keeps its slot whatever is shown: colour follows the entity, never its rank. */
   --viz-1: #2a78d6;
@@ -39,27 +45,30 @@
 }
 
 .dark {
-  --background: oklch(0.165 0.01 255);
-  --foreground: oklch(0.96 0.004 255);
-  --card: oklch(0.2 0.011 255);
-  --card-foreground: oklch(0.96 0.004 255);
-  --popover: oklch(0.2 0.011 255);
-  --popover-foreground: oklch(0.96 0.004 255);
-  --primary: oklch(0.72 0.14 162);
-  --primary-foreground: oklch(0.17 0.02 162);
-  --secondary: oklch(0.25 0.012 255);
-  --secondary-foreground: oklch(0.96 0.004 255);
-  --muted: oklch(0.25 0.012 255);
-  --muted-foreground: oklch(0.71 0.012 255);
-  --accent: oklch(0.25 0.012 255);
-  --accent-foreground: oklch(0.96 0.004 255);
+  --background: oklch(0.165 0.012 330);
+  --foreground: oklch(0.96 0.0042 330);
+  --card: oklch(0.2 0.0132 330);
+  --card-foreground: oklch(0.96 0.0042 330);
+  --popover: oklch(0.2 0.0132 330);
+  --popover-foreground: oklch(0.96 0.0042 330);
+  --primary: oklch(0.76 0.12 340);
+  --primary-foreground: oklch(0.2 0.04 340);
+  --secondary: oklch(0.25 0.012 330);
+  --secondary-foreground: oklch(0.96 0.0042 330);
+  --muted: oklch(0.25 0.012 330);
+  --muted-foreground: oklch(0.71 0.012 330);
+  --accent: oklch(0.25 0.012 330);
+  --accent-foreground: oklch(0.96 0.0042 330);
   --destructive: oklch(0.7 0.17 25);
+  --critical: oklch(0.5 0.19 25);
+  --critical-foreground: #ffffff;
+  --success: oklch(0.74 0.14 152);
   --warning: oklch(0.82 0.14 80);
   --warning-ink: oklch(0.84 0.13 82);
   --info: oklch(0.72 0.13 255);
   --border: oklch(1 0 0 / 9%);
   --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.72 0.14 162);
+  --ring: oklch(0.76 0.12 340);
   --viz-1: #3987e5;
   --viz-2: #d95926;
   --viz-3: #199e70;
@@ -68,6 +77,261 @@
   --viz-6: #008300;
   --viz-7: #9085e9;
   --viz-8: #e66767;
+}
+
+/* ------------------------------------------------------------------ themes
+   Chosen per viewer (lib/theme.ts), carried by the root element. Without attributes the page is
+   the default above (basalt + heather). `:root.dark[...]` outranks `.dark`, so dark wins in both. */
+:root[data-base="apple"] {
+  /* Apple, light: the grey of apple.com behind white cards, Apple's label greys, and the
+     increased-contrast system colours, which stay readable as text on white. */
+  --background: #f5f5f7;
+  --foreground: #1d1d1f;
+  --card: #ffffff;
+  --card-foreground: #1d1d1f;
+  --popover: #ffffff;
+  --popover-foreground: #1d1d1f;
+  --secondary: #f2f2f7;
+  --secondary-foreground: #1d1d1f;
+  --muted: #f2f2f7;
+  --muted-foreground: #6e6e73;
+  --accent: #e8e8ed;
+  --accent-foreground: #1d1d1f;
+  --border: #d2d2d7;
+  --input: #d2d2d7;
+  --success: #248a3d;
+  --warning: #ff9500;
+  --warning-ink: #c93400;
+  --destructive: #d70015;
+  --critical: #b80014;
+  --critical-foreground: #ffffff;
+  --info: #0071e3;
+}
+:root.dark[data-base="apple"] {
+  /* Apple, dark: true black, the system's elevated greys, and the dark-mode system colours. */
+  --background: #000000;
+  --foreground: #f5f5f7;
+  --card: #1c1c1e;
+  --card-foreground: #f5f5f7;
+  --popover: #2c2c2e;
+  --popover-foreground: #f5f5f7;
+  --secondary: #2c2c2e;
+  --secondary-foreground: #f5f5f7;
+  --muted: #2c2c2e;
+  --muted-foreground: #98989d;
+  --accent: #3a3a3c;
+  --accent-foreground: #f5f5f7;
+  --border: #38383a;
+  --input: #48484a;
+  --success: #30d158;
+  --warning: #ff9f0a;
+  --warning-ink: #ffb340;
+  --destructive: #ff453a;
+  --critical: #d70015;
+  --critical-foreground: #ffffff;
+  --info: #0a84ff;
+}
+:root[data-accent="blue"] {
+  --primary: #0071e3;
+  --primary-foreground: #ffffff;
+  --ring: #0071e3;
+}
+:root.dark[data-accent="blue"] {
+  --primary: #0a84ff;
+  --primary-foreground: #ffffff;
+  --ring: #0a84ff;
+}
+:root[data-accent="purple"] {
+  --primary: #8944ab;
+  --primary-foreground: #ffffff;
+  --ring: #8944ab;
+}
+:root.dark[data-accent="purple"] {
+  --primary: #bf5af2;
+  --primary-foreground: #ffffff;
+  --ring: #bf5af2;
+}
+:root[data-accent="pink"] {
+  --primary: #d30f45;
+  --primary-foreground: #ffffff;
+  --ring: #d30f45;
+}
+:root.dark[data-accent="pink"] {
+  --primary: #ff375f;
+  --primary-foreground: #ffffff;
+  --ring: #ff375f;
+}
+:root[data-base="obsidian"] {
+  /* Nebula, light: Ivory ground, Obsidian ink. The palette's orange and coral fail contrast on
+     light grounds (2.2:1 and 3.2:1), so status colours keep their defaults here. */
+  --background: #f8fafc;
+  --foreground: #080a0f;
+  --card: #ffffff;
+  --card-foreground: #080a0f;
+  --popover: #ffffff;
+  --popover-foreground: #080a0f;
+  --secondary: #f1eef6;
+  --secondary-foreground: #1a1326;
+  --muted: #f1eef6;
+  --muted-foreground: #6b7280;
+  --accent: #f1eef6;
+  --accent-foreground: #1a1326;
+  --border: #e4e0ec;
+  --input: #dcd6e6;
+  --highlight: #ffd6b3;
+}
+:root.dark[data-base="obsidian"] {
+  /* Nebula, dark: the Cairn brand guide as given. Obsidian ground, Deep Purple surfaces, Royal Purple
+     for what floats above them, Ash borders, Ivory and Slate text, its own semantic colours. */
+  --background: #080a0f;
+  --foreground: #f8fafc;
+  --card: #1a1326;
+  --card-foreground: #f8fafc;
+  --popover: #4b2b8f;
+  --popover-foreground: #f8fafc;
+  /* Fills inside a card: a step above Deep Purple, or a chip would vanish into its card. */
+  --secondary: #241b35;
+  --secondary-foreground: #f8fafc;
+  --muted: #241b35;
+  --muted-foreground: #6b7280;
+  --accent: #2a2538;
+  --accent-foreground: #f8fafc;
+  --border: #2a2538;
+  --input: #2a2538;
+  --success: #30d158;
+  --critical: #d70015;
+  --warning: #ffb454;
+  --warning-ink: #ffb454;
+  --destructive: #ff3b8d;
+  --info: #c084fc;
+  --highlight: #ffd6b3;
+  --primary-image: linear-gradient(90deg, #8855f6, #ff8a3d);
+  --accent-image: linear-gradient(90deg, #ff3b8d, #ffd6b3);
+}
+:root[data-accent="violet"],
+:root.dark[data-accent="violet"] {
+  --primary: #8855f6;
+  --primary-foreground: #f8fafc;
+  --ring: #8855f6;
+}
+:root[data-base="slate"] {
+  --background: oklch(0.995 0.0018 255);
+  --foreground: oklch(0.2 0.0132 255);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.0132 255);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.0132 255);
+  --secondary: oklch(0.962 0.006 255);
+  --secondary-foreground: oklch(0.24 0.0132 255);
+  --muted: oklch(0.962 0.006 255);
+  --muted-foreground: oklch(0.5 0.0156 255);
+  --accent: oklch(0.962 0.006 255);
+  --accent-foreground: oklch(0.24 0.0132 255);
+  --border: oklch(0.915 0.0066 255);
+  --input: oklch(0.895 0.0078 255);
+}
+:root.dark[data-base="slate"] {
+  --background: oklch(0.165 0.012 255);
+  --foreground: oklch(0.96 0.0042 255);
+  --card: oklch(0.2 0.0132 255);
+  --card-foreground: oklch(0.96 0.0042 255);
+  --popover: oklch(0.2 0.0132 255);
+  --popover-foreground: oklch(0.96 0.0042 255);
+  --secondary: oklch(0.25 0.012 255);
+  --secondary-foreground: oklch(0.96 0.0042 255);
+  --muted: oklch(0.25 0.012 255);
+  --muted-foreground: oklch(0.71 0.012 255);
+  --accent: oklch(0.25 0.012 255);
+  --accent-foreground: oklch(0.96 0.0042 255);
+}
+:root[data-base="stone"] {
+  --background: oklch(0.995 0.0013 70);
+  --foreground: oklch(0.2 0.0099 70);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.0099 70);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.0099 70);
+  --secondary: oklch(0.962 0.0045 70);
+  --secondary-foreground: oklch(0.24 0.0099 70);
+  --muted: oklch(0.962 0.0045 70);
+  --muted-foreground: oklch(0.5 0.0117 70);
+  --accent: oklch(0.962 0.0045 70);
+  --accent-foreground: oklch(0.24 0.0099 70);
+  --border: oklch(0.915 0.005 70);
+  --input: oklch(0.895 0.0059 70);
+}
+:root.dark[data-base="stone"] {
+  --background: oklch(0.165 0.009 70);
+  --foreground: oklch(0.96 0.0031 70);
+  --card: oklch(0.2 0.0099 70);
+  --card-foreground: oklch(0.96 0.0031 70);
+  --popover: oklch(0.2 0.0099 70);
+  --popover-foreground: oklch(0.96 0.0031 70);
+  --secondary: oklch(0.25 0.009 70);
+  --secondary-foreground: oklch(0.96 0.0031 70);
+  --muted: oklch(0.25 0.009 70);
+  --muted-foreground: oklch(0.71 0.009 70);
+  --accent: oklch(0.25 0.009 70);
+  --accent-foreground: oklch(0.96 0.0031 70);
+}
+:root[data-accent="copper"] {
+  --primary: oklch(0.55 0.13 45);
+  --primary-foreground: oklch(0.985 0.01 45);
+  --ring: oklch(0.55 0.13 45);
+}
+:root.dark[data-accent="copper"] {
+  --primary: oklch(0.75 0.12 52);
+  --primary-foreground: oklch(0.2 0.04 45);
+  --ring: oklch(0.75 0.12 52);
+}
+:root[data-accent="lagoon"] {
+  --primary: oklch(0.53 0.095 205);
+  --primary-foreground: oklch(0.985 0.01 205);
+  --ring: oklch(0.53 0.095 205);
+}
+:root.dark[data-accent="lagoon"] {
+  --primary: oklch(0.77 0.1 200);
+  --primary-foreground: oklch(0.19 0.03 205);
+  --ring: oklch(0.77 0.1 200);
+}
+:root[data-accent="indigo"] {
+  --primary: oklch(0.5 0.17 278);
+  --primary-foreground: oklch(0.985 0.01 278);
+  --ring: oklch(0.5 0.17 278);
+}
+:root.dark[data-accent="indigo"] {
+  --primary: oklch(0.75 0.13 278);
+  --primary-foreground: oklch(0.2 0.05 278);
+  --ring: oklch(0.75 0.13 278);
+}
+:root[data-accent="emerald"] {
+  --primary: oklch(0.56 0.125 162);
+  --primary-foreground: oklch(0.99 0.004 162);
+  --ring: oklch(0.56 0.125 162);
+}
+:root.dark[data-accent="emerald"] {
+  --primary: oklch(0.72 0.14 162);
+  --primary-foreground: oklch(0.17 0.02 162);
+  --ring: oklch(0.72 0.14 162);
+}
+:root[data-accent="graphite"] {
+  --primary: oklch(0.25 0.01 280);
+  --primary-foreground: oklch(0.985 0 0);
+  --ring: oklch(0.25 0.01 280);
+}
+:root.dark[data-accent="graphite"] {
+  --primary: oklch(0.94 0 0);
+  --primary-foreground: oklch(0.2 0 0);
+  --ring: oklch(0.94 0 0);
+}
+:root[data-font="plex"] {
+  --app-font: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+}
+:root[data-font="system"] {
+  /* SF Pro on Apple devices, Segoe UI on Windows, the platform's own elsewhere. */
+  --app-font:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, "Segoe UI",
+    sans-serif;
 }
 
 @theme inline {
@@ -86,6 +350,9 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-critical: var(--critical);
+  --color-critical-foreground: var(--critical-foreground);
+  --color-success: var(--success);
   --color-warning: var(--warning);
   --color-warning-ink: var(--warning-ink);
   --color-info: var(--info);
@@ -96,7 +363,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--app-font);
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
@@ -117,7 +384,7 @@
 
 /* Selected text carries the brand colour, not the browser's blue. */
 ::selection {
-  background: color-mix(in oklch, var(--primary) 24%, transparent);
+  background: color-mix(in oklch, var(--highlight, var(--primary)) 24%, transparent);
 }
 
 /* Folded sidebar: icons only, centred. Labels carry `.sb-label`. */

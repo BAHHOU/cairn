@@ -65,6 +65,24 @@ export function toConnection(row: StoredTrackerConnection): TrackerConnection {
         approvedAtProperty: str(s.approvedAtProperty),
         approverProperty: str(s.approverProperty),
       };
+    case "taiga":
+      return {
+        kind: "taiga",
+        baseUrl: str(s.baseUrl) ?? "https://api.taiga.io",
+        project: str(s.project) ?? "",
+        username: str(s.username) ?? "",
+        password: secret.password ?? "",
+      };
+    case "gitea":
+      return {
+        kind: "gitea",
+        baseUrl: str(s.baseUrl) ?? "",
+        token: secret.token ?? "",
+        defaultRepo: str(s.defaultRepo),
+      };
+    case "bugzilla":
+    case "mantis":
+      return { kind: row.kind, baseUrl: str(s.baseUrl) ?? "", token: secret.token ?? "" };
     case "azure":
       return { kind: "azure", orgUrl: str(s.orgUrl) ?? "", token: secret.token ?? "" };
     case "youtrack":

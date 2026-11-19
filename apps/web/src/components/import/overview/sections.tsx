@@ -89,8 +89,12 @@ function SectionTitle({ id, title, hint }: { id?: string; title: string; hint?: 
 }
 
 const VERDICT_STYLE: Record<Verdict, { Icon: typeof CircleCheck; tone: string; ring: string }> = {
-  ready: { Icon: CircleCheck, tone: "text-primary", ring: "border-primary/40 bg-primary/5" },
-  partial: { Icon: TriangleAlert, tone: "text-warning", ring: "border-warning/50 bg-warning/5" },
+  ready: { Icon: CircleCheck, tone: "text-success", ring: "border-success/40 bg-success/5" },
+  partial: {
+    Icon: TriangleAlert,
+    tone: "text-warning-ink",
+    ring: "border-warning/50 bg-warning/5",
+  },
   notReady: {
     Icon: CircleX,
     tone: "text-destructive",
@@ -301,7 +305,7 @@ export function LargestFiles({ scan, base }: { scan: ScanView; base: SourceBase 
                           </span>
                           {huge ? (
                             <TriangleAlert
-                              className="size-3.5 shrink-0 text-warning"
+                              className="size-3.5 shrink-0 text-warning-ink"
                               aria-label={t("tooLarge")}
                             />
                           ) : (
@@ -327,7 +331,7 @@ export function LargestFiles({ scan, base }: { scan: ScanView; base: SourceBase 
 /* ---------------------------------------------------------------- readiness axes */
 
 const CHECK_ICON: Record<CheckStatus, { Icon: typeof CircleCheck; tone: string }> = {
-  pass: { Icon: CircleCheck, tone: "text-primary" },
+  pass: { Icon: CircleCheck, tone: "text-success" },
   fail: { Icon: CircleX, tone: "text-destructive" },
   unknown: { Icon: CircleDashed, tone: "text-muted-foreground" },
 };
@@ -441,7 +445,7 @@ export function Gaps({ readiness, base }: { readiness: Readiness; base: SourceBa
       <CardContent>
         {readiness.gaps.length === 0 ? (
           <p className="flex items-center gap-2 text-muted-foreground text-sm">
-            <CircleCheck className="size-4 text-primary" aria-hidden />
+            <CircleCheck className="size-4 text-success" aria-hidden />
             {t("empty")}
           </p>
         ) : (

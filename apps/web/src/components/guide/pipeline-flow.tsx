@@ -175,7 +175,7 @@ export function JobDetail({
         <ul className="flex flex-col gap-1.5 rounded-lg border border-warning/40 bg-warning/10 p-3 text-sm">
           {job.flags.map((f) => (
             <li key={f} className="flex items-center gap-2">
-              <AlertTriangle className="size-4 shrink-0 text-warning" aria-hidden />
+              <AlertTriangle className="size-4 shrink-0 text-warning-ink" aria-hidden />
               {t(`domain.pipelineFlag.${f}`)}
             </li>
           ))}

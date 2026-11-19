@@ -1516,7 +1516,11 @@
         "clickup": "ClickUp → Settings → Apps → API Token: generate your personal token (starts with pk_).",
         "shortcut": "Shortcut → Settings → Your account → API Tokens: generate a token.",
         "plane": "Plane → Workspace settings → API tokens: add a token. Self-hosted: use your instance address instead of api.plane.so.",
-        "monday": "monday.com → your avatar → Developers → My access tokens. Name the board columns that hold the status and, ideally, the approval date."
+        "monday": "monday.com → your avatar → Developers → My access tokens. Name the board columns that hold the status and, ideally, the approval date.",
+        "taiga": "Taiga has no personal tokens: give an account that can read the project (a dedicated observer account is best). Self-hosted: your instance address, without /api/v1.",
+        "gitea": "Gitea or Forgejo (Codeberg too) → Settings → Applications → Generate token, with read access to issues.",
+        "bugzilla": "Bugzilla → Preferences → API Keys: generate a key. Read access to the products involved is enough.",
+        "mantis": "MantisBT → My account → API tokens: create a token. The REST API must be enabled on the instance."
       }
     },
     "field": {
@@ -1587,6 +1591,14 @@
       "workspace": {
         "label": "Workspace",
         "hint": "The slug in your Plane address: app.plane.so/acme → acme."
+      },
+      "username": {
+        "label": "Username or e-mail",
+        "hint": "Taiga has no personal tokens: use an account that can read the project, ideally a dedicated one."
+      },
+      "password": {
+        "label": "Password",
+        "hint": "Encrypted before storage (AES-256-GCM), never shown again."
       }
     },
     "result": {
@@ -1748,6 +1760,36 @@
           "label": "Board link",
           "placeholder": "https://acme.monday.com/boards/1234567890",
           "hint": "Items whose status reads like a done status count as delivered."
+        },
+        "github": {
+          "label": "Repository",
+          "placeholder": "owner/repository",
+          "hint": "Issues closed as completed count as delivered; closed as not planned do not."
+        },
+        "linear": {
+          "label": "Team key",
+          "placeholder": "ENG",
+          "hint": "Issues in a completed state count as delivered."
+        },
+        "taiga": {
+          "label": "Project",
+          "placeholder": "acme-payments",
+          "hint": "The project slug of this connection. Closed user stories count as delivered."
+        },
+        "gitea": {
+          "label": "Repository",
+          "placeholder": "owner/repository",
+          "hint": "Closed issues count as delivered."
+        },
+        "bugzilla": {
+          "label": "Product",
+          "placeholder": "Payments",
+          "hint": "The product name, or a search link that names it. Bugs resolved as fixed count as delivered."
+        },
+        "mantis": {
+          "label": "Project id",
+          "placeholder": "3",
+          "hint": "The number in the project link (project_id=3). Resolved and closed issues count as delivered."
         }
       }
     },
@@ -1790,6 +1832,79 @@
       "demo": "Demo",
       "empty": "No project traced yet. Open a project's Traceability page to run it.",
       "note": "Imported projects are traced when their Traceability page is opened; the counts here are from that run."
+    }
+  },
+  "theme": {
+    "open": "Customize the interface",
+    "title": "Customize",
+    "description": "Pick a template, or set each part yourself. Changes apply at once and are kept in this browser.",
+    "reset": "Reset",
+    "close": "Close",
+    "templates": "Templates",
+    "accent": "Colour",
+    "base": "Neutrals",
+    "radius": "Corners",
+    "font": "Typeface",
+    "mode": "Mode",
+    "statusNote": "Colours follow the message in every theme: green is safe, orange asks for a look, red is critical, solid dark red blocks.",
+    "template": {
+      "apple": {
+        "name": "Apple",
+        "hint": "System colours, SF Pro, Apple greys. The default."
+      },
+      "cairn": {
+        "name": "Cairn",
+        "hint": "Heather on basalt."
+      },
+      "ledger": {
+        "name": "Ledger",
+        "hint": "Copper and stone, tight corners."
+      },
+      "console": {
+        "name": "Console",
+        "hint": "Graphite, square, technical."
+      },
+      "tide": {
+        "name": "Tide",
+        "hint": "Lagoon teal, soft corners."
+      },
+      "classic": {
+        "name": "Classic",
+        "hint": "The first emerald look."
+      },
+      "nebula": {
+        "name": "Nebula",
+        "hint": "Violet on obsidian, coral and orange."
+      }
+    },
+    "accentName": {
+      "heather": "Heather",
+      "copper": "Copper",
+      "lagoon": "Lagoon",
+      "indigo": "Indigo",
+      "emerald": "Emerald",
+      "graphite": "Graphite",
+      "violet": "Violet",
+      "blue": "Blue",
+      "purple": "Purple",
+      "pink": "Pink"
+    },
+    "baseName": {
+      "basalt": "Basalt",
+      "slate": "Slate",
+      "stone": "Stone",
+      "obsidian": "Obsidian",
+      "apple": "Apple"
+    },
+    "fontName": {
+      "schibsted": "Schibsted",
+      "plex": "IBM Plex",
+      "system": "System (SF Pro)"
+    },
+    "modeName": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
     }
   }
 }

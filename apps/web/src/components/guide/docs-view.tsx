@@ -73,7 +73,7 @@ export function ImportedDocs({ imported }: { imported: ImportedScan }) {
                     className="flex items-start gap-3 border-border/60 border-b py-2.5 last:border-0"
                   >
                     {item.present ? (
-                      <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
+                      <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" aria-hidden />
                     ) : (
                       <CircleDashed
                         className="mt-0.5 size-4 shrink-0 text-muted-foreground"
@@ -167,7 +167,7 @@ export function ImportedDocs({ imported }: { imported: ImportedScan }) {
                     <Bot
                       className={cn(
                         "size-4 shrink-0",
-                        f.present ? "text-primary" : "text-muted-foreground",
+                        f.present ? "text-success" : "text-muted-foreground",
                       )}
                       aria-hidden
                     />

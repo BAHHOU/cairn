@@ -143,7 +143,7 @@ function ConnectionList({
               <span
                 className={
                   c.confidence === "inferred"
-                    ? "shrink-0 text-[10px] text-warning"
+                    ? "shrink-0 text-[10px] text-warning-ink"
                     : "shrink-0 text-[10px] text-muted-foreground"
                 }
               >

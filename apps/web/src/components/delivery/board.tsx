@@ -49,9 +49,9 @@ export function StageRow({ stage }: { stage: DeliveryStage }) {
       <div className="flex items-start justify-between gap-3">
         <span className="flex items-start gap-2 font-medium text-sm">
           {stage.blocking ? (
-            <CircleCheck className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />
+            <CircleCheck className="mt-0.5 size-3.5 shrink-0 text-success" aria-hidden />
           ) : (
-            <CircleDashed className="mt-0.5 size-3.5 shrink-0 text-warning" aria-hidden />
+            <CircleDashed className="mt-0.5 size-3.5 shrink-0 text-warning-ink" aria-hidden />
           )}
           {stage.label}
         </span>
@@ -93,7 +93,7 @@ function GateStrip({ env }: { env: DeliveryEnvironment }) {
   if (!env.approval.required) {
     return (
       <p className="flex min-h-14 items-center gap-2 border-b bg-muted/30 px-4 py-2 text-muted-foreground text-xs">
-        <CircleCheck className="size-3.5 shrink-0 text-primary" aria-hidden />
+        <CircleCheck className="size-3.5 shrink-0 text-success" aria-hidden />
         {t("noApproval")}
       </p>
     );
@@ -105,7 +105,7 @@ function GateStrip({ env }: { env: DeliveryEnvironment }) {
     // column's content lower than its neighbours'.
     <div className="flex min-h-14 flex-col justify-center gap-0.5 border-warning/40 border-b bg-warning/10 px-4 py-2 text-xs">
       <span className="flex items-center gap-2 font-medium">
-        <Lock className="size-3.5 shrink-0 text-warning" aria-hidden />
+        <Lock className="size-3.5 shrink-0 text-warning-ink" aria-hidden />
         {env.approval.who ?? <span className="text-destructive">{t("nobodyNamed")}</span>}
       </span>
       {wait ? (

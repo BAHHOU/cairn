@@ -28,6 +28,18 @@ describe("parsing a board scope", () => {
       board: "1234567890",
     });
     expect(parseScope("shortcut", "team:payments")).toEqual({ query: "team:payments" });
+    expect(parseScope("github", "https://github.com/acme/pay/issues?q=is%3Aopen")).toEqual({
+      repo: "acme/pay",
+    });
+    expect(parseScope("linear", "https://linear.app/acme/team/ENG/active")).toEqual({
+      team: "ENG",
+    });
+    expect(parseScope("bugzilla", "https://bz.example/buglist.cgi?product=Core+Payments")).toEqual({
+      product: "Core Payments",
+    });
+    expect(parseScope("mantis", "https://mt.example/view_all_bug_page.php?project_id=3")).toEqual({
+      project: "3",
+    });
   });
 
   it("refuses what is not a scope", () => {

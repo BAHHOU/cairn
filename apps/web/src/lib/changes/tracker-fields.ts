@@ -13,6 +13,10 @@ export const LIVE_TRACKERS = [
   "linear",
   "trello",
   "notion",
+  "taiga",
+  "gitea",
+  "bugzilla",
+  "mantis",
   "azure",
   "youtrack",
   "openproject",
@@ -46,6 +50,8 @@ export type FieldName =
   | "approvedAtProperty"
   | "approverProperty"
   | "orgUrl"
+  | "username"
+  | "password"
   | "workspace";
 
 export interface Field {
@@ -91,6 +97,25 @@ export const TRACKER_FIELDS: Record<LiveTracker, Field[]> = {
     { name: "statusProperty", type: "text", required: true, defaultValue: "Status" },
     { name: "approvedAtProperty", type: "text", required: false, placeholder: "Approved on" },
     { name: "approverProperty", type: "text", required: false, placeholder: "Approver" },
+  ],
+  taiga: [
+    { name: "baseUrl", type: "url", required: true, defaultValue: "https://api.taiga.io" },
+    { name: "project", type: "text", required: true, placeholder: "acme-payments" },
+    { name: "username", type: "text", required: true },
+    { name: "password", type: "secret", required: true },
+  ],
+  gitea: [
+    { name: "baseUrl", type: "url", required: true, placeholder: "https://codeberg.org" },
+    { name: "token", type: "secret", required: true },
+    { name: "defaultRepo", type: "text", required: false, placeholder: "owner/repository" },
+  ],
+  bugzilla: [
+    { name: "baseUrl", type: "url", required: true, placeholder: "https://bugzilla.example.org" },
+    { name: "apiKey", type: "secret", required: true },
+  ],
+  mantis: [
+    { name: "baseUrl", type: "url", required: true, placeholder: "https://mantis.example.org" },
+    { name: "token", type: "secret", required: true },
   ],
   azure: [
     { name: "orgUrl", type: "url", required: true, placeholder: "https://dev.azure.com/your-org" },
@@ -243,6 +268,46 @@ export const TRACKER_INPUT = {
       },
       secret: { token: v.token },
     })),
+  taiga: z
+    .object({
+      baseUrl: url,
+      project: z
+        .string()
+        .trim()
+        .regex(/^[a-z0-9][a-z0-9-]{0,99}$/i),
+      username: z.string().trim().min(1).max(200),
+      password: z.string().min(1).max(500),
+    })
+    .transform((v) => ({
+      settings: {
+        baseUrl: v.baseUrl.replace(/\/+$/, ""),
+        project: v.project,
+        username: v.username,
+      },
+      secret: { password: v.password },
+    })),
+  gitea: z
+    .object({
+      baseUrl: url,
+      token: secret,
+      defaultRepo: z
+        .string()
+        .trim()
+        .regex(/^([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)?$/)
+        .optional(),
+    })
+    .transform((v) => ({
+      settings: { baseUrl: v.baseUrl.replace(/\/+$/, ""), defaultRepo: v.defaultRepo || undefined },
+      secret: { token: v.token },
+    })),
+  bugzilla: z.object({ baseUrl: url, apiKey: secret }).transform((v) => ({
+    settings: { baseUrl: v.baseUrl.replace(/\/+$/, "") },
+    secret: { token: v.apiKey },
+  })),
+  mantis: z.object({ baseUrl: url, token: secret }).transform((v) => ({
+    settings: { baseUrl: v.baseUrl.replace(/\/+$/, "") },
+    secret: { token: v.token },
+  })),
   azure: z.object({ orgUrl: url, token: secret }).transform((v) => ({
     settings: { orgUrl: v.orgUrl.replace(/\/+$/, "") },
     secret: { token: v.token },

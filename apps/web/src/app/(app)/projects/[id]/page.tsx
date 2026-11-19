@@ -133,12 +133,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                 key={level}
                 className={cn(
                   "flex flex-col gap-1 rounded-lg border p-3 text-sm",
-                  done && "border-primary/40 bg-primary/5",
+                  done && "border-success/40 bg-success/5",
                   isNext && "border-dashed border-foreground/30",
                 )}
               >
                 <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  {done ? <Check className="size-3.5 text-primary" aria-hidden /> : null}
+                  {done ? <Check className="size-3.5 text-success" aria-hidden /> : null}
                   {t("level", { level })}
                 </span>
                 <span className="font-medium">{td(`maturity.${level}`)}</span>

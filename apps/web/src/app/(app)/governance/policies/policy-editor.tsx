@@ -367,7 +367,7 @@ export function PolicyEditor({
             <output
               className={cn(
                 "flex items-center gap-1.5 text-sm",
-                result.ok ? "text-primary" : "text-destructive",
+                result.ok ? "text-success" : "text-destructive",
               )}
             >
               {result.ok ? (

@@ -46,7 +46,7 @@ export function VerdictBanner({ review }: { review: Review }) {
         "flex gap-4 rounded-xl border p-5",
         verdict === "blocked" && "border-destructive/40 bg-destructive/5",
         verdict === "review" && "border-warning/40 bg-warning/5",
-        verdict === "pass" && "border-primary/30 bg-primary/5",
+        verdict === "pass" && "border-success/30 bg-success/5",
       )}
     >
       <Icon className={cn("mt-0.5 size-6 shrink-0", text)} aria-hidden />
@@ -257,7 +257,7 @@ function SpecBlock({ spec, review }: { spec: SpecView; review: Review }) {
       </blockquote>
       {inexact && changed ? (
         <p className="flex items-start gap-2 rounded-md border border-warning/40 bg-warning/5 p-2.5 text-xs">
-          <CircleAlert className="mt-0.5 size-3.5 shrink-0 text-warning" aria-hidden />
+          <CircleAlert className="mt-0.5 size-3.5 shrink-0 text-warning-ink" aria-hidden />
           {t("inexact", { tool: spec.tracker ? TRACKERS[spec.tracker].name : "" })}
         </p>
       ) : null}
@@ -289,7 +289,7 @@ function SpecBlock({ spec, review }: { spec: SpecView; review: Review }) {
                     className={cn(
                       "absolute top-1 -left-[1.3rem] size-2 rounded-full ring-2 ring-card",
                       e.kind === "approval"
-                        ? "bg-primary"
+                        ? "bg-success"
                         : late
                           ? "bg-destructive"
                           : "bg-muted-foreground/50",
@@ -348,7 +348,7 @@ export function ApprovalPanel({ review }: { review: Review }) {
                     <td className="px-3 py-2">{tr(r.role)}</td>
                     <td className="px-3 py-2">
                       {r.approvedBy.length > 0 ? (
-                        <span className="text-primary">{r.approvedBy.map(name).join(", ")}</span>
+                        <span className="text-success">{r.approvedBy.map(name).join(", ")}</span>
                       ) : (
                         <Badge variant="destructive">{t("missing")}</Badge>
                       )}
@@ -438,7 +438,7 @@ export function FileChanges({ review }: { review: Review }) {
                       return (
                         <tr
                           key={`${row.kind}-${row.line}`}
-                          className={cn(row.kind === "added" ? "bg-primary/8" : "bg-destructive/8")}
+                          className={cn(row.kind === "added" ? "bg-success/8" : "bg-destructive/8")}
                         >
                           <td className="w-10 select-none px-2 py-0.5 text-right text-muted-foreground tabular-nums">
                             {row.line}

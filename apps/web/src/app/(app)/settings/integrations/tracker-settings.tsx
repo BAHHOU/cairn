@@ -60,7 +60,7 @@ function Outcome({ outcome }: { outcome: TrackerOutcome }) {
     <output
       className={cn(
         "flex items-center gap-1.5 text-sm",
-        outcome.ok ? "text-primary" : "text-destructive",
+        outcome.ok ? "text-success" : "text-destructive",
       )}
     >
       {outcome.ok ? (

@@ -1,5 +1,6 @@
 import { listImportViews } from "@cairn/db";
 import { can } from "@cairn/shared";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { AppShell } from "@/components/app-shell";
@@ -7,11 +8,13 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CommandPalette, type PaletteEntry } from "@/components/command-palette";
 import { CreateMenu } from "@/components/create-menu";
 import { SidebarNav } from "@/components/sidebar-nav";
+import { ThemeCustomizer } from "@/components/theme-customizer";
 import { UserMenu } from "@/components/user-menu";
 import { getApi } from "@/lib/api";
 import { getDb, isImportConfigured, viewerMayImport } from "@/lib/import/runtime";
 import { navFor, projectNavFor, SETTINGS } from "@/lib/nav";
 import { getViewer, isDemo } from "@/lib/session";
+import { parseTheme, THEME_COOKIE } from "@/lib/theme";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations();
@@ -56,7 +59,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           href="/"
           className="flex items-center gap-2 rounded-md px-1.5 py-1 outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
         >
-          <span className="grid size-7 place-items-center rounded-md bg-primary font-bold text-primary-foreground text-sm">
+          <span className="grid size-7 place-items-center rounded-md bg-primary [background-image:var(--primary-image,none)] font-bold text-primary-foreground text-sm">
             {Array.from(t("meta.brand"))[0]}
           </span>
           <span className="hidden font-semibold text-base tracking-tight sm:inline">
@@ -68,6 +71,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       actions={
         <>
           {viewerMayImport(viewer) ? <CreateMenu /> : null}
+          <ThemeCustomizer initial={parseTheme((await cookies()).get(THEME_COOKIE)?.value)} />
           <UserMenu name={viewer.name} role={viewer.role} team={viewer.team} demo={isDemo()} />
         </>
       }

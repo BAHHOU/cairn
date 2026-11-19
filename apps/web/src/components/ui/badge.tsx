@@ -11,9 +11,11 @@ const badgeVariants = cva(
         secondary: "border-transparent bg-secondary text-secondary-foreground",
         outline: "text-foreground",
         destructive: "border-transparent bg-destructive/15 text-destructive",
-        warning: "border-transparent bg-warning/20 text-warning",
+        warning: "border-transparent bg-warning/18 text-warning-ink",
+        /** Blocking: solid dark red. See lib/tone.ts. */
+        critical: "border-transparent bg-critical text-critical-foreground",
         info: "border-transparent bg-info/15 text-info",
-        success: "border-transparent bg-primary/15 text-primary",
+        success: "border-transparent bg-success/12 text-success",
       },
     },
     defaultVariants: { variant: "default" },

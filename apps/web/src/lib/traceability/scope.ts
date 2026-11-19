@@ -3,6 +3,12 @@ import type { TrackerKind } from "@cairn/shared";
 /** The kinds a project can link a board from: those whose adapter can list tickets. */
 export const LISTABLE_KINDS = [
   "jira",
+  "github",
+  "linear",
+  "taiga",
+  "gitea",
+  "bugzilla",
+  "mantis",
   "trello",
   "notion",
   "gitlab",
@@ -48,6 +54,33 @@ export function parseScope(kind: ListableKind, raw: string): Record<string, stri
       const path = value.replace(/^https?:\/\/[^/]+\//, "").replace(/\/+$/, "");
       return /^[\w.-]+(?:\/[\w.-]+)+$/.test(path) ? { project: path } : null;
     }
+    case "github":
+    case "gitea": {
+      const path = value
+        .replace(/^https?:\/\/[^/]+\//, "")
+        .replace(/\/(issues|pulls).*$/, "")
+        .replace(/\/+$/, "");
+      return /^[\w.-]+\/[\w.-]+$/.test(path) ? { repo: path } : null;
+    }
+    case "linear": {
+      const key = /linear\.app\/[^/]+\/team\/([A-Za-z0-9]+)/.exec(value)?.[1] ?? value;
+      return /^[A-Za-z][A-Za-z0-9]{1,9}$/.test(key) ? { team: key.toUpperCase() } : null;
+    }
+    case "taiga": {
+      const slug = /\/project\/([\w-]+)/.exec(value)?.[1] ?? /^[\w-]{1,100}$/.exec(value)?.[0];
+      return slug ? { project: slug } : null;
+    }
+    case "bugzilla": {
+      const product = /[?&]product=([^&#]+)/.exec(value)?.[1]?.replace(/\+/g, " ") ?? value;
+      const name = decodeURIComponent(product).trim();
+      return name.length >= 1 && name.length <= 64 && !/[/?&#]/.test(name)
+        ? { product: name }
+        : null;
+    }
+    case "mantis": {
+      const id = /[?&]project_id=(\d+)/.exec(value)?.[1] ?? /^\d+$/.exec(value)?.[0];
+      return id ? { project: id } : null;
+    }
     case "azure": {
       // A project name, or any link inside it: dev.azure.com/<org>/<project>/…
       const name = /dev\.azure\.com\/[^/]+\/([^/?#]+)/.exec(value)?.[1] ?? value;
@@ -92,6 +125,15 @@ export function parseScope(kind: ListableKind, raw: string): Record<string, stri
 /** The scope as people read it back. */
 export function describeScope(scope: Record<string, string>): string {
   return (
-    scope.jql ?? scope.query ?? scope.board ?? scope.database ?? scope.list ?? scope.project ?? ""
+    scope.jql ??
+    scope.repo ??
+    scope.team ??
+    scope.product ??
+    scope.query ??
+    scope.board ??
+    scope.database ??
+    scope.list ??
+    scope.project ??
+    ""
   );
 }

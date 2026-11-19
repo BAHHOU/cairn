@@ -73,7 +73,9 @@ export function toGiteaSpec(
   // A label event's body is "1" when the label was added, empty when removed.
   const approval = timeline
     .parse(raw.timeline ?? [])
-    .filter((e) => e.type === "label" && e.body === "1" && approvedStatuses.includes(e.label?.name ?? ""))
+    .filter(
+      (e) => e.type === "label" && e.body === "1" && approvedStatuses.includes(e.label?.name ?? ""),
+    )
     .map((e) => ({ at: utc(e.created_at), by: e.user?.login ?? "unknown" }))
     .sort((a, b) => a.at.localeCompare(b.at))
     .at(-1);
@@ -100,8 +102,7 @@ export function giteaTracker(
 ): TrackerAdapter {
   const base = trimBase(connection.baseUrl);
   const headers = { authorization: `token ${connection.token}` };
-  const get = (path: string) =>
-    trackerCall("Gitea", `${base}/api/v1${path}`, { headers }, options);
+  const get = (path: string) => trackerCall("Gitea", `${base}/api/v1${path}`, { headers }, options);
 
   return {
     kind: "gitea",

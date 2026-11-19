@@ -51,7 +51,7 @@ const NODE_CLASS: Record<TopologyBasis, string> = {
   missing: "border-dashed border-muted-foreground/40 bg-muted/40",
 };
 const BASIS_DOT: Record<TopologyBasis, string> = {
-  found: "bg-primary",
+  found: "bg-success",
   inferred: "bg-warning",
   missing: "bg-muted-foreground/50",
 };
@@ -113,7 +113,7 @@ function TopoNodeCard({ data }: NodeProps<TopoNode>) {
       </span>
       {node.alerts ? (
         <span
-          className="absolute -top-2 -right-2 flex items-center gap-0.5 rounded-full border bg-card px-1.5 py-0.5 font-medium text-[10px] text-warning shadow-xs"
+          className="absolute -top-2 -right-2 flex items-center gap-0.5 rounded-full border bg-card px-1.5 py-0.5 font-medium text-[10px] text-warning-ink shadow-xs"
           title={`${node.alerts} point(s) d'attention`}
         >
           <AlertTriangle className="size-3" aria-hidden />

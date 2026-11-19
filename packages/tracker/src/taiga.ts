@@ -56,7 +56,11 @@ export function toTaigaSpec(
   const i = item.parse(raw.item);
   const events = history
     .parse(raw.history)
-    .map((h) => ({ ...h, at: utc(h.created_at), by: h.user?.username ?? h.user?.name ?? "unknown" }))
+    .map((h) => ({
+      ...h,
+      at: utc(h.created_at),
+      by: h.user?.username ?? h.user?.name ?? "unknown",
+    }))
     .sort((a, b) => a.at.localeCompare(b.at));
   const approval = events
     .filter((e) => approvedStatuses.includes(e.values_diff?.status?.[1] ?? ""))
@@ -147,7 +151,9 @@ export function taigaTracker(
       if (!kind) throw new TrackerError("not_found", `${ref} is not a Taiga story or issue`);
       const [i, h] = await Promise.all([get(`/${path}/${id}`), get(`/history/${kind}/${id}`)]);
       const link = `${appUrl(base)}/project/${slug}/${kind === "userstory" ? "us" : "issue"}/${n}`;
-      return shaped("Taiga", () => toTaigaSpec(ref, { item: i, history: h }, approvedStatuses, link));
+      return shaped("Taiga", () =>
+        toTaigaSpec(ref, { item: i, history: h }, approvedStatuses, link),
+      );
     },
     async list(scope, query) {
       const project = scope.project?.trim() || connection.project;

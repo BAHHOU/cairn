@@ -24,8 +24,8 @@ const SEVERITY: Record<Severity, { text: string; chip: string; Icon: typeof Info
     Icon: AlertTriangle,
   },
   major: {
-    text: "text-warning",
-    chip: "bg-warning/15 text-warning",
+    text: "text-warning-ink",
+    chip: "bg-warning/15 text-warning-ink",
     Icon: AlertTriangle,
   },
   minor: {
@@ -58,7 +58,7 @@ export function Findings({
   if (findings.length === 0) {
     return (
       <p className="flex items-center gap-2 text-muted-foreground text-sm">
-        <CheckCircle2 className="size-4 text-primary" aria-hidden /> {emptyText ?? t("empty")}
+        <CheckCircle2 className="size-4 text-success" aria-hidden /> {emptyText ?? t("empty")}
       </p>
     );
   }

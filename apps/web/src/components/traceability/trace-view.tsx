@@ -1,7 +1,6 @@
 import {
   type ChangeVerdict,
   type DeliverySummary,
-  type Severity,
   TRACE_CATEGORIES,
   type Traceability,
   type TraceCategory,
@@ -25,6 +24,7 @@ import type { ReactNode } from "react";
 import { TrackerLogo } from "@/components/changes/tracker-logo";
 import { Panel } from "@/components/import/overview/dashboard";
 import { useFormat } from "@/i18n/format";
+import { SEVERITY_PILL } from "@/lib/tone";
 import { cn } from "@/lib/utils";
 
 /** Finding texts take different arguments per kind (asserted by the catalog test). */
@@ -37,15 +37,8 @@ const CATEGORY: Record<TraceCategory, { Icon: LucideIcon; tone: string; tint: st
   agent: { Icon: Bot, tone: "text-info", tint: "bg-info/10" },
 };
 
-const SEVERITY_PILL: Record<Severity, string> = {
-  blocker: "bg-destructive/12 text-destructive",
-  critical: "bg-destructive/10 text-destructive",
-  major: "bg-warning/18 text-warning-ink",
-  minor: "bg-muted text-muted-foreground",
-};
-
 const VERDICT_TONE: Record<ChangeVerdict, string> = {
-  pass: "text-primary",
+  pass: "text-success",
   review: "text-warning-ink",
   blocked: "text-destructive",
 };
@@ -272,7 +265,7 @@ export function TraceView({
           ) : null}
           {rows.length === 0 ? (
             <p className="flex items-center gap-2 rounded-lg border border-dashed p-4 text-muted-foreground text-sm">
-              <CircleCheck className="size-4 text-primary" aria-hidden />
+              <CircleCheck className="size-4 text-success" aria-hidden />
               {filter ? t("emptyFilter") : t("empty", { branch })}
             </p>
           ) : (
@@ -306,7 +299,7 @@ export function TraceView({
                     </Cell>
                     <Cell label={columns.findings}>
                       {row.findings.length === 0 ? (
-                        <span className="flex items-center gap-1.5 text-primary text-sm">
+                        <span className="flex items-center gap-1.5 text-success text-sm">
                           <CircleCheck className="size-4" aria-hidden />
                           {t("conforms")}
                         </span>

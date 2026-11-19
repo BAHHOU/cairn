@@ -8,11 +8,11 @@ import { cn } from "@/lib/utils";
 
 export const VERDICT_STYLE: Record<
   ChangeVerdict,
-  { icon: typeof OctagonX; badge: "destructive" | "warning" | "success"; text: string }
+  { icon: typeof OctagonX; badge: "critical" | "warning" | "success"; text: string }
 > = {
-  blocked: { icon: OctagonX, badge: "destructive", text: "text-destructive" },
-  review: { icon: Eye, badge: "warning", text: "text-warning" },
-  pass: { icon: CircleCheck, badge: "success", text: "text-primary" },
+  blocked: { icon: OctagonX, badge: "critical", text: "text-destructive" },
+  review: { icon: Eye, badge: "warning", text: "text-warning-ink" },
+  pass: { icon: CircleCheck, badge: "success", text: "text-success" },
 };
 
 export function ChangeVerdictBadge({ verdict }: { verdict: ChangeVerdict }) {

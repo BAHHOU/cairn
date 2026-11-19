@@ -51,7 +51,7 @@ export function CommandBlock({ command, shell }: { command: string; shell?: stri
         className="absolute top-2 right-2 rounded-md border bg-background p-1.5 text-muted-foreground hover:text-foreground"
       >
         {copied ? (
-          <Check className="size-3.5 text-primary" aria-hidden />
+          <Check className="size-3.5 text-success" aria-hidden />
         ) : (
           <Copy className="size-3.5" aria-hidden />
         )}

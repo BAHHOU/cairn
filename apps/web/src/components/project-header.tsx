@@ -53,7 +53,7 @@ export function ProjectHeader({ data }: { data: ProjectHeaderData }) {
       <header className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
         <div className="flex min-w-0 items-center gap-4">
           <span
-            className="grid size-14 shrink-0 place-items-center rounded-xl bg-primary font-semibold text-2xl text-primary-foreground uppercase"
+            className="grid size-14 shrink-0 place-items-center rounded-xl bg-primary [background-image:var(--primary-image,none)] font-semibold text-2xl text-primary-foreground uppercase"
             aria-hidden
           >
             {data.name.charAt(0)}

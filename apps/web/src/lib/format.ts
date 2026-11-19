@@ -90,13 +90,13 @@ export const scoreTone = (score: number): Tone =>
   score >= 70 ? "good" : score >= 50 ? "warn" : "bad";
 
 export const TONE_TEXT: Record<Tone, string> = {
-  good: "text-primary",
-  warn: "text-warning",
+  good: "text-success",
+  warn: "text-warning-ink",
   bad: "text-destructive",
 };
 
 export const TONE_BG: Record<Tone, string> = {
-  good: "bg-primary",
+  good: "bg-success",
   warn: "bg-warning",
   bad: "bg-destructive",
 };

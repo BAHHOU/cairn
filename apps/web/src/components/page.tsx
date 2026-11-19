@@ -83,7 +83,7 @@ export function Restricted({ title }: { title?: string }) {
 }
 
 export function ProgressBar({ value, className }: { value: number; className?: string }) {
-  const tone = value >= 70 ? "bg-primary" : value >= 50 ? "bg-warning" : "bg-destructive";
+  const tone = value >= 70 ? "bg-success" : value >= 50 ? "bg-warning" : "bg-destructive";
   return (
     <div
       className={cn("h-1.5 w-full overflow-hidden rounded-full bg-muted", className)}

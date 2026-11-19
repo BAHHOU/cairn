@@ -74,7 +74,7 @@ export function UserMenu({
         {demo ? (
           <>
             <div className="mx-1 mb-1 flex items-start gap-2 rounded-md bg-warning/10 px-2 py-1.5 text-xs">
-              <FlaskConical className="mt-0.5 size-3.5 shrink-0 text-warning" aria-hidden />
+              <FlaskConical className="mt-0.5 size-3.5 shrink-0 text-warning-ink" aria-hidden />
               <span>
                 <span className="font-medium">{t("shell.demoBadge")}</span>
                 <span className="block text-muted-foreground">{t("shell.demoHint")}</span>
